@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\tikzstyle{nd} = [anchor=base, inner sep=0pt]
+\tikzstyle{ndpic} = [remember picture, baseline, every node/.style={nd}]
+
+\begin{document}
+\begin{align*}
+   \tikz[ndpic]{\node(left) {$a$};} &= \tikz[ndpic]{\node (right) {$b$};} \\
+                 c  &              = d \\
+                 e  &              = f  \\
+         \tikz[ndpic]{\node(left1) {$\displaystyle \lim_{x\to 0}\frac{\sin x}{x}$};} &= \tikz[ndpic]{\node (right1)
+         {$\displaystyle \int_{-\pi}^\pi \frac{\sqrt{x^2 - 1}}{2x}\;dx$};} \\
+\end{align*}
+
+\begin{tikzpicture}[overlay, remember picture]
+   \draw[very thick, red, fill=yellow] ($ (left.south west)+(-.1,-.1) $)
+   rectangle ($ (right.north east)+(.1,.1) $);
+   \node[nd] at (left.base) {$a$};
+   \node[nd] at (right.base) {$b$};
+   \node[nd] at ($ (right.base)!.5!(left.base) $) {$=$};
+\end{tikzpicture}
+
+\begin{tikzpicture}[overlay, remember picture]
+   \draw[very thick, red, fill=yellow] ($ (left1.south west)+(-.1,-.2) $)
+   rectangle ($ (right1.north east)+(.1,.1) $);
+   \node[nd] at (left1.base) {$\displaystyle \lim_{x\to 0}\frac{\sin x}{x}$};
+   \node[nd] at (right1.base) {$\displaystyle \int_{-\pi}^\pi \frac{\sqrt{x^2 - 1}}{2x}\;dx$};
+   \node[nd] at ($ (right1.base west)!.5!(left1.base east) $) {$=$};
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
