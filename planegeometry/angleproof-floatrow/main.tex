@@ -313,6 +313,77 @@ DCP$的角平分线相交于$K$，$\angle AKC$与$\angle APC$有何数量关系�
                & = 80^\circ                 
   \end{align*}  
 \end{proof}
+
+\newpage
+
+\begin{tikzpicture}[
+        scale=1.5,
+        decoration={
+          markings,
+          mark=at position 3cm with {\arrow[scale=2]{>}};
+        }]
+        % 初始化
+        \tkzInit[xmin=-0.35,xmax=3.25, ymin=-1.0,ymax=2.5] \tkzClip
+        % 定义坐标点
+        \tkzDefPoints{0/0/E, 3/0/F, 0/2/R, 3/2/S}
+        % 绘制两条平行线
+        \tkzDrawLines(E,F R,S)
+        % 定义A、B、C、D坐标
+        \tkzDefPoints{0.2/0/D, 2.8/0/C, 0.2/2/B, 2.0/2/A}
+        % 绘制各线段
+        \tkzDrawSegments(A,C)
+        % 标记符号
+        \tkzLabelPoints[above](A,B)
+        \tkzLabelPoints[below](D,C)
+        % 定义A出发-120度的线
+        \tkzDefShiftPoint[A](-110:1){a}
+        % 定义C出发110度的线
+        \tkzDefShiftPoint[C](150:1){c}
+        % 求交点
+        \tkzInterLL(A,a)(C,c) \tkzGetPoint{P}
+        \tkzLabelPoints[above left](P)
+        \tkzDefLine[parallel = through P](E,F) \tkzGetPoint{p}        
+        \tkzDrawLines[color = red,add=.2 and .6,dashed](P,p)
+        % 求交点
+        \tkzInterLL(P,p)(A,C) \tkzGetPoint{Q}
+        \tkzLabelPoints[above right](Q)
+        % 绘制线段
+        \tkzDrawSegments(A,P C,P)   
+        % 绘制角平分线关系
+        \tkzDefLine[bisector](B,A,P) \tkzGetPoint{a}
+        \tkzDefLine[bisector](P,C,D) \tkzGetPoint{c}    
+        % 求交点
+        \tkzInterLL(A,a)(C,c) \tkzGetPoint{K}
+        \tkzLabelPoints[above left](K)
+        % \tkzDefLine[parallel = through P](E,F) \tkzGetPoint{k}        
+        % \tkzDrawLines[color = blue,add=.6 and .6,dashed](P,k)
+        % % 求交点
+        % \tkzInterLL(K,k)(A,C) \tkzGetPoint{L}
+        % \tkzLabelPoints[above right](L)
+        % 绘制线段
+        \tkzDrawSegments(A,K C,K)
+      \end{tikzpicture}
+\vspace{-8ex}   
+\begin{proof}[\textbf{(2)解}]
+  过$P$点作辅助线$PQ$，并且使$PQ \varparallel CD$
+
+  $\because AB \varparallel CD$
+
+  $\therefore \angle APQ = \angle BAP$，并且$\angle CPQ = \angle DCP$
+
+  $\therefore \angle APC = \angle BAP + \angle DCP$
+
+  同理可得：$\angle AKC = \angle BAK + \angle DCK$
+
+  又$\because K$是$\angle BAP$与$\angle DCP$的角平分线的交点
+
+  从而可得：
+  \begin{align*}
+    \angle AKC & = \frac{1}{2}\angle BAP + \frac{1}{2}\angle DCP \\
+               & = \frac{1}{2}\left(\angle BAP + \angle DCP\right) \\
+               & = \frac{1}{2}\angle APC                 
+  \end{align*} 
+\end{proof}      
   
 \end{document}
 
