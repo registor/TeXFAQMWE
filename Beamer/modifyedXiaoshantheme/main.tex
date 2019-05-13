@@ -1,0 +1,53 @@
+\XeTeXgenerateactualtext=1
+\ifdefined\HANDOUT
+  \documentclass[fontset=adobe, t, handout]{ctexbeamer}
+\else
+  \documentclass[fontset = adobe, t]{ctexbeamer}
+\fi
+
+% 载入需要的宏包
+\input{setup/packages.tex}
+% 进行必要的设置
+\input{setup/format.tex}
+
+% Information
+\title{西北农林科技大学学位论文\\ \nwafuthesis{}模板简介}
+\subtitle{A Short Introduction of \nwafuthesis}
+\author{耿楠}
+\institute{西北农林科技大学\quad 教学发展中心}
+\date{\tosemester}
+\titlegraphic{%
+  \vspace{3.4cm}
+  \qrcode[hyperlink, height=1.6cm]{https://github.com/registor/shortintronwafuthesis/}}
+
+\begin{document}
+
+\maketitle
+
+\input{contents/introduction.tex}
+
+% \subsection[是什么？]{什么是\LaTeX{}}
+% \section[安装\LaTeX{}]{安装\LaTeX{}}
+% \subsection[下载软件]{下载软件}
+% \subsection[注意事项]{注意事项}
+% \section[学习\LaTeX{}]{学习\LaTeX{}}
+% \subsection[命令行]{命令行操作}
+% \subsection[学习资源]{学习资源}
+% \subsection[文档结构]{文档结构}
+% \subsection[错误处理]{错误处理}
+% \section[\nwafuthesis{}模板]{\nwafuthesis{}模板}
+% \subsection[开发需求]{开发需求}
+% \subsection[模板下载]{模板下载}
+% \subsection[模板使用]{模板使用}
+% \subsection[TeXstudio]{TeXstudio}
+% \section[参考文献]{参考文献}
+% \section[关于我们]{关于我们}
+% \subsection[联系方式]{联系方式}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
