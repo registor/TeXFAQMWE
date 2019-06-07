@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{mathtools,amssymb}     %% this is not needed. just for demo
+\usepackage{tikz}
+\usepackage{xparse}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.markings}
+
+% 中心否定线长度
+\newcommand*{\StrikeThruDistance}{0.07cm}%
+
+% 带中心否定线的箭头样式 
+\tikzset{
+  strike thru arrow/.style={
+    decoration={
+      markings,
+      mark=at position 0.5 with {
+        \draw[black, -] ++ (\StrikeThruDistance,-\StrikeThruDistance)
+        -- ( -\StrikeThruDistance, \StrikeThruDistance);
+      }
+    },
+    postaction={decorate},
+  }
+}
+
+% 定义一个带否定符号的双向箭头
+\NewDocumentCommand{\xrightarrows}{ O{}O{} }{%
+  \mathrel{%
+    \vcenter{
+      \hbox{%
+        \begin{tikzpicture}[%
+          ->,
+          >=stealth,
+          node distance=1cm,
+          pil/.style={
+            ->,
+            thick,
+            shorten =2pt,}
+          ]
+          \node[minimum width=1cm,minimum height=1ex,anchor=south,align=center] (a){\text{\vphantom{hg}#1}\\[0.5ex] \vphantom{hg}#2};
+          \draw[->] ([yshift=0.5ex]a.west) -- ([yshift=0.5ex]a.east);
+          \draw[<-,strike thru arrow] ([yshift=-0.5ex]a.west) -- ([yshift=-0.5ex]a.east);
+        \end{tikzpicture}
+      }
+    }%
+  }%
+}
+
+\begin{document}
+  % 基本的数学符号
+  $\xleftarrow[under]{over}$
+
+  $\xrightarrow[under]{over} \rightleftarrows$
+
+  % 自定义的数学符号
+  $A \xrightarrows B$  \quad $A \xrightarrows[some ght][some text again] B$ 
+
+  $A \xrightarrows[some text here] B$  \quad $A \xrightarrows[][some text again] B$
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
