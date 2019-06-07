@@ -1,0 +1,34 @@
+\documentclass{ctexart}
+\usepackage{amsmath} 
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\tikzset{>=stealth}
+
+\newcommand{\tikzmark}[1]{\tikz[baseline,remember picture] \coordinate (#1) {};}
+
+\begin{document}
+	\begin{equation*}
+	\frac{1}{V}\sum_{p}\sum_{p'}\sum_{q}\underline{\hat{a}^{\dagger}_{p\tikzmark{a}+q}}\,\,\underline{\tikzmark{b}\hat{a}^{\dagger}_{\tikzmark{c}p'-q}}\,\,\underline{\tikzmark{d}\hat{a}_{\tikzmark{e}p'}}\,\,\underline{\tikzmark{f}\hat{a}_{\tikzmark{g}p}}	
+	\end{equation*}
+	\begin{tikzpicture}[overlay, remember picture,node distance =1.5cm]
+	\coordinate  [below=0.3 of a ](aa){};
+	\coordinate  [below=0.6 of a ](ab){};
+	\coordinate  [below=0.9 of a ](ac){};
+	\coordinate (ba) at ($(b) + (0.08, 0.3)$);
+	\coordinate (da) at ($(d) + (0.08, 0.3)$);
+	\coordinate (fa) at ($(f) + (0.08, 0.3)$);
+	\coordinate  [above=0.3 of ba ](bb){};
+	\coordinate  [above=0.6 of ba ](bc){};
+	\coordinate  [below=1.2 of e ](ea){};
+	
+	\draw ($(a.south)+(0, -0.1)$) -- (ac.north) ;
+	\draw[->] (aa.east) -| ($(c.south)+(0, -0.1)$) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 1};
+	\draw[->] (ab.east) -| ($(d.south)+(0.1, -0.15)$) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 2};
+	\draw[->] (ac.east) -| ($(f.south)+(0.1, -0.15)$) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 3};
+	\draw ($(e.south)+(0, -0.1)$) -- (ea.north) ;
+	\draw[->] (ea.east) -| ($(g.south)+(0.05, -0.1)$) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 6};	
+	\draw (ba) -- (bc) ;
+	\draw[->] (bb.east) -| (da.north) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 4};		
+	\draw[->] (bc.east) -| (fa.north) node[near start,circle,fill=black,,inner sep=0pt,minimum size=3pt,white] {\tiny 5};
+	\end{tikzpicture}
+\end{document}
