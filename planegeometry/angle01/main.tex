@@ -1,0 +1,91 @@
+\documentclass{ctexart}
+
+% 平面几何绘图
+\usepackage{tkz-euclide}
+\usetkzobj{all}
+\usepackage{amsmath}
+\usepackage{txfonts}
+
+\begin{document} %在document环境中撰写文档
+
+如图所示的几何体中，$ABCD$是菱形，$\angle ABC=60^\circ$，
+
+$PA\perp \text{平面}ABCD$，$AP\varparallel BF\varparallel DE$
+
+$AP = AB = 2BF = 2DE = 2$.
+
+\begin{enumerate}
+\item 求证：$\text{平面}PAC\perp \text{平面}PCE$；
+\item 求平面$PBC$与平面$PCE$构成的二面角的正弦值。
+\end{enumerate}
+
+\begin{figure}[!htp]
+  \begin{tikzpicture}[
+    scale=1.0,
+    decoration={
+      markings,
+      mark=at position 3cm with {\arrow[scale=2]{>}};
+    }]
+    % 初始化
+    \tkzInit[xmin=-0.25,xmax=5.25, ymin=-1.00,ymax=5.8] \tkzClip
+    % 定义坐标点
+    \tkzDefPoints{0/0/E, 4/0/F, 0/1.73/R, 3/1.73/S, 0/4.00/T}
+    % 定义B、C坐标
+    \tkzDefPoints{0.2/0/B, 3.8/0/C}
+    % 绘制线段BC
+    \tkzDrawSegments(B,C)
+    % 标记线段B、点符号
+    \tkzLabelPoints[below left](B)
+    \tkzLabelPoints[below right](C)    
+    % 定义B出发60度的线
+    \tkzDefShiftPoint[B](60:2){b}
+    % 定义C出发60度的线
+    \tkzDefShiftPoint[C](60:2){c}
+    % 求交点A,D
+    \tkzInterLL(B,b)(R,S) \tkzGetPoint{A}
+    \tkzInterLL(C,c)(R,S) \tkzGetPoint{D}
+    % 标记线段A、D端点符号
+    \tkzLabelPoints[above left](A)
+    \tkzLabelPoints[above right](D)
+    % 绘制虚线线段AD,BC
+    \tkzDrawSegments[color=red, dashed](A,D)
+    \tkzDrawSegments[color=red, dashed](B,A)
+    % 绘制实线线段CD
+    \tkzDrawSegments(C,D)    
+    % 定义A出发90度，长度为3.46的点P
+    \tkzDefShiftPoint[A](90:3.46){P}
+    % 定义A出发90度，长度为1.73的点F
+    \tkzDefShiftPoint[B](90:1.73){F}
+    % 定义A出发90度，长度为1.73的点E
+    \tkzDefShiftPoint[D](90:1.73){E}
+    % 标记P、F、E端点符号
+    \tkzLabelPoints[above left](P)
+    \tkzLabelPoints[above left](F)
+    \tkzLabelPoints[above right](E)
+
+    % 绘制实线线段CD
+    \tkzDrawSegments(B,F)
+    \tkzDrawSegments(D,E)
+    \tkzDrawSegments(P,F)
+    \tkzDrawSegments(P,E)
+    \tkzDrawSegments(P,C)
+    \tkzDrawSegments(F,C)
+    \tkzDrawSegments(E,C)
+    % 绘制实线线段CD
+    \tkzDrawSegments[color=red, dashed](P,A)
+    \tkzDrawSegments[color=red, dashed](P,B)
+    \tkzDrawSegments[color=red, dashed](A,C)
+    \tkzDrawSegments[color=red, dashed](P,B)
+
+    % 标记角度
+    \tkzMarkAngle[size=0.5](C,B,A)
+    \tkzLabelAngle[pos=0.9](C,B,A){$60^\circ$}
+ \end{tikzpicture}
+\end{figure}    
+  
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
