@@ -20,6 +20,7 @@ $AP = AB = 2BF = 2DE = 2$.
 \end{enumerate}
 
 \begin{figure}[!htp]
+  \centering
   \begin{tikzpicture}[
     scale=1.0,
     decoration={
@@ -27,23 +28,18 @@ $AP = AB = 2BF = 2DE = 2$.
       mark=at position 3cm with {\arrow[scale=2]{>}};
     }]
     % 初始化
-    \tkzInit[xmin=-0.25,xmax=5.25, ymin=-1.00,ymax=5.8] \tkzClip
-    % 定义坐标点
-    \tkzDefPoints{0/0/E, 4/0/F, 0/1.73/R, 3/1.73/S, 0/4.00/T}
+    \tkzInit[xmin=-0.25,xmax=5.25, ymin=-1.00,ymax=4.5] \tkzClip    
     % 定义B、C坐标
     \tkzDefPoints{0.2/0/B, 3.8/0/C}
     % 绘制线段BC
     \tkzDrawSegments(B,C)
     % 标记线段B、点符号
     \tkzLabelPoints[below left](B)
-    \tkzLabelPoints[below right](C)    
-    % 定义B出发60度的线
-    \tkzDefShiftPoint[B](60:2){b}
-    % 定义C出发60度的线
-    \tkzDefShiftPoint[C](60:2){c}
-    % 求交点A,D
-    \tkzInterLL(B,b)(R,S) \tkzGetPoint{A}
-    \tkzInterLL(C,c)(R,S) \tkzGetPoint{D}
+    \tkzLabelPoints[below right](C)
+    % 利用相对位置，用极坐标定义D点
+    \tkzDefShiftPoint[C](60:2){D}
+    % 利用相对位置，计算并定义平行四边形最后A
+    \tkzDefPointWith[colinear= at D](C,B) \tkzGetPoint{A}
     % 标记线段A、D端点符号
     \tkzLabelPoints[above left](A)
     \tkzLabelPoints[above right](D)
@@ -51,13 +47,13 @@ $AP = AB = 2BF = 2DE = 2$.
     \tkzDrawSegments[color=red, dashed](A,D)
     \tkzDrawSegments[color=red, dashed](B,A)
     % 绘制实线线段CD
-    \tkzDrawSegments(C,D)    
-    % 定义A出发90度，长度为3.46的点P
-    \tkzDefShiftPoint[A](90:3.46){P}
-    % 定义A出发90度，长度为1.73的点F
-    \tkzDefShiftPoint[B](90:1.73){F}
-    % 定义A出发90度，长度为1.73的点E
-    \tkzDefShiftPoint[D](90:1.73){E}
+    \tkzDrawSegments(C,D)
+    % 定义过A点垂直于AD，长度为3.46个单位长度的点P
+    \tkzDefPointWith[orthogonal normed,K=2](A,D) \tkzGetPoint{P}
+    % 定义过D点垂直于DA，长度为1.73个单位长度的点E
+    \tkzDefPointWith[orthogonal normed,K=-1](D,A) \tkzGetPoint{E}
+    % 定义过B点垂直于BC，长度为1.73个单位长度的点F
+    \tkzDefPointWith[orthogonal normed,K=1](B,C) \tkzGetPoint{F}
     % 标记P、F、E端点符号
     \tkzLabelPoints[above left](P)
     \tkzLabelPoints[above left](F)
