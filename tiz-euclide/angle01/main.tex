@@ -22,22 +22,23 @@ $AP = AB = 2BF = 2DE = 2$.
 \begin{figure}[!htp]
   \centering
   \begin{tikzpicture}[
-    scale=1.0,
+    scale=1.5,
     decoration={
       markings,
       mark=at position 3cm with {\arrow[scale=2]{>}};
     }]
     % 初始化
-    \tkzInit[xmin=-0.25,xmax=5.25, ymin=-1.00,ymax=4.5] \tkzClip    
+    \tkzInit[xmin=-0.35,xmax=3.25, ymin=-0.5,ymax=4.0] \tkzClip    
     % 定义B、C坐标
-    \tkzDefPoints{0.2/0/B, 3.8/0/C}
+    \tkzDefPoints{0/0/B, 2/0/C}
     % 绘制线段BC
     \tkzDrawSegments(B,C)
     % 标记线段B、点符号
     \tkzLabelPoints[below left](B)
     \tkzLabelPoints[below right](C)
     % 利用相对位置，用极坐标定义D点
-    \tkzDefShiftPoint[C](60:2){D}
+    %\pgfmathparse{4/sqrt(3)}\edef\storeresult{\pgfmathresult}%    
+    \tkzDefShiftPoint[C](60:1.73){D}
     % 利用相对位置，计算并定义平行四边形最后A
     \tkzDefPointWith[colinear= at D](C,B) \tkzGetPoint{A}
     % 标记线段A、D端点符号
