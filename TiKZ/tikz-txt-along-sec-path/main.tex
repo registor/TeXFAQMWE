@@ -1,10 +1,10 @@
 % 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
-\documentclass{standalone}
+\documentclass[multi]{standalone}
 
 %导言区，可以在此引入必要的宏包
 \usepackage{ctex}
 \usepackage{tikz} % Required for drawing custom shapes
-%\usetikzlibrary{arrows,calc,fit,matrix,positioning,shapes,shadows,trees,mindmap,tikzmark,arrows.meta}
+% \usetikzlibrary{arrows,calc,fit,matrix,positioning,shapes,shadows,trees,mindmap,tikzmark,arrows.meta}
 \usetikzlibrary{decorations.text}
 
 \begin{document} %在document环境中撰写文档
@@ -13,65 +13,58 @@
   text=black,
   border/.style={line width=45mm},
   every node/.style={align=center},
-  pin distance=17mm，
+  pin distance=17mm,
+  arc text/.style={%
+      decorate,
+      decoration={%
+        text effects along path,
+        text={#1},
+        text align=center,        
+        text along path,
+        text effects/.cd,
+        characters={anchor=mid},
+      }
+    }
   ]
   % 尺寸宏命令
   \def\bgr{2.5cm}
   \def\sepr{3.65cm}
-  \def\etxtr{3.8cm}
-  \def\otxtr{2.5cm}
-  \def\itxtr{1.2cm}
-  \def\txtoff{4.5mm}
   
-  % 绘制
-  \foreach \etxto/\etxti/\txto/\txti/\name/\angle/\col [remember=\angle as \last (initially 30)] in
-  { {搜索引擎/工具/策略等}/{网络/数字化资源}/{获取资源}/探究知识/信息/90/blue!21,
-    {文字/图像/数据处理等}/{复制/粘贴功能}/提高效率/支持构建/效率/150/cyan!33,
-    {在线批阅/电子档案等}/{反馈/反思}/{记录/展示}/促进反思/评价/210/green!22,
-    {专家系统/思维导图等}/{独特形式再现知识}/高阶学习/高阶思维/认识/270/red!21,
-    {Email/论坛/聊天等}/{异步/同步交流}/协作学习/{}/交流/330/orange!21,
-    {案例/问题/项目等}/{情境模拟/游戏化}/创建情境/做中学/情境/390/violet!21}
+  % 绘制  
+  \foreach \txtarr/\angle/\col [remember=\angle as \last (initially 30),
+  evaluate=\angle as \m using {\angle < 180 ? \angle : \last },
+  evaluate=\angle as \n using { \angle < 180 ? \last : \angle } 
+  ] in
+  { {工具, 信息, 探究知识, 获取资源, 网络/数字化资源, 搜索引擎/工具/策略等}/90/blue!21,
+    {工具, 效率, 支持构建, 提高效率, 复制/粘贴功能, 文字/图像/数据处理等}/150/cyan!33,
+    {工具, 评价, 促进反思, 记录/展示, 反馈/反思, 在线批阅/电子档案等}/210/green!22,
+    {工具, 认识, 高阶思维, 高阶学习, 独特形式再现知识, 专家系统/思维导图等}/270/red!18,
+    {工具, 交流, {}, 协作学习, 异步/同步交流, Email/论坛/聊天等}/330/orange!24,
+    {工具, 情境, 做中学, 创建情境, 情境模拟/游戏化, 案例/问题/项目等}/390/violet!19}
   {
     % 绘制背景
-    \draw[\col, border] (\last:\bgr) arc[start angle=\last, end
-    angle=\angle, radius=\bgr];
+    \draw[\col, border] (\last:\bgr) arc(\last:\angle:\bgr);
     % 不同扇形角间的分割条    
     \draw[white, line width=2mm] (\last:1.1cm)--++(\last:\sepr);
 
-    % 绘制工具示例外层文字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={\txtoff},text along path,
-        text={\etxto}}}](\angle:\etxtr) arc[start angle=\angle, end
-    angle=\last, radius=\etxtr];
-
-    % 绘制工具示例内层文字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={0.0mm},text along path,
-        text={\etxti}}}](\angle:\etxtr) arc[start angle=\angle, end
-    angle=\last, radius=\etxtr];
-
-    % 绘制工具内涵外层文字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={\txtoff},text along path,
-        text={\txto}}}](\angle:\otxtr) arc[start angle=\angle, end
-    angle=\last, radius=\otxtr];
-
-    % 绘制工具内涵内层文字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={0.0mm},text along path,
-        text={\txti}}}](\angle:\otxtr) arc[start angle=\angle, end
-    angle=\last, radius=\otxtr];
-
-    % 绘制工具名称文字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={\txtoff},text along path,
-        text={\name}}}](\angle:\itxtr) arc[start angle=\angle, end
-    angle=\last, radius=\itxtr];
-    % 绘制工具两个字
-    \path [postaction={decorate, decoration={text
-        align={center},raise={0.0mm},text along path, text={工具}}}]
-          (\angle:\itxtr) arc[start angle=\angle, end
-    angle=\last, radius=\itxtr];
+    % 带文字装饰的圆弧路径半径
+    \edef\txtr{0.01cm}
+    \foreach \txt [count=\i] in \txtarr
+    {
+      % 根据计数奇偶性确定半径增加步长
+      \pgfmathisodd{\i}
+      \ifnum\pgfmathresult>0        
+        \pgfmathsetmacro{\rstep}{0.3mm}
+      \else
+        \pgfmathsetmacro{\rstep}{0.15mm}
+      \fi
+      % 计算文字绘制圆弧半径
+      \pgfmathparse{\txtr+\rstep}
+      \xdef\txtr{\pgfmathresult}  
+      % 添加路径，用文字装饰路径
+      %\path[arc text/.expanded=\txt](\angle:\txtr) arc(\angle:\last:\txtr);
+      \path[arc text/.expanded=\txt](\m:\txtr) arc(\m:\n:\txtr);      
+    }
   }
   % 最后一个扇形分割条
   \draw[white, line width=2mm] (30:1.1cm)--++(30:\sepr);
@@ -79,12 +72,10 @@
   \node[line width=1.2mm, draw, circle, minimum width=5em, white,
   fill=yellow!51,text=black] (core) {学习工具};
   % 分割圆
-  \draw[red, dashed, line width = 0.5mm] (0,0) circle(2.2cm);
-  \draw[blue, dashed, line width = 0.5mm] (0,0) circle(3.5cm);
+  \draw[white, line width = 0.5mm] (0,0) circle(2.1cm);
+  \draw[white, line width = 0.5mm] (0,0) circle(3.4cm);
 \end{tikzpicture}
 \end{document}
-
-
 
 %%% Local Variables:
 %%% mode: latex
