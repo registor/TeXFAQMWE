@@ -1,0 +1,30 @@
+\documentclass[tikz,border=10pt,multi]{standalone}
+% question by daleif at https://tex.stackexchange.com/q/315284/
+% OP's code is based on percusse's answer at https://tex.stackexchange.com/a/134297/3929
+\usetikzlibrary{fadings,decorations.pathmorphing}
+
+\begin{tikzfadingfrompicture}[name=custom fade]%
+	\path [fill=transparent!100] (-5mm,-10mm) rectangle (5mm,10mm);
+	\draw[
+	very thick,
+	transparent!20,
+	decorate,
+	decoration=snake,
+	decoration={
+		pre=curveto,
+		pre length=0pt,
+		post length=3pt,
+	},
+	->
+	] (0,-1cm) -- ++ (0,2cm);
+\end{tikzfadingfrompicture}
+\begin{document}
+	\begin{tikzpicture}
+	\path[
+	path fading=custom fade,
+	fit fading=false,
+	top color=red,
+	bottom color=blue,
+	] (-5mm,-10mm) rectangle (5mm,10mm);
+	\end{tikzpicture}
+\end{document}
