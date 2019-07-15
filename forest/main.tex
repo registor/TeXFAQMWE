@@ -1,0 +1,100 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage{geometry}
+\usepackage{forest}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{shadows}
+\begin{document}
+	\tikzset{
+		my node style/.style={
+			font=\small,
+			top color=white,
+			bottom color=blue!25,
+			rectangle,
+			rounded corners,
+			minimum size=6mm,
+			draw=blue!75,
+			very thick,
+			drop shadow,
+			align=center,
+		}
+	}
+	\forestset{
+		my tree style/.style={
+			for tree={
+				parent anchor=south,
+				child anchor=north,
+				l sep+=5pt,
+				my node style,
+				edge={draw=blue!50, thick},
+				edge path={
+					\noexpand\path [draw, \forestoption{edge}] (!u.parent anchor) -- +(0,-7.5pt) -| (.child anchor)\forestoption{edge label};
+				},
+				if n children=3{
+					for children={
+						if n=2{calign with current}{}
+					}
+				}{},
+				delay={if content={}{shape=coordinate}{}}
+			}
+		}
+	}
+	\centering
+	
+	\begin{forest}
+		my tree style
+		[Paletizar
+		[Iniciar
+		[Detectar Pacote]
+		[Movimentar]
+		]
+		[Empacotar
+		[Posicionar
+		[Pegar/Largar]
+		[Organizar]
+		[Movimentar]
+		]
+		[Agrupar]
+		[Padronizar, tier=A]
+		]
+		[Finalizar, tier=A
+		[Detectar estado\\da palete]
+		[Transmitir]
+		]
+		]
+	\end{forest}
+	
+	\vspace{2cm}
+	
+	\begin{forest}
+		my tree style
+		[Paletizador
+		[Inicialização\\de sistema
+		[Sensor X]
+		[Acção Y]
+		]
+		[Sacos
+		[
+		[
+		[Linha/Coluna
+		[Garra]
+		[Rodar Garra]
+		[Acção Y2]
+		]
+		[Euro Pallet]
+		[{Disposição $xyz$}
+		[{$x=?$}]
+		[{$y=?$}]
+		[{$z=?$}]
+		]
+		]
+		]
+		]
+		[Sistema de despacho
+		[Sensor de peso\\/contador]
+		[Tapete rolante\\de saída]
+		]
+		]
+	\end{forest}
+	
+\end{document}
