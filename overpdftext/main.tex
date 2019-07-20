@@ -2,20 +2,22 @@
 \documentclass{ctexart}
 
 % 导言区，可以在此引入必要的宏包
+\usepackage{amsmath}
 \usepackage{pdfpages}
-\usepackage{eso-pic}
 \usepackage{tikz}
 \usetikzlibrary{calc}
+
 \thispagestyle{empty}
 \pagestyle{empty}
 
-\begin{document} %在document环境中撰写文档
-\includepdf[pagecommand={%
-  \begin{tikzpicture}[remember picture, overlay]
-    \node at ($(current page.center)+(5, 10)$) {overlay text};
-  \end{tikzpicture}
+\begin{document} 
+  \includepdf[pagecommand={%
+    \begin{tikzpicture}[remember picture, overlay]
+      \node at ($(current page.center)+(7, 11.5)$) {2019年7月8日};
+      \node at ($(current page.center)+(0.82, 10.95)$) {($\text{平时成
+          绩}=\text{OJ成绩}\times 2/3+\text{模拟考试成绩}/3$)};
+    \end{tikzpicture}
   },pages=1-]{example.pdf}
-  % \includepdf[pages=2-]{example.pdf}
 \end{document}    
 
 %%% Local Variables:
