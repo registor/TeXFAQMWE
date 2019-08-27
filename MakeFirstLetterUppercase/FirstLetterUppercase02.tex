@@ -1,0 +1,24 @@
+\documentclass{book}
+\usepackage{mfirstuc,fancyhdr,lipsum}
+
+\fancypagestyle{mainmatter}{% %% <- defines \ps@mainmatter
+    \fancyhf{}%
+    \fancyhead[LE]{\thepage}%
+    \fancyhead[RO]{\thepage}%
+    \fancyhead[RE]{\leftmark}%
+    \fancyhead[LO]{\rightmark}%
+}
+
+\usepackage{xpatch}
+\makeatletter
+  \appto\ps@mainmatter{% %% <- appends to \ps@mainmatter
+    \xpatchcmd{\chaptermark}{\MakeUppercase}{}{}{}%
+    \xpatchcmd{\sectionmark}{\MakeUppercase}{}{}{}%
+  }
+\makeatother
+
+\begin{document}
+    \pagestyle{mainmatter} %% <- calls \ps@mainmatter
+    \chapter{\ecapitalisewords{some thing} with Text}
+    \lipsum[1-5]
+\end{document}

@@ -1,0 +1,59 @@
+\documentclass{ctexart}
+
+% You can modify the following lengths, which affect all floats.;
+%
+%   \floatsep: space left between floats (12.0pt plus 2.0pt minus 2.0pt).
+%   \textfloatsep: space between last top float or first bottom float and the text (20.0pt plus 2.0pt minus 4.0pt).
+%   \intextsep : space left on top and bottom of an in-text float (12.0pt plus 2.0pt minus 2.0pt).
+%   \dbltextfloatsep is \textfloatsep for 2 column output (20.0pt plus 2.0pt minus 4.0pt).
+%   \dblfloatsep is \floatsep for 2 column output (12.0pt plus 2.0pt minus 2.0pt).
+%   \abovecaptionskip: space above caption (10.0pt).
+%   \belowcaptionskip: space below caption (0.0pt).
+
+\setlength{\abovecaptionskip}{0pt}
+%\setlength{\belowcaptionskip}{0pt}
+%
+%\setlength{\floatsep}{1.5ex plus0.2ex}
+%\setlength{\textfloatsep}{\floatsep}
+%\setlength{\intextsep}{\floatsep}
+%
+%\addtolength{\textfloatsep}{-0.2in}
+
+\usepackage{etoolbox}
+
+\BeforeBeginEnvironment{figure}{\vskip-1ex}
+\AfterEndEnvironment{figure}{\vskip-2ex}
+\BeforeBeginEnvironment{table}{\vskip-1ex}
+\AfterEndEnvironment{table}{\vskip-2ex}
+
+\setlength{\abovecaptionskip}{2pt plus 0.2pt minus 0.3pt}
+
+\begin{document}
+
+啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+
+\begin{figure}[htbp]
+\centering
+我是图片
+\caption{啊}
+\end{figure}
+
+啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+
+\begin{table}[htbp]
+\centering
+\caption{啊}
+我是表格
+\end{table}
+
+啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+
+\the\intextsep
+
+\the\textfloatsep
+
+\the\abovecaptionskip
+
+\the\belowcaptionskip
+
+\end{document}

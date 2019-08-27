@@ -1,0 +1,19 @@
+\documentclass{ctexart}
+
+% 引入拼音宏包
+
+\usepackage{xpinyin}
+
+% 定义拼音宏
+
+\def\zhpinyin{zhong1guo2}
+
+\begin{document}
+
+  \pinyin{zhong1guo2} % 正确
+
+  \pinyin{\zhpinyin} % 无法使用定义的宏
+
+  \xpinyin*{中国} % 正确
+
+\end{document}
