@@ -12,8 +12,18 @@
 
   \pinyin{zhong1guo2} % 正确
 
-  \pinyin{\zhpinyin} % 无法使用定义的宏
+  % 需要手动展开宏才能够在\pinyin参数中使用宏命令
+  \expandafter\pinyin\expandafter{\zhpinyin} % 无法使用定义的宏
+
+  % 语法
+  \ExplSyntaxOn
+  \exp_args:NV \pinyin \zhpinyin
+  \ExplSyntaxOff
 
   \xpinyin*{中国} % 正确
 
 \end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
