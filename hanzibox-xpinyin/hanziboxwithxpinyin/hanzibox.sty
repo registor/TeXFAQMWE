@@ -14,6 +14,7 @@
 \usetikzlibrary{positioning}
 \RequirePackage{xpinyin}
 \RequirePackage{xstring,xifthen,stringstrings}
+%\RequirePackage{expl3} % 使用LaTeX3语法
 \usepackage[utf8]{inputenc}
 
 %used as tmp color%
@@ -69,7 +70,12 @@
 		\the\numexpr(#1+\ifnum\expandafter`\string#2<"80 1\else \ifnum\expandafter`\string#2>"BF 1 \else 0 \fi\fi
 		\expandafter)\expandafter\relax\expandafter}%
 	\fi}
-
+% 测试不通过，TODO
+%\newcommand\exppinyin{
+%  \ExplSyntaxOn
+%  \exp_args:NV \pinyin \mm@pin
+%  \ExplSyntaxOff
+%}
 \newcommand\drawhanzibox{%
 	\tikz[scale=0.5, every node/.style={inner sep=0,outer sep=0}]{%
 		%\draw[cheating dash=on 2pt off 2pt distance 2pt,thin,gray](0,0)grid(2,2);%
@@ -100,12 +106,14 @@
 			\draw[thin, black] (0,0) rectangle(2,2);
 			{\node[] at (1,1){\huge\mm@char};}%
 			\ifthenelse{\pinlen = 0}{}{\node[label={\strut\small\expandafter\pinyin\expandafter{\mm@pin}}, text height=1cm] (charr) at (1,1){};}%
+			%\ifthenelse{\pinlen = 0}{}{\node[label={\strut\small\ExplSyntaxOn \exp_args:NV \pinyin \mm@pin \ExplSyntaxOff}, text height=1cm] (charr) at (1,1){};}%
 			\ifthenelse{\tranlen = 0}{}{\node[align=center] at (1,-0.2){\strut\tiny\textit{\mm@tran}};}%
 		}%
 		{%
 			\ifthenelse{\equal{\mm@bo}{yes}}{\draw[thin, black] (0,0) rectangle(2*\charslen,2);}{}%
 			{\node[] at (1*\charslen,1){\huge\mm@char};}%
 			\ifthenelse{\pinlen = 0}{}{\node[label={\strut\small\expandafter\pinyin\expandafter{\mm@pin}}, text height=1cm] (charr) at (1*\charslen,1){};}%
+			%\ifthenelse{\pinlen = 0}{}{\node[label={\strut\small\ExplSyntaxOn \exp_args:NV \pinyin \mm@pin \ExplSyntaxOff}, text height=1cm] (charr) at (1*\charslen,1){};}%
 			\ifthenelse{\tranlen = 0}{}{\node[align=center] at (1*\charslen,-0.2){\strut\tiny\textit{\mm@tran}};}%
 		}%
 	}%
