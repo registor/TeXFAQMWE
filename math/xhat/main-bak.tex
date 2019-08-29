@@ -29,12 +29,13 @@
     \limits^{
       \begin{tikzpicture}[baseline={(beg)}]
         \path 
-        (.5\wd\xhat@box@pre, 0) coordinate (beg)
-        +(0, -5pt) coordinate (bofbeg)
-        (\wd\xhat@box - .5\wd\xhat@box@suf, 0) coordinate (end)
-        +(0, -5pt) coordinate (bofend);
-        \draw[<->,>={Stealth[length=3pt,width=2pt]}] (bofbeg) |- (end) -- (bofend);
-        \path (beg) -- node[midway, fill=black, draw=white, line~width=1pt, circle, inner~sep=1pt] {} (end);
+          (.5\wd\xhat@box@pre, 0) coordinate (beg)
+          (\wd\xhat@box - .5\wd\xhat@box@suf, 0) coordinate (end);
+        \draw[white] (0, 0) -- +(\wd\xhat@box, 0);
+        \draw (beg) -- node[midway, fill=black, draw=white, line~width=1pt, circle, inner~sep=1pt] {} (end);
+        \path[arrows={-Latex[length=3pt]}]
+          (beg) edge +(0, -5pt)
+          (end) edge +(0, -5pt);
       \end{tikzpicture}
     }
   }
