@@ -11,6 +11,11 @@
 \newsavebox\xhat@box@suf
 \newsavebox\xhat@box@voffset
 \ExplSyntaxOn
+% usage:
+% \xhat
+% [<left offset text>, <right offset text>]
+% [<phantom height text>]
+% {<whole text>}
 \NewDocumentCommand \xhat { > {\SplitArgument{1}{,}} O{,} O{} m }{
   \xhat@getxoffset#1
   \savebox\xhat@box@voffset{\ensuremath{#2}}
@@ -27,8 +32,7 @@
           (.5\wd\xhat@box@pre, 0) coordinate (beg)
           (\wd\xhat@box - .5\wd\xhat@box@suf, 0) coordinate (end);
         \draw[white] (0, 0) -- +(\wd\xhat@box, 0);
-        \draw
-          (beg) -- node[midway, fill=black, draw=white, line~width=1pt, circle, inner~sep=1pt] {} (end);
+        \draw (beg) -- node[midway, fill=black, draw=white, line~width=1pt, circle, inner~sep=1pt] {} (end);
         \path[arrows={-Latex[length=3pt]}]
           (beg) edge +(0, -5pt)
           (end) edge +(0, -5pt);
@@ -59,7 +63,7 @@
   \Large\noindent Function of \verb||:
   \begin{align*}
       abc \xhat     {abc} ffffd \xhat     {ST} \\
-      abc \xhat[a,b]{abc} ffffd \xhat[S,T]{ST}
+      abc \xhat[a,c]{abc} ffffd \xhat[S,T]{ST}
   \end{align*}
   
   \noindent Function of \verb||:
