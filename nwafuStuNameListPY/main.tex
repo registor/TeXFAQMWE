@@ -1,0 +1,60 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+\usepackage{pgfplotstable}
+% recommended:
+%\usepackage{booktabs}
+%\usepackage{array}
+%\usepackage{colortbl}
+
+\usepackage{xpinyin}
+% 导言区，可以在此引入必要的宏包
+
+\pgfplotstableset{
+  col sep=comma,
+}
+
+\pgfplotstableread{namelist.csv}{\loadedtable}
+
+\foreach \x in {1,2,...,10} {
+  \pgfplotstablecreatecol{\x}\loadedtable
+}  
+
+\begin{document} %在document环境中撰写文档
+%\pgfplotstableread{namelist.csv}\loadedtable
+\pgfplotstabletypeset[
+  columns={stno,name,1,2},
+  every head row/.style={
+    % patches the first row:
+    before row={
+      \hline
+    },
+    % after row={
+    %   \hline
+    % },     
+  },
+  before row={\hline},
+  every last row/.style={
+    after row={
+      \hline
+    },
+  },
+  columns/stno/.style={string type,
+    column name={学号},
+    column type=|c,
+  },
+  columns/name/.style={string type,
+    column name={姓名},
+    %preproc cell content/.code={\xpinyin*{##1}},
+    preproc cell content/.style={@cell content=\xpinyin*{##1}},
+    column type=|c|,
+  },
+]{\loadedtable}
+  %{namelist.csv}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
