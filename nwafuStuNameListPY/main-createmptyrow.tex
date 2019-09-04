@@ -1,0 +1,150 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+\usepackage{geometry}
+\geometry{% 本科生页边距
+  paper=a4paper,
+  top=2.5cm,
+  bottom=2.1cm,
+  left=2.5cm,
+  right=2.5cm,
+  headheight=0.8cm,
+  headsep=0.7cm,
+  footskip=1.4cm,
+} 
+
+\usepackage{pgfplotstable}
+\usepackage{multirow}
+% recommended:
+%\usepackage{booktabs}
+%\usepackage{array}
+%\usepackage{colortbl}
+
+\usepackage{xpinyin}
+%\xpinyinsetup{vsep=0.9em}
+
+\pgfplotstableset{
+  col sep=comma,
+  header=false,
+  font=\small,
+}
+
+%\pgfplotstableread{namelist-head.csv}{\loadedtable}
+\pgfplotstableread{namelist-nohead.csv}{\loadedtable}
+% 创建空白列
+\pgfplotstablecreatecol{A}\loadedtable
+\pgfplotstablecreatecol{B}\loadedtable
+\pgfplotstablecreatecol{C}\loadedtable
+\pgfplotstablecreatecol{D}\loadedtable
+\pgfplotstablecreatecol{E}\loadedtable
+\pgfplotstablecreatecol{F}\loadedtable
+\pgfplotstablecreatecol{G}\loadedtable
+\pgfplotstablecreatecol{H}\loadedtable
+\pgfplotstablecreatecol{I}\loadedtable
+\pgfplotstablecreatecol{J}\loadedtable
+\pgfplotstablecreatecol{K}\loadedtable
+\pgfplotstablecreatecol{L}\loadedtable
+\pgfplotstablecreatecol{M}\loadedtable
+
+
+\begin{document} %在document环境中撰写文档
+\pagestyle{empty}
+\newcolumntype{C}{>{\centering\arraybackslash}p{0.5em}}% a centered fixed-width-column
+\def\arraystretch{1.2}
+\pgfplotstabletypeset[
+  % columns={stno,name,1,2},
+  column type/.add={|}{},% results in ’|c’
+  %column type/.add={|@{\extracolsep{0.5cm}}}{@{\extracolsep{0.5cm}}},% results in ’|c’
+  every head row/.style={
+    % patches the first row:
+    before row={
+      \multicolumn{16}{c}{\bf\large 西北农林科技大学2019秋季学期学生课程考勤表}\\
+      \multicolumn{16}{l}{课程名称：C语言程序设计\hfill 课程代码：1091102\hfill 课序号：2\hfill   任课教师：耿楠}\\
+      \hline
+      \multirow{2}{*}{学号}&\multirow{2}{*}{姓名}&\multirow{2}{*}{班级}&\multicolumn{13}{c|}{平时考勤}\\
+      \cline{4-16}
+    }, 
+  },
+  after row={\hline},
+  every last row/.style={
+    after row={
+      \hline
+      \multicolumn{16}{|l|}{备注：出勤：$\surd$\ 缺勤：$\times$\ 迟到：$\bigtriangleup$\ 早退：$\bigcirc$\ 事假：$\bigtriangledown$\ 病假：$\oplus$}\\
+      \hline
+    },
+  },
+  columns/0/.style={string type,
+    column name={},
+    %column type=|c,
+  },
+  columns/1/.style={string type,
+    column name={},
+    postproc cell content/.style={@cell content=\xpinyin*{##1}},
+  },
+  columns/2/.style={string type,
+    column name={},
+  },
+  columns/A/.style={
+    column name={1},
+    column type=|C,
+  },
+  columns/A/.style={
+    column name={1},
+    column type=|C,
+  },
+  columns/B/.style={
+    column name={2},
+    column type=|C,
+  },
+  columns/C/.style={
+    column name={3},
+    column type=|C,
+  },
+  columns/D/.style={
+    column name={4},
+    column type=|C,
+  },
+  columns/E/.style={
+    column name={5},
+    column type=|C,
+  },
+  columns/F/.style={
+    column name={6},
+    column type=|C,
+  },
+  columns/G/.style={
+    column name={7},
+    column type=|C,
+  },
+  columns/H/.style={
+    column name={8},
+    column type=|C,
+  },
+  columns/I/.style={
+    column name={9},
+    column type=|C,
+  },
+  columns/J/.style={
+    column name={10},
+    column type=|C,
+  },
+  columns/K/.style={
+    column name={11},
+    column type=|C,
+  },
+  columns/L/.style={
+    column name={12},
+    column type=|C,
+  },
+  columns/M/.style={
+    column name={备注},
+    column type=|c|,
+  },
+]{\loadedtable}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

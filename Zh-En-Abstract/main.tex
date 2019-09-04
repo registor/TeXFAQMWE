@@ -1,0 +1,41 @@
+\documentclass{ctexart}
+\makeatletter
+\newenvironment{chineseabstract}{%
+  \if@twocolumn
+  \section*{摘要}
+  \else
+  \small
+  \begin{center}
+    {\bfseries 摘要\vspace{-.5em}\vspace{\z@}}
+  \end{center}
+  \quotation
+  \fi}{%
+  \if@twocolumn\else\endquotation\fi}
+
+\newenvironment{englishabstract}{%
+  \if@twocolumn
+  \section*{Abstract}
+  \else
+  \small
+  \begin{center}
+    {\bfseries Abstract\vspace{-.5em}\vspace{\z@}}
+  \end{center}
+  \quotation
+  \fi}{%
+  \if@twocolumn\else\endquotation\fi}
+\makeatother
+
+\usepackage{zhlipsum,lipsum}
+\begin{document}
+  \begin{chineseabstract}
+    \zhlipsum[1]
+  \end{chineseabstract}
+  \begin{englishabstract}
+    \lipsum[1]
+  \end{englishabstract}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

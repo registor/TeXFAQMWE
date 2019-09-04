@@ -1,0 +1,105 @@
+% question from https://wenda.latexstudio.net/q-1115.html
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{xparse}
+
+\makeatletter
+\newsavebox\xhat@box
+\newsavebox\xhat@box@pre
+\newsavebox\xhat@box@suf
+\newsavebox\xhat@box@voffset
+
+\tikzset{
+  xhat line/.style={
+    line cap=round
+  },
+  xhat arrow/.style={
+    arrows={-Latex[length=3pt]}
+  }
+}
+
+\ExplSyntaxOn
+\NewDocumentCommand \xhat { >{\SplitArgument{1}{,}} O{,} O{} m }{
+  \xhat@getxoffset#1
+  \savebox\xhat@box@voffset{\ensuremath{#2}}
+  \savebox\xhat@box{\ensuremath{#3}}
+  \mathnormal{
+    \mathop{
+      \mathstrut
+      \xhat@voffset{\xhat@box@voffset}\xhat@voffset{\xhat@box}
+      \smash[t]{\usebox\xhat@box}
+    }
+    \limits^{
+      \begin{tikzpicture}[baseline={(beg)}]
+        \path 
+          (.5\wd\xhat@box@pre, 0) coordinate (beg)
+          (\wd\xhat@box - .5\wd\xhat@box@suf, 0) coordinate (end);
+        \draw[white] (0, 0) -- +(\wd\xhat@box, 0);
+        \draw[xhat~line]
+          (beg) -- node[midway, fill=black, draw=white, circle, line~width=1pt, inner~sep=1pt] {} (end);
+        \path[xhat~line, xhat~arrow]
+          (beg) edge +(0, -5pt)
+          (end) edge +(0, -5pt);
+      \end{tikzpicture}
+    }
+  }
+}
+
+\def\xhat@getxoffset#1#2{
+  \savebox\xhat@box@pre{\ensuremath{#1}}
+  \savebox\xhat@box@suf{\ensuremath{#2}}
+}
+\def\xhat@voffset#1{
+  \rule{0pt}{\dimexpr\ht#1 - 2pt\relax}
+}
+\ExplSyntaxOff
+\makeatother
+
+\input code-with-output
+%   code-with-output is downloadable from 
+%   https://github.com/muzimuzhi/latex-examples/blob/master/utilities/code-with-output.tex
+
+\begin{document}
+
+\begin{example*}{Usages of \texttt{\textbackslash xhat}}
+  % \xhat
+  %   [<left offset text>, <right offset text>]
+  %   [<phantom height text>]
+  %   (<extra tikz options>)
+  %   {<whole text>}
+  \parindent=0pt\Large
+  Function of \verb|<left/right offset text>|:
+  \begin{align*}
+      abc \xhat     {abc} ffffd \xhat     {ST} \\
+      abc \xhat[a,b]{abc} ffffd \xhat[S,T]{ST}
+  \end{align*}
+  
+  Function of \verb|<phantom height text>|:
+  \begin{align*}
+    abc \xhat[\bm{S},\bm{T}]     {\bm{TS}} &=
+      \xhat[\bm{g},\bm{g}_s]{\bm{g}^k\bm{g}^l\bm{g}_r\bm{g}_s} \\
+    abc \xhat[\bm{S},\bm{T}][g^l]{\bm{TS}} &=
+      \xhat[\bm{g},\bm{g}_s]{\bm{g}^k\bm{g}^l\bm{g}_r\bm{g}_s}
+  \end{align*}
+\end{example*}
+
+\begin{example*}{Usage of \texttt{\textbackslash xhat}, 2}
+  \parindent=0pt\Large
+  Line cap is always round.
+  \Huge
+  \[
+    \xhat[\bm{S},\bm{T}]{\bm{TS}} \qquad
+    \tikzset{xhat line/.append style={line width=3pt}}
+    \xhat[\bm{S},\bm{T}]{\bm{TS}}
+  \]
+\end{example*}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
