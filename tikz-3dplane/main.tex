@@ -2,67 +2,72 @@
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{calc}
-\newcommand{\DrawPlane}[3][]{\draw[#1] 
-(-1*\PlaneScale,{\PlaneScale*cos(#2)},{\PlaneScale*sin(#2)})
- -- ++  (2*\PlaneScale,0,0)
- -- ++ (0,{sqrt(3)*\PlaneScale*cos(#3)},{sqrt(3)*\PlaneScale*sin(#3)})
- -- ++  (-2*\PlaneScale,0,0) -- cycle;}
-\newcommand{\DrawSinglePlane}[2][]{\ifcase#2
-\or
-\DrawPlane[fill=blue,#1]{210}{240} %left bottom 
-\or
-\DrawPlane[fill=red,#1]{-30}{-60} % right bottom
-\or
-\DrawPlane[fill=purple,#1]{210}{180} % bottom left
-\or
-\DrawPlane[fill=purple,#1]{210}{0} % bottom middle
-\or
-\DrawPlane[fill=purple,#1]{-30}{0} % bottom right
-\or
-\DrawPlane[fill=blue,#1]{90}{240} % left top
-\or
-\DrawPlane[fill=red,#1]{90}{-60} % right middle
-\or
-\DrawPlane[fill=red,#1]{90}{120} % right top
-\or
-\DrawPlane[fill=blue,#1]{90}{60} % left top
-\fi
-} 
+
+% 画一个平面
+\newcommand{\DrawPlane}[3][]{
+  \draw[#1] (-1*\PlaneScale,{\PlaneScale*cos(#2)},{\PlaneScale*sin(#2)})
+    -- ++  (2*\PlaneScale,0,0)
+    -- ++ (0,{sqrt(3)*\PlaneScale*cos(#3)},{sqrt(3)*\PlaneScale*sin(#3)})
+    -- ++  (-2*\PlaneScale,0,0) -- cycle;
+}
+
+% 画一个单一平面  
+\newcommand{\DrawSinglePlane}[2][]{
+  \ifcase#2
+  \or \DrawPlane[fill=blue,#1]{210}{240} %left bottom
+  \or \DrawPlane[fill=red,#1]{-30}{-60} % right bottom
+  \or \DrawPlane[fill=purple,#1]{210}{180} % bottom left
+  \or \DrawPlane[fill=purple,#1]{210}{0} % bottom middle
+  \or \DrawPlane[fill=purple,#1]{-30}{0} % bottom right
+  \or \DrawPlane[fill=blue,#1]{90}{240} % left top
+  \or \DrawPlane[fill=red,#1]{90}{-60} % right middle
+  \or \DrawPlane[fill=red,#1]{90}{120} % right top
+  \or \DrawPlane[fill=blue,#1]{90}{60} % left top
+  \fi
+}
+
 \begin{document}
-\foreach \X in {0,5,...,355}
-{\tdplotsetmaincoords{90+40*sin(\X)}{\X} % the first argument cannot be larger than 90
-\pgfmathsetmacro{\PlaneScale}{1}
-\begin{tikzpicture}
-\path[use as bounding box] (-4*\PlaneScale,-4*\PlaneScale) rectangle (4*\PlaneScale,4*\PlaneScale);
-\begin{scope}[tdplot_main_coords]
-% \draw[thick,->] (0,0,0) -- (2,0,0) node[anchor=north east]{$x$};
-% \draw[thick,->] (0,0,0) -- (0,2,0) node[anchor=north west]{$y$};
-% \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$z$};
-\path let \p1=(1,0,0)  in 
-\pgfextra{\pgfmathtruncatemacro{\xproj}{sign(\x1)}\xdef\xproj{\xproj}};
-\pgfmathtruncatemacro{\zproj}{sign(cos(\tdplotmaintheta))}
-\xdef\zproj{\zproj}
-% \node[anchor=north west] at (current bounding box.north west)
-% {\tdplotmaintheta,\tdplotmainphi,\xproj,\zproj};
-\ifnum\zproj=1
-  \ifnum\xproj=1
-   \foreach \X in {2,1,5,4,3,7,6,9,8}
-    {\DrawSinglePlane{\X}}
-  \else
-   \foreach \X in {1,...,9}
-    {\DrawSinglePlane{\X}}
-  \fi  
-\else
-  \ifnum\xproj=1
-   \foreach \X in {9,8,7,6,3,4,5,2,1}
-    {\DrawSinglePlane{\X}}
-  \else
-   \foreach \X in {8,9,6,7,3,5,4,1,2}
-    {\DrawSinglePlane{\X}}
-  \fi  
-\fi  
-\end{scope}
-\end{tikzpicture}}
+
+\foreach \X in {90}%,5,...,355}
+{
+  \tdplotsetmaincoords{90+40*sin(\X)}{\X} % the first argument cannot be larger than 90
+  \pgfmathsetmacro{\PlaneScale}{1}
+  \begin{tikzpicture}
+    \path[use as bounding box] (-4*\PlaneScale,-4*\PlaneScale) rectangle (4*\PlaneScale,4*\PlaneScale);
+    \begin{scope}[tdplot_main_coords]
+      % \draw[thick,->] (0,0,0) -- (2,0,0) node[anchor=north east]{$x$};
+      % \draw[thick,->] (0,0,0) -- (0,2,0) node[anchor=north west]{$y$};
+      % \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$z$};
+      \path let \p1=(1,0,0)  in 
+      \pgfextra{\pgfmathtruncatemacro{\xproj}{sign(\x1)}\xdef\xproj{\xproj}};
+      \pgfmathtruncatemacro{\zproj}{sign(cos(\tdplotmaintheta))}
+      \xdef\zproj{\zproj}
+      % \node[anchor=north west] at (current bounding box.north west)
+      % {\tdplotmaintheta,\tdplotmainphi,\xproj,\zproj};
+      \ifnum\zproj=1
+        \ifnum\xproj=1
+        \foreach \X in {2,1,5,4,3,7,6,9,8}{
+          \DrawSinglePlane{\X}
+        }
+        \else
+        \foreach \X in {1,...,9}{
+          \DrawSinglePlane{\X}
+        }
+        \fi
+      \else
+        \ifnum\xproj=1
+        \foreach \X in {9,8,7,6,3,4,5,2,1}{
+          \DrawSinglePlane{\X}
+        }
+        \else
+        \foreach \X in {8,9,6,7,3,5,4,1,2}{
+          \DrawSinglePlane{\X}
+        }
+        \fi
+      \fi  
+    \end{scope}
+  \end{tikzpicture}
+}
 \end{document}
 
 %%% Local Variables:
