@@ -1,0 +1,120 @@
+\documentclass[11pt]{scrartcl} 
+\PassOptionsToPackage{dvipsnames,svgnames}{xcolor}     
+\usepackage{xkeyval,tkz-base}
+\usetikzlibrary{arrows,calc}
+ \makeatletter%   
+% \pgfkeys{
+% /tkzcone/.cd,
+% }    
+
+\define@cmdkey[TKZ]{ell}{color}{}
+\define@cmdkey[TKZ]{ell}{shift}{}  
+\presetkeys[TKZ]{ell}{color = {},shift = 0}{}
+ %  (#2,#3) coordonnée du centre (#4,#5) Ra et Rb 
+
+\newcommand*{\ellipseThreeD}[1][]{\tkz@ellipseThreeD[#1]}% 
+\def\tkz@ellipseThreeD[#1](#2,#3)(#4,#5){%
+\setkeys[TKZ]{ell}{#1}%
+  \draw[yshift=\cmdTKZ@ell@shift cm,dashed] (#4,0) arc(0:180:#4 and #5);
+  \draw[yshift=\cmdTKZ@ell@shift cm ] (-#4,0) arc(180:360:#4 and #5); 
+  \path[fill=\cmdTKZ@ell@color,opacity=0.5,shade](#2 cm,#3 cm) ellipse (#4 and #5);  
+}
+
+\newcommand*{\sellipseThreeD}[1][]{\tkz@sellipseThreeD[#1]}% 
+\def\tkz@sellipseThreeD[#1](#2,#3)(#4,#5){%
+\setkeys[TKZ]{ell}{#1}%
+  \draw[yshift=\cmdTKZ@ell@shift cm,dashed] (#4,0) arc(0:180:#4 and #5);
+  \draw[yshift=\cmdTKZ@ell@shift cm ] (-#4,0) arc(180:360:#4 and #5); 
+} 
+
+\def\tkzCone{\pgfutil@ifnextchar[{\tkz@cone}{\tkz@cone[]}} 
+\def\tkz@cone[#1]#2#3#4{%
+% #1    styles
+% #2    rayon R
+% #3    coeff d'aplatissement k
+% #4    Hauteur du cône H   
+% \pgfkeys{%
+% /tkzcone/.cd
+% }% 
+% \pgfqkeys{/tkzcone}{#1}%     
+\pgfmathsetmacro{\bb}{#2*#3}          
+\pgfmathsetmacro{\yy}{\bb*\bb/#4}  
+\pgfmathsetmacro{\xx}{#2*sqrt((1-\yy)/#4)} 
+\fill[color=Maroon!10] (0,#4)--(-\xx,\yy)  arc(180:360:\xx cm and .5 cm); 
+\ellipseThreeD[color=Maroon!30](0,0)(\xx cm,.5 cm)
+\draw (0,#4)--(\xx,\yy);
+\draw (0,#4)--(-\xx,\yy); 
+}% 
+
+\def\tkzCylinder{\pgfutil@ifnextchar[{\tkz@cylinder}{\tkz@cylinder[]}} 
+\def\tkz@cylinder[#1]#2#3#4{% 
+\pgfmathsetmacro{\bb}{#2*#3}          
+\pgfmathsetmacro{\yy}{\bb*\bb/#4}  
+\pgfmathsetmacro{\xx}{#2*sqrt((1-\yy)/#4)}
+  \fill[color=Maroon!10] (-\xx cm,0)--(-\xx cm,#4 cm)  
+         arc(180:360:\xx cm and .5 cm)--(\xx cm,0) 
+         arc(360:180:\xx cm and .5 cm);   
+\ellipseThreeD[color=Maroon!30](0,0)(\xx cm,.5 cm)
+\begin{scope}[yshift=#4 cm]
+  \draw[fill=\cmdTKZ@ell@color,opacity=0.5,shade](0,0) ellipse (\xx cm and .5 cm) ;  
+\end{scope}
+\draw (\xx cm,0)--(\xx cm,#4 cm);
+\draw (-\xx cm,0)--(-\xx cm,#4 cm); 
+}%  
+
+\def\tkzTruncatedCone{\pgfutil@ifnextchar[{\tkz@TruncatedCone}{\tkz@TruncatedCone[]}} 
+\def\tkz@TruncatedCone[#1]#2#3#4{%   
+\pgfmathsetmacro{\bb}{#2*#3}          
+\pgfmathsetmacro{\yy}{\bb*\bb/#4}  
+\pgfmathsetmacro{\xx}{#2*sqrt((1-\yy)/#4)}
+  \fill[color=Maroon!10] (-\xx cm,0)--(-0.5*\xx cm,#4 cm)  
+    arc(180:360:0.5*\xx cm and .25 cm)--(\xx cm,0) arc(360:180:\xx cm and .5 cm);     
+\ellipseThreeD[color=Maroon!30](0,0)(\xx cm,.5 cm)
+\begin{scope}[yshift=#4 cm]
+  \draw[fill=\cmdTKZ@ell@color,opacity=0.5,shade](0,0) ellipse (0.5*\xx cm and .25 cm);  
+\end{scope}
+ \draw (\xx cm,0)--(0.5*\xx cm,#4 cm);
+ \draw (-\xx cm,0)--(-0.5*\xx cm,#4 cm); 
+}%   
+
+\def\tkzSphere{\pgfutil@ifnextchar[{\tkz@Sphere}{\tkz@Sphere[]}} 
+\def\tkz@Sphere[#1]#2#3#4{%
+\pgfmathsetmacro{\bb}{#2*#3}          
+\pgfmathsetmacro{\yy}{\bb*\bb/#4}  
+\pgfmathsetmacro{\xx}{#2*sqrt((1-\yy)/#4)}      
+\filldraw[ball color=Maroon!10] (0,0) circle[radius=\xx];
+\sellipseThreeD(0,0)(\xx cm,.25 cm)  
+\begin{scope}[rotate=-90]
+\sellipseThreeD(0,0)(\xx cm,.25 cm)  
+\end{scope}   
+}% 
+
+\newcommand{\parapp}[3]{%
+\fill[Maroon!10,opacity=.5] (0,0,0)-- (#1,0,0) -- (#1,#3,0)  -- (0,#3,0) --cycle;
+\fill[Maroon!10,opacity=.5] (0,0,#2)-- (#1,0,#2) -- (#1,#3,#2)  -- (0,#3,#2) --cycle;
+\fill[Maroon!10,opacity=.5] (0,#3,0)-- (0,#3,#2) -- (#1,#3,#2) -- (#1,#3,0)--cycle;
+\fill[Maroon!10,opacity=.5] (0,0,0)-- (0,0,#2) -- (#1,0,#2) -- (#1,0,0)--cycle; 
+\draw[] (0,0,#2) -- (#1,0,#2) -- (#1,#3,#2) --(0,#3,#2) --(0,0,#2)
+        (#1,0,#2) -- (#1,0,0)  -- (#1,#3,0) --(0,#3,0) -- (0,#3,#2)    
+        (#1,#3,#2) -- (#1,#3,0);
+\draw[dashed] (0,0,0) -- (0,0,#2) (0,0,0)-- (#1,0,0) (0,0,0)-- (0,#3,0);
+
+}    
+\begin{document}    
+
+ \tikz  \tkzCone{3}{0}{5};
+  \hspace{1cm}
+ \tikz   \tkzCylinder{3}{0}{5};
+  \hspace{1cm}   
+ \tikz   \tkzTruncatedCone{3}{0}{2};
+
+\vspace{1cm}
+
+\tikz   \parapp{6}{2}{4};      
+  \hspace{1cm}
+\tikz  \parapp{3}{3}{3} ;
+
+\vspace{1cm}   
+\tikz \tkzSphere{2}{0}{2};
+
+\end{document}
