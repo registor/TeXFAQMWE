@@ -33,7 +33,7 @@
 \fi
 } 
 \begin{document}
-\foreach \X in {0,5,...,355} % {70}
+\foreach \X in {20}%{0,5,...,355} % {70}
 {\tdplotsetmaincoords{90+40*sin(\X)}{\X} % the first argument cannot be larger than 90
 \pgfmathsetmacro{\PlaneScale}{1}
 \begin{tikzpicture}
@@ -44,7 +44,7 @@
 \ifnum\xproj=1
   \ifnum\zproj=1
    \foreach \X in {5,6,7,8}
-    {\DrawSinglePlane{\X}}
+    %{\DrawSinglePlane{\X}}
   \else
    \foreach \X in {8,6,7,5}
     {\DrawSinglePlane{\X}}
@@ -52,15 +52,15 @@
 \else
   \ifnum\zproj=1
    \foreach \X in {5,7,6,8}
-    {\DrawSinglePlane{\X}}
+    %{\DrawSinglePlane{\X}}
   \else
    \foreach \X in {6,5,8,7}
-    {\DrawSinglePlane{\X}}
+    %{\DrawSinglePlane{\X}}
   \fi  
 \fi  
-% \draw[thick,->] (0,0,0) -- (2,0,0) node[anchor=north east]{$x$};
-% \draw[thick,->] (0,0,0) -- (0,2,0) node[anchor=north west]{$y$};
-% \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$z$};
+ \draw[thick,->] (0,0,0) -- (2,0,0) node[anchor=north east]{$x$};
+ \draw[thick,->] (0,0,0) -- (0,2,0) node[anchor=north west]{$y$};
+ \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$z$};
 \end{scope}
 \end{tikzpicture}}
 \end{document}
