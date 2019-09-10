@@ -1,0 +1,71 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{calc}
+
+\newcommand{\DrawRectangularPlane}[4][]{\draw[#1] 
+#2 -- ++  #3 --++ #4 -- ++ ($-1*#3$) -- cycle;}
+\newcommand{\DrawSinglePlane}[2][]{\ifcase#2
+\or % 1 xz plane at y=-1 
+\DrawRectangularPlane[fill=red,#1]{({-2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},-\PlaneScale)}
+{(2*\PlaneScale,0,0)}{(0,0,2*\PlaneScale)} 
+\or% 2 xz plane at y=1
+\DrawRectangularPlane[fill=blue,#1]{({-2*cos(45)*\PlaneScale},{2*sin(45)*\PlaneScale},-\PlaneScale)}
+{(2*\PlaneScale,0,0)}{(0,0,2*\PlaneScale)} 
+\or% 3 yz plane at x=-1
+\DrawRectangularPlane[fill=red,#1]{({-2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},-\PlaneScale)}
+{(0,2*\PlaneScale,0)}{(0,0,2*\PlaneScale)} %
+\or% 4 yz plane at x=1
+\DrawRectangularPlane[fill=blue,#1]{({2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},-\PlaneScale)}
+{(0,2*\PlaneScale,0)}{(0,0,2*\PlaneScale)} % 
+\or% 5 diagonal upper right quadrant
+\DrawRectangularPlane[fill=blue,#1]{({2*cos(45)*\PlaneScale},{2*sin(45)*\PlaneScale},-\PlaneScale)}
+{({-2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},0)}{(0,0,2*\PlaneScale)} 
+\or% 6 diagonal upper left quadrant
+\DrawRectangularPlane[fill=red,#1]{({-2*cos(45)*\PlaneScale},{2*sin(45)*\PlaneScale},-\PlaneScale)}
+{({2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},0)}{(0,0,2*\PlaneScale)} 
+\or% 7 diagonal lower right quadrant
+\DrawRectangularPlane[fill=red,#1]{({2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},-\PlaneScale)}
+{({-2*cos(45)*\PlaneScale},{2*sin(45)*\PlaneScale},0)}{(0,0,2*\PlaneScale)} 
+\or %d iagonal lower left quadrant
+\DrawRectangularPlane[fill=blue,#1]{({-2*cos(45)*\PlaneScale},{-2*sin(45)*\PlaneScale},-\PlaneScale)}
+{({2*cos(45)*\PlaneScale},{2*sin(45)*\PlaneScale},0)}{(0,0,2*\PlaneScale)} 
+\fi
+} 
+\begin{document}
+\foreach \X in {0,5,...,355} % {70}
+{\tdplotsetmaincoords{90+40*sin(\X)}{\X} % the first argument cannot be larger than 90
+\pgfmathsetmacro{\PlaneScale}{1}
+\begin{tikzpicture}
+\path[use as bounding box] (-4*\PlaneScale,-4*\PlaneScale) rectangle (4*\PlaneScale,4*\PlaneScale);
+\begin{scope}[tdplot_main_coords]
+\pgfmathtruncatemacro{\xproj}{sign(cos(\tdplotmainphi-45))}
+\pgfmathtruncatemacro{\zproj}{sign(sin(\tdplotmainphi-45))}
+\ifnum\xproj=1
+  \ifnum\zproj=1
+   \foreach \X in {5,6,7,8}
+    {\DrawSinglePlane{\X}}
+  \else
+   \foreach \X in {8,6,7,5}
+    {\DrawSinglePlane{\X}}
+  \fi  
+\else
+  \ifnum\zproj=1
+   \foreach \X in {5,7,6,8}
+    {\DrawSinglePlane{\X}}
+  \else
+   \foreach \X in {6,5,8,7}
+    {\DrawSinglePlane{\X}}
+  \fi  
+\fi  
+% \draw[thick,->] (0,0,0) -- (2,0,0) node[anchor=north east]{$x$};
+% \draw[thick,->] (0,0,0) -- (0,2,0) node[anchor=north west]{$y$};
+% \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$z$};
+\end{scope}
+\end{tikzpicture}}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
