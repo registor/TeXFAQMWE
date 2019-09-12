@@ -1,7 +1,19 @@
 % 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
 \documentclass{ctexbeamer}
 
-\def\chnum{3}
+\def\chnum{1}
+
+% 根据需要载入宏包
+\ifcase\chnum\relax
+  % 第0章
+  \usepackage{multirow}  
+\or % 第1章
+  \usepackage{multirow}
+  \usepackage{pifont}
+\or % 第2章
+  \usepackage{minted}
+  \usepackage[os=win]{menukeys}
+\fi 
 
 % 设置标题==================================================
 \title[\textsc{C Language Programming}] % (可选，仅当标题过长时使用)
