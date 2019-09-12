@@ -1,0 +1,58 @@
+% https://tex.stackexchange.com/questions/222641/how-do-i-do-complex-positioning-of-my-subfigures
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\newsavebox{\bigimage}
+
+\begin{document}
+
+\begin{figure}
+\centering
+
+\sbox{\bigimage}{%
+  \begin{subfigure}[b]{.38\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{example-image-9x16}
+  \caption{Figure 1}
+
+  \vspace{0pt}% reference point at the very bottom
+  \end{subfigure}%
+}
+
+\usebox{\bigimage}\hfill
+\begin{minipage}[b][\ht\bigimage][s]{.58\textwidth}
+  \begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[height=3.5cm,width=\textwidth]{example-image-16x9}
+  \caption{Figure 2}
+  \end{subfigure}%
+  \vfill
+  \begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[height=3.5cm,width=\textwidth]{example-image-16x9}
+  \caption{Figure 3}
+  \end{subfigure}
+
+  \vspace{0pt}% reference point at the very bottom
+\end{minipage}
+
+\caption{Full caption}
+
+\end{figure}
+
+\end{document}
+
+%% https://tex.stackexchange.com/questions/331328/the-way-to-use-3-figures
+%\documentclass{article}
+%
+%\usepackage{graphicx}
+%
+%\begin{document}
+%	\begin{figure}[!htb]
+%		\begin{tabular}{cc}
+%			\begin{minipage}{0.5\textwidth} \includegraphics[width=0.9\textwidth]{example-image-a} \end{minipage}& \begin{minipage}{0.5\textwidth} \includegraphics[width=0.9\textwidth]{example-image} \\ \includegraphics[width=0.9\textwidth]{example-image} \end{minipage}
+%		\end{tabular}
+%		\caption{Hello\label{fig:irrfdad}}
+%	\end{figure}
+%\end{document}
