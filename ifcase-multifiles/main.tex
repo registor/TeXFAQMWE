@@ -1,0 +1,49 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexbeamer}
+
+\def\chnum{3}
+
+% 设置标题==================================================
+\title[\textsc{C Language Programming}] % (可选，仅当标题过长时使用)
+{C语言程序程序设计}
+\ifcase\chnum\relax
+  % 第0章
+  \subtitle[绪论]{绪论} % (可选，仅当标题过长时使用)  
+\or % 第1章
+  \subtitle[基础知识]{基础知识} % (可选，仅当标题过长时使用)  
+\or % 第2章
+  \subtitle[算法简介]{算法简介} % (可选，仅当标题过长时使用)
+\fi 
+\author[Nine, G.] % (可选，仅当有多个作者时使用)
+{
+  耿楠
+}
+
+\date{2019年秋}
+
+% 定义章选择命令
+\newcommand\seledchap[1]{%
+  \ifcase#1\relax
+    % 第0章
+    \include{data/ch00} % 绪论
+  \or % 第1章
+    \include{data/ch01} % 基础知识
+  \or % 第2章
+    \include{data/ch02} % 算法
+  \fi
+}
+
+\begin{document} %在document环境中撰写文档
+  % plain选项移除标题页的边栏和页眉
+  \begin{frame}[plain,noframenumbering]
+    \titlepage
+  \end{frame}
+  
+  % 插入章节
+  \seledchap{\chnum}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
