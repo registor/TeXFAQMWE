@@ -1,0 +1,592 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+% 包含beamer宏包
+\documentclass[t, xcolor=svgnames]{ctexbeamer}
+
+% 载入需要的宏包
+\input{settings/packages.tex}
+% 进行必要的设置
+\input{settings/format.tex}
+
+\begin{document}
+  \begin{frame}[fragile]%{动态数组}{动态数组作函数参数} %must using [fragile]
+  \begin{itemize}
+  \item 动态数组作函数参数   
+  \end{itemize}
+  \begin{center}
+    \begin{tikzpicture}[font=\tiny]
+      \umlnote[scale = 0.8, text width=0.55\textwidth](code1) at(0, 0)
+      {
+        \cfile{codes/memdiagram.c}
+      };
+
+      \node[scale = 0.95, right = 0.5 of code1, shift={(-1.8cm, 0.0cm)}] (mem01) {
+        \begin{bytefield}[leftcurlyspace=34pt,
+          rightcurlyspace=0pt]{4}
+          \memsec{}{}{2}{\rvdots}\\
+          \begin{rightwordgroup}{栈}
+            \begin{leftwordgroup}{pa:main}
+              \memsec{}{FFFF E180}{2}{$\ldots$}
+            \end{leftwordgroup}\\
+            \memsec{}{}{2}{\rvdots}\\
+            \begin{leftwordgroup}{p:Traversal}
+              \memsec{}{FFFF E158}{2}{$\ldots$}
+            \end{leftwordgroup}\\
+            \memsec{}{}{2}{\rvdots}\\
+            \begin{leftwordgroup}{pa:Traversal}
+              \memsec{}{FFFF E148}{2}{$\ldots$}
+            \end{leftwordgroup}\\
+            \memsec{}{}{2}{\rvdots}\\
+            \begin{leftwordgroup}{pf:Traversal}
+              \memsec{}{FFFF E138}{2}{$\ldots$}
+            \end{leftwordgroup}\\
+            \memsec{}{}{2}{\rvdots}\\
+            \begin{leftwordgroup}{pData:I/Oput}
+              \memsec{}{FFFF E118}{2}{$\ldots$}
+            \end{leftwordgroup}
+          \end{rightwordgroup}\\
+          \memsec{}{}{2}{\rvdots}\\
+          \begin{rightwordgroup}{堆}            
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{}{1}{$\ldots$}\\%
+            \memsec{}{0060 3430}{1}{$\ldots$}
+          \end{rightwordgroup}\\
+          \memsec{}{}{2}{\rvdots}\\
+          \begin{rightwordgroup}{代码段}
+            \memsec{}{0040 0935}{2}{Output()}\\%
+            \memsec{}{0040 0910}{2}{Input()}
+          \end{rightwordgroup}\\
+          \memsec{}{}{2}{\rvdots}
+        \end{bytefield}
+      };
+      
+      \def\clh{0.20}; %一行代码的高度宏
+      \def\clw{1.30}; %一行代码的宽度宏
+      \def\stpos{-2.18}
+      \path let \p1=(code1) in coordinate (org1) at (\x1, \y1)
+      % pa指针声明代码坐标
+      coordinate (ovBL10) at ($(org1) + (\stpos, 2.09)$)%左下角坐标
+      coordinate (ovUR10) at ($(ovBL10) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD10) at ($(ovBL10)!0.5!(ovUR10)$)%中心点坐标
+      coordinate (ovCR10) at (ovUR10|-ovCD10)%右边线中点坐标
+
+      % 通过pa指针分配内存代码坐标
+      coordinate (ovBL11) at ($(org1) + (\stpos, 1.50)$)%左下角坐标
+      coordinate (ovUR11) at ($(ovBL11) + (\clw + 1.8, \clh)$)%右上角坐标
+      coordinate (ovCD11) at ($(ovBL11)!0.5!(ovUR11)$)%中心点坐标
+      coordinate (ovCR11) at (ovUR11|-ovCD11)%右边线中点坐标
+
+      % 遍历函数第1次调用pa实参代码坐标
+      coordinate (ovBL12) at ($(org1) + (\stpos + 0.91, 1.12)$)%左下角坐标
+      coordinate (ovUR12) at ($(ovBL12) + (\clw - 1.06, \clh)$)%右上角坐标
+      coordinate (ovCD12) at ($(ovBL12)!0.5!(ovUR12)$)%中心点坐标
+      coordinate (ovCR12) at (ovUR12|-ovCD12)%右边线中点坐标
+      % 遍历函数第1次调用Input实参代码坐标
+      coordinate (ovBL13) at ($(ovBL12) + (0.54, 0.0)$)%左下角坐标
+      coordinate (ovUR13) at ($(ovBL13) + (\clw - 0.81, \clh)$)%右上角坐标
+      coordinate (ovCD13) at ($(ovBL13)!0.5!(ovUR13)$)%中心点坐标
+      coordinate (ovCR13) at (ovUR13|-ovCD13)%右边线中点坐标
+
+       % 遍历函数第2次调用pa实参代码坐标
+      coordinate (ovBL14) at ($(ovBL12) + (0.0, -0.41)$)%左下角坐标
+      coordinate (ovUR14) at ($(ovBL14) + (\clw - 1.06, \clh)$)%右上角坐标
+      coordinate (ovCD14) at ($(ovBL14)!0.5!(ovUR14)$)%中心点坐标
+      coordinate (ovCR14) at (ovUR14|-ovCD14)%右边线中点坐标
+      % 遍历函数第2次调用Output实参代码坐标
+      coordinate (ovBL15) at ($(ovBL14) + (0.54, 0.0)$)%左下角坐标
+      coordinate (ovUR15) at ($(ovBL15) + (\clw - 0.73, \clh)$)%右上角坐标
+      coordinate (ovCD15) at ($(ovBL15)!0.5!(ovUR15)$)%中心点坐标
+      coordinate (ovCR15) at (ovUR15|-ovCD15)%右边线中点坐标
+
+      % free函数调用代码坐标
+      coordinate (ovBL16) at ($(org1) + (\stpos, 0.12)$)%左下角坐标
+      coordinate (ovUR16) at ($(ovBL16) + (\clw - 0.45, \clh)$)%右上角坐标
+      coordinate (ovCD16) at ($(ovBL16)!0.5!(ovUR16)$)%中心点坐标
+      coordinate (ovCR16) at (ovUR16|-ovCD16)%右边线中点坐标
+
+      % NULL空指针操作代码坐标
+      coordinate (ovBL17) at ($(ovBL16) + (0.0, -\clh - 0.02)$)%左下角坐标
+      coordinate (ovUR17) at ($(ovBL17) + (\clw - 0.45, \clh)$)%右上角坐标
+      coordinate (ovCD17) at ($(ovBL17)!0.5!(ovUR17)$)%中心点坐标
+      coordinate (ovCR17) at (ovUR17|-ovCD17)%右边线中点坐标
+
+      % Traversal形参pa代码坐标
+      coordinate (ovBL18) at ($(org1) + (\stpos + 1.40, -0.67)$)%左下角坐标
+      coordinate (ovUR18) at ($(ovBL18) + (\clw - 0.98, \clh)$)%右上角坐标
+      coordinate (ovCD18) at ($(ovBL18)!0.5!(ovUR18)$)%中心点坐标
+      coordinate (ovCR18) at (ovUR18|-ovCD18)%右边线中点坐标
+
+      % Traversal形参pf代码坐标
+      coordinate (ovBL19) at ($(ovBL18) + (1.48, 0.0)$)%左下角坐标
+      coordinate (ovUR19) at ($(ovBL19) + (\clw - 0.98, \clh)$)%右上角坐标
+      coordinate (ovCD19) at ($(ovBL19)!0.5!(ovUR19)$)%中心点坐标
+      coordinate (ovCR19) at (ovUR19|-ovCD19)%右边线中点坐标
+
+      % 遍历函数内p指针代码坐标
+      coordinate (ovBL1a1) at ($(org1) + (\stpos, -1.05)$)%左下角坐标
+      coordinate (ovUR1a1) at ($(ovBL1a1) + (\clw - 0.68, \clh)$)%右上角坐标
+      coordinate (ovCD1a1) at ($(ovBL1a1)!0.5!(ovUR1a1)$)%中心点坐标
+      coordinate (ovCR1a1) at (ovUR1a1|-ovCD1a1)%右边线中点坐标
+      % 遍历函数内for循环代码坐标
+      coordinate (ovBL1a2) at ($(ovBL1a1) + (0.0, -\clh - 0.01)$)%左下角坐标
+      coordinate (ovUR1a2) at ($(ovBL1a2) + (\clw + 0.98, \clh)$)%右上角坐标
+      coordinate (ovCD1a2) at ($(ovBL1a2)!0.5!(ovUR1a2)$)%中心点坐标
+      coordinate (ovCR1a2) at (ovUR1a2|-ovCD1a2)%右边线中点坐标
+      % 遍历函数内pf指针调用函数代码坐标
+      coordinate (ovBL1b) at ($(ovBL1a2) + (0.2, -\clh - 0.02)$)%左下角坐标
+      coordinate (ovUR1b) at ($(ovBL1b) + (\clw - 0.68, \clh)$)%右上角坐标
+      coordinate (ovCD1b) at ($(ovBL1b)!0.5!(ovUR1b)$)%中心点坐标
+      coordinate (ovCR1b) at (ovUR1b|-ovCD1b)%右边线中点坐标
+
+      % Input函数头代码坐标
+      coordinate (ovBL1c) at ($(org1) + (\stpos - 0.24, -2.03)$)%左下角坐标
+      coordinate (ovUR1c) at ($(ovBL1c) + (\clw + 0.75, \clh)$)%右上角坐标
+      coordinate (ovCD1c) at ($(ovBL1c)!0.5!(ovUR1c)$)%中心点坐标
+      coordinate (ovCR1c) at (ovUR1c|-ovCD1c)%右边线中点坐标
+      % Input函数体代码坐标
+      coordinate (ovBL1d) at ($(ovBL1c) + (0.23, -0.41)$)%左下角坐标
+      coordinate (ovUR1d) at ($(ovBL1d) + (\clw + 0.45, \clh)$)%右上角坐标
+      coordinate (ovCD1d) at ($(ovBL1d)!0.5!(ovUR1d)$)%中心点坐标
+      coordinate (ovCR1d) at (ovUR1d|-ovCD1d)%右边线中点坐标
+      % Output函数头代码坐标
+      coordinate (ovBL1e) at ($(ovBL1c) + (0.0, -0.80)$)%左下角坐标
+      coordinate (ovUR1e) at ($(ovBL1e) + (\clw + 0.83, \clh)$)%右上角坐标
+      coordinate (ovCD1e) at ($(ovBL1e)!0.5!(ovUR1e)$)%中心点坐标
+      coordinate (ovCR1e) at (ovUR1e|-ovCD1e)%右边线中点坐标
+      % Output函数体代码坐标
+      coordinate (ovBL1f) at ($(ovBL1e) + (0.23, -0.40)$)%左下角坐标
+      coordinate (ovUR1f) at ($(ovBL1f) + (\clw + 0.7, \clh)$)%右上角坐标
+      coordinate (ovCD1f) at ($(ovBL1f)!0.5!(ovUR1f)$)%中心点坐标
+      coordinate (ovCR1f) at (ovUR1f|-ovCD1f)%右边线中点坐标
+      ;
+
+      % 计算地址框的坐标
+      \def\clh{0.3}; %一行代码的高度宏
+      \def\clw{1.23}; %一行代码的宽度宏
+      \def\stpos{-0.25}   
+      \path let \p1=(mem01) in coordinate (org1) at (\x1, \y1)
+      % Input函数地址
+      coordinate (ovBL21) at ($(org1) + (\stpos, -3.30)$)%左下角坐标
+      coordinate (ovUR21) at ($(ovBL21) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD21) at ($(ovBL21)!0.5!(ovUR21)$)%中心点坐标
+      coordinate (ovCR21) at (ovUR21|-ovCD21)%右边线中点坐标
+      coordinate (ovCL21) at (ovBL21|-ovCD21)%左边线中点坐标
+      % Output函数地址
+      coordinate (ovBL22) at ($(ovBL21) + (0.0, 0.4)$)%左下角坐标
+      coordinate (ovUR22) at ($(ovBL22) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD22) at ($(ovBL22)!0.5!(ovUR22)$)%中心点坐标
+      coordinate (ovCR22) at (ovUR22|-ovCD22)%右边线中点坐标
+      coordinate (ovCL22) at (ovBL22|-ovCD22)%左边线中点坐标
+      % 动态内存首地址
+      coordinate (ovBL23) at ($(ovBL22) + (0.0, 0.8)$)%左下角坐标
+      coordinate (ovUR23) at ($(ovBL23) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD23) at ($(ovBL23)!0.5!(ovUR23)$)%中心点坐标
+      coordinate (ovCR23) at (ovUR23|-ovCD23)%右边线中点坐标
+      coordinate (ovCL23) at (ovBL23|-ovCD23)%左边线中点坐标      
+      ;
+
+      % 计算内存框的坐标
+      \def\clh{0.40}; %一行代码的高度宏
+      \def\clw{1.05}; %一行代码的宽度宏
+      \def\stpos{1.02}   
+      \path let \p1=(mem01) in coordinate (org1) at (\x1, \y1)
+      % Input函数内存框
+      coordinate (ovBL31) at ($(org1) + (\stpos, -3.31)$)%左下角坐标
+      coordinate (ovUR31) at ($(ovBL31) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD31) at ($(ovBL31)!0.5!(ovUR31)$)%中心点坐标
+      coordinate (ovCR31) at (ovUR31|-ovCD31)%右边线中点坐标
+      coordinate (ovCL31) at (ovBL31|-ovCD31)%左边线中点坐标
+      % Output函数内存框
+      coordinate (ovBL32) at ($(ovBL31) + (0.0, 0.4)$)%左下角坐标
+      coordinate (ovUR32) at ($(ovBL32) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD32) at ($(ovBL32)!0.5!(ovUR32)$)%中心点坐标
+      coordinate (ovCR32) at (ovUR32|-ovCD32)%右边线中点坐标
+      coordinate (ovCL32) at (ovBL32|-ovCD32)%左边线中点坐标
+      % 动态内存框
+      coordinate (ovBL33) at ($(ovBL32) + (0.0, 0.81)$)%左下角坐标
+      coordinate (ovUR33) at ($(ovBL33) + (\clw, \clh + 1.0)$)%右上角坐标
+      coordinate (ovCD33) at ($(ovBL33)!0.5!(ovUR33)$)%中心点坐标
+      coordinate (ovCR33) at (ovUR33|-ovCD33)%右边线中点坐标
+      coordinate (ovCL33) at (ovBL33|-ovCD33)%左边线中点坐标
+      coordinate (ovBR33) at (ovBL33-|ovUR33)%右下角坐标
+      coordinate (ovUL33) at (ovBL33|-ovUR33)%左上角坐标
+
+      % pData指针内存框
+      coordinate (ovBL34) at ($(ovBL33) + (0.0, 1.80)$)%左下角坐标
+      coordinate (ovUR34) at ($(ovBL34) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD34) at ($(ovBL34)!0.5!(ovUR34)$)%中心点坐标
+      coordinate (ovCR34) at (ovUR34|-ovCD34)%右边线中点坐标
+      coordinate (ovCL34) at (ovBL34|-ovCD34)%左边线中点坐标
+      coordinate (ovBR34) at (ovBL34-|ovUR34)%右下角坐标
+      coordinate (ovUL34) at (ovBL34|-ovUR34)%左上角坐标
+      % 遍历函数形参pf指针内存框
+      coordinate (ovBL35) at ($(ovBL34) + (0.0, 0.8)$)%左下角坐标
+      coordinate (ovUR35) at ($(ovBL35) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD35) at ($(ovBL35)!0.5!(ovUR35)$)%中心点坐标
+      coordinate (ovCR35) at (ovUR35|-ovCD35)%右边线中点坐标
+      coordinate (ovCL35) at (ovBL35|-ovCD35)%左边线中点坐标
+      coordinate (ovBR35) at (ovBL35-|ovUR35)%右下角坐标
+      coordinate (ovUL35) at (ovBL35|-ovUR35)%左上角坐标
+      % 遍历函数形参pa指针内存框
+      coordinate (ovBL36) at ($(ovBL35) + (0.0, 0.8)$)%左下角坐标
+      coordinate (ovUR36) at ($(ovBL36) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD36) at ($(ovBL36)!0.5!(ovUR36)$)%中心点坐标
+      coordinate (ovCR36) at (ovUR36|-ovCD36)%右边线中点坐标
+      coordinate (ovCL36) at (ovBL36|-ovCD36)%左边线中点坐标
+      coordinate (ovBR36) at (ovBL36-|ovUR36)%右下角坐标
+      coordinate (ovUL36) at (ovBL36|-ovUR36)%左上角坐标
+      % 遍历函数内p指针内存框
+      coordinate (ovBL37) at ($(ovBL36) + (0.0, 0.8)$)%左下角坐标
+      coordinate (ovUR37) at ($(ovBL37) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD37) at ($(ovBL37)!0.5!(ovUR37)$)%中心点坐标
+      coordinate (ovCR37) at (ovUR37|-ovCD37)%右边线中点坐标
+      coordinate (ovCL37) at (ovBL37|-ovCD37)%左边线中点坐标
+      coordinate (ovBR37) at (ovBL37-|ovUR37)%右下角坐标
+      coordinate (ovUL37) at (ovBL37|-ovUR37)%左上角坐标
+
+      % 主函数pa指针内存框
+      coordinate (ovBL38) at ($(ovBL37) + (0.0, 0.8)$)%左下角坐标
+      coordinate (ovUR38) at ($(ovBL38) + (\clw, \clh)$)%右上角坐标
+      coordinate (ovCD38) at ($(ovBL38)!0.5!(ovUR38)$)%中心点坐标
+      coordinate (ovCR38) at (ovUR38|-ovCD38)%右边线中点坐标
+      coordinate (ovCL38) at (ovBL38|-ovCD38)%左边线中点坐标
+      ;      
+
+      % 绘制pa指针声明代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<1>](ovBL10) rectangle (ovUR10);
+      % 绘制通过pa指针动态分配内存代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<2>](ovBL11) rectangle (ovUR11);
+      % 绘制遍历函数第1次调用pa实参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<4>](ovBL12) rectangle (ovUR12);
+      % 绘制遍历函数第1次调用Input实参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<4>](ovBL13) rectangle (ovUR13);
+      % 绘制遍历函数第2次调用pa实参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<11>](ovBL14) rectangle (ovUR14);
+      % 绘制遍历函数第2次调用Output实参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<11>](ovBL15) rectangle (ovUR15);
+      % 绘制free函数代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<18>](ovBL16) rectangle (ovUR16);
+      % 绘制pa = NULL代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<19>](ovBL17) rectangle (ovUR17);
+      % 绘制遍历函数pa形参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<4-11>](ovBL18) rectangle (ovUR18);
+      % 绘制遍历函数pf形参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<4-11>](ovBL19) rectangle (ovUR19);
+      % 绘制遍历函数中p指针代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<6-17>](ovBL1a1) rectangle (ovUR1a1);
+      % 绘制遍历函数for循环代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<7-17>](ovBL1a2) rectangle (ovUR1a2);
+      % 绘制遍历函数pf函数指针调用代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<8-17>](ovBL1b) rectangle (ovUR1b);
+      % 绘制Input函数代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<8-10>](ovBL1c) rectangle (ovUR1c);
+      % 绘制Input函数中scanf实参pData代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<8-10>](ovBL1d) rectangle (ovUR1d);
+      % 绘制Output函数代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<11-17>](ovBL1e) rectangle (ovUR1e);
+      % 绘制Output函数中printf实参代码覆盖框
+      \draw[blue, fill=blue!35, fill opacity=0.3, visible
+      on=<11-17>](ovBL1f) rectangle (ovUR1f);
+
+      
+      % 绘制Input函数地址覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<4->](ovBL21) rectangle (ovUR21);
+      % 绘制Output函数地址覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<11->](ovBL22) rectangle (ovUR22);
+      % 绘制动态分配的内存首地址覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<2->](ovBL23) rectangle (ovUR23);
+
+      % 绘制Input函数内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<4->](ovBL31) rectangle (ovUR31);
+      % 绘制Output函数内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<11->](ovBL32) rectangle (ovUR32);
+      % 绘制动态分配的内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<2->](ovBL33) rectangle (ovUR33);
+      % 绘制pData内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<8->](ovBL34) rectangle (ovUR34);
+      % 绘制遍历函数形参pf内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<4->](ovBL35) rectangle (ovUR35);
+      % 绘制遍历函数形参pa内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<4->](ovBL36) rectangle (ovUR36);
+      % 绘制遍历函数内p指针内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<6->](ovBL37) rectangle (ovUR37);
+      % 绘制主函数中pa指针内存覆盖框
+      \draw[green!35!black, fill=green!35, fill opacity=0.3, visible
+      on=<1->](ovBL38) rectangle (ovUR38);
+
+      % pa指针声明到内存的指向线
+      \begin{scope}[visible on=<1>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR10) to [out = 0,
+        in = 180]node[midway, sloped, above]{声明指针变量} (ovCL38);        
+      \end{scope}
+      \node[red!45!black, visible on=<1-2>] at (ovCD38) {\tiny NULL};
+
+      % 通过pa指针申请内存的指向线
+      \begin{scope}[visible on=<2>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR11) to [out = 0,
+        in = 180]node[midway, sloped, above]{动态申请内存} (ovCL23);        
+      \end{scope}
+
+      % 将动态内存首地址赋值到pa指针内存的指向线
+      \begin{scope}[visible on=<3>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL23) to [out = 180,
+        in = 180]node[midway, sloped, above]{赋值} (ovCL38);        
+      \end{scope}
+      \node[red!45!black, visible on=<3-18>] at (ovCD38) {\tiny 0060
+        3430};
+
+      % 遍历函数第1次调用的指向线
+      \begin{scope}[visible on=<4>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR12) to [out = 0,
+        in = 0] (ovCR18);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR13) to [out = 0,
+        in = 0]node[near start, sloped, above]{值传递} (ovCR19);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR18) to [out = 0,
+        in = 180] (ovCL38);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR19) to [out = 0,
+        in = 180] (ovCL21);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL38) to [out = 180,
+        in = 180]node[near start, sloped, below]{赋值} (ovCL36);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL21) to [out = 180,
+        in = 180]node[midway, sloped, above]{赋值} (ovCL35);
+      \end{scope}
+      \node[red!45!black, visible on=<4-10>] at (ovCD36) {\tiny 0060
+        3430};
+      \node[red!45!black, visible on=<4-10>] at (ovCD35) {\tiny 0040
+        0910};
+
+      % 遍历函数第1次调用的指向线
+      \begin{scope}[visible on=<5>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR36) to [out = 0,
+        in = 0]node[near start, sloped, above]{指向} (ovBR33);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR35) to [out = 0,
+        in = 0]node[near end, sloped, above]{指向} (ovCR31);
+      \end{scope}
+
+      % 遍历函数第1次调用的指向线
+      \begin{scope}[visible on=<6>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1a1) to [out = 0,
+        in = 180]node[near start, sloped, above]{声明指针变量} (ovCL37);
+      \end{scope}
+
+      % 遍历函数第1次调用的指向线
+      \begin{scope}[visible on=<7>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1a2) to [out = 0,
+        in = 180]node[midway, sloped, above]{循环操作指针} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL36) to [out = 180,
+        in = 180]node[midway, sloped, above]{赋初值} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR37) to [out = 0,
+        in = 0]node[midway, sloped, above]{指向动态内存区} (ovCR33);
+      \end{scope}
+      \node[red!45!black, visible on=<7-10>] at (ovCD37) {\tiny 0060
+        3430};
+
+      % 遍历函数第1次调用的指向线
+      \begin{scope}[visible on=<8>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1b) to [out = 0,
+        in = 0] node[midway, sloped, above]{值传递}  (ovCR1c);
+
+        \draw[-{Stealth[scale=1.0]}, red, thick](ovCR1b) to [out = 0,
+        in = 180]node[near start, sloped, above]{函数指针} (ovCL35);
+
+        \draw[-{Stealth[scale=1.0]}, red, thick](ovCR35) to [out = 0,
+        in = 0]node[near start, sloped, above]{调用函数} (ovCR31);
+        
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL37) to [out = 180,
+        in = 180]node[near start, sloped, below]{赋值} (ovCL34);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1c) to [out = 0,
+        in = 180]node[midway, sloped, above]{传递实参} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR1d) to [out = 0,
+        in = 180]node[midway, sloped, above]{函数体} (ovCL31);
+        
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCL34) to [out = 180,
+        in = 180]node[midway, sloped, above]{参数赋值} (ovCL31);
+
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR31) to [out = 0,
+        in = 0]node[midway, sloped, below]{操作动态内存区} (ovCR33);
+      \end{scope}
+      \node[red!45!black, visible on=<8-10>] at (ovCD34) {\tiny 0060
+        3430};
+
+      % Input函数形参销毁
+      \begin{scope}[visible on=<9-10>]
+        \draw[red, thick](ovBL34) -- (ovUR34);
+        \draw[red, thick](ovUL34) -- (ovBR34);
+      \end{scope}
+
+      % 遍历函数第1次调用函数形参销毁
+      \begin{scope}[visible on=<10>]
+        \draw[red, thick](ovBL35) -- (ovUR35);
+        \draw[red, thick](ovUL35) -- (ovBR35);
+
+        \draw[red, thick](ovBL36) -- (ovUR36);
+        \draw[red, thick](ovUL36) -- (ovBR36);
+
+        \draw[red, thick](ovBL37) -- (ovUR37);
+        \draw[red, thick](ovUL37) -- (ovBR37);
+      \end{scope}
+
+
+      % 遍历函数第2次调用的指向线
+      \begin{scope}[visible on=<11>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR14) to [out = 0,
+        in = 0] (ovCR18);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR15) to [out = 0,
+        in = 0]node[near start, sloped, above]{值传递} (ovCR19);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR18) to [out = 0,
+        in = 180] (ovCL38);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR19) to [out = 0,
+        in = 180] (ovCL22);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL38) to [out = 180,
+        in = 180]node[near start, sloped, below]{赋值} (ovCL36);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL22) to [out = 180,
+        in = 180]node[midway, sloped, above]{赋值} (ovCL35);
+      \end{scope}
+      \node[red!45!black, visible on=<11->] at (ovCD36) {\tiny 0060
+        3430};
+      \node[red!45!black, visible on=<11->] at (ovCD35) {\tiny 0040
+        0935};
+
+      % 遍历函数第2次调用的指向线
+      \begin{scope}[visible on=<12>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR36) to [out = 0,
+        in = 0]node[near start, sloped, above]{指向} (ovBR33);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR35) to [out = 0,
+        in = 0]node[near end, sloped, above]{指向} (ovCR32);
+      \end{scope}
+
+      % 遍历函数第2次调用的指向线
+      \begin{scope}[visible on=<13>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1a1) to [out = 0,
+        in = 180]node[near start, sloped, above]{声明指针变量} (ovCL37);
+      \end{scope}
+
+      % 遍历函数第2次调用的指向线
+      \begin{scope}[visible on=<14>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1a2) to [out = 0,
+        in = 180]node[midway, sloped, above]{循环操作指针} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL36) to [out = 180,
+        in = 180]node[midway, sloped, above]{赋初值} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR37) to [out = 0,
+        in = 0]node[midway, sloped, above]{指向动态内存区} (ovCR33);
+      \end{scope}
+      \node[red!45!black, visible on=<14->] at (ovCD37) {\tiny 0060
+        3430};
+
+      % 遍历函数第2次调用的指向线
+      \begin{scope}[visible on=<15>]
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1b) to [out = 0,
+        in = 0] node[midway, sloped, above]{值传递}  (ovCR1e);
+
+        \draw[-{Stealth[scale=1.0]}, red, thick](ovCR1b) to [out = 0,
+        in = 180]node[near start, sloped, above]{函数指针} (ovCL35);
+
+        \draw[-{Stealth[scale=1.0]}, red, thick](ovCR35) to [out = 0,
+        in = 0]node[near start, sloped, above]{调用函数} (ovCR32);
+        
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCL37) to [out = 180,
+        in = 180]node[near start, sloped, below]{赋值} (ovCL34);
+
+        \draw[-{Stealth[scale=1.0]}, blue, thick](ovCR1e) to [out = 0,
+        in = 180]node[midway, sloped, above]{传递实参} (ovCL37);
+
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR1f) to [out = 0,
+        in = 180]node[midway, sloped, above]{函数体} (ovCL32);
+        
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCL34) to [out = 180,
+        in = 180]node[midway, sloped, above]{参数赋值} (ovCL32);
+
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR32) to [out = 0,
+        in = 0]node[midway, sloped, below]{操作动态内存区} (ovCR33);
+      \end{scope}
+      \node[red!45!black, visible on=<15->] at (ovCD34) {\tiny 0060
+        3430};
+
+      % Input函数形参销毁
+      \begin{scope}[visible on=<16->]
+        \draw[red, thick](ovBL34) -- (ovUR34);
+        \draw[red, thick](ovUL34) -- (ovBR34);
+      \end{scope}
+
+      % 遍历函数第1次调用函数形参销毁
+      \begin{scope}[visible on=<17->]
+        \draw[red, thick](ovBL35) -- (ovUR35);
+        \draw[red, thick](ovUL35) -- (ovBR35);
+
+        \draw[red, thick](ovBL36) -- (ovUR36);
+        \draw[red, thick](ovUL36) -- (ovBR36);
+
+        \draw[red, thick](ovBL37) -- (ovUR37);
+        \draw[red, thick](ovUL37) -- (ovBR37);
+      \end{scope}
+
+      % 遍历函数第1次调用函数形参销毁
+      \begin{scope}[visible on=<18->]
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR16) to [out = 0,
+        in = 180]node[midway, sloped, above]{释放动态内存区} (ovCL23);
+        
+        \draw[red, thick](ovBL33) -- (ovUR33);
+        \draw[red, thick](ovUL33) -- (ovBR33);
+      \end{scope}
+
+      % 遍历函数第1次调用函数形参销毁
+      \begin{scope}[visible on=<19>]
+        \draw[-{Stealth[scale=1.0]}, magenta, thick](ovCR17) to [out = 0,
+        in = 180]node[midway, sloped, above]{避免悬空指针} (ovCL38);
+        \node[red!45!black] at (ovCD38) {\tiny NULL};
+      \end{scope}
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

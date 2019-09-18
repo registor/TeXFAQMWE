@@ -1,0 +1,270 @@
+% ====================================================================================
+% bytefield绘图设置
+% 调整表格的垂直对齐方式
+\newcommand{\descbox}[1]{\parbox[c][0.7\baselineskip]{0.95\width}{%
+\raggedright #1\vfill}}
+% 用于绘制无标记内存图中一个内存块的命令，其开始地址在底部，结束地址在顶部（基于bytefield宏包）
+% 语法:
+% \memsec{结束地址}{开始地址}{以行为单位的高度}{盒子中的文字}
+\newcommand*\istempaddr[1]{\IfStrEq{}{#1}{}{0X#1}}
+\newcommand{\memsec}[4]{%
+  % 定义memsection的高度
+  %
+  %\tiny
+  \bytefieldsetup{bitheight=#3\baselineskip}%
+  \bitbox[]{5}{%    
+    \tiny \texttt{\istempaddr{#1}}%0X#1}% 结束地址
+    \\
+    % 留出空白
+    \vspace{#3\baselineskip}
+    \vspace{-1.6\baselineskip}
+    \vspace{-#3pt}
+    \tiny \texttt{\istempaddr{#2}}%0X#2}% 开始地址
+  }%
+  \bitbox{4}{\tiny \texttt{#4}}% 盒子里的内容 %\vspace{-0.9\baselineskip}
+}
+
+% 定义绘制有标记内存的命令（基于bytefield宏包）
+% 创建计算机内存映像的自定义命令，
+% 起始地址位于低部，结束地址位于顶部
+% 语法：
+% \memsection[标记符号]{结束地址}{起始地址}{内存单元高度}{内存单元中的内容}
+% 其中标记符号为可选项，可以是任何符合LaTeX语法的内容
+\newcommand{\memseclab}[5][]{
+  %\tiny
+  \bytefieldsetup{bitheight=#4\baselineskip} % 内存单元的高度
+  \bitbox[]{10}{%标记符号及地址盒子，参数为总宽度
+    \raggedleft%右对齐
+    \texttt{\tiny\istempaddr{#2}}% 结束地址
+    \\%换行
+    % 设置结束地址与起始地址之间的空白
+    \vspace{#4\baselineskip}
+    \vspace{-1.5\baselineskip}
+    \vspace{-#4pt} % 
+    {\tiny\texttt{#1}}%\hspace{1em}
+    \texttt{\tiny\istempaddr{#3}}% 起始地址
+  }~
+  \bitbox{4}{\tiny \texttt{#5}} % 内存单元盒子
+}
+
+% 自定义垂直省略号
+\makeatletter
+\DeclareRobustCommand{\rvdots}{%
+  \vbox{
+    \baselineskip4\p@\lineskiplimit\z@
+    \kern-\p@
+    \hbox{.}\hbox{.}\hbox{.}
+  }}
+\makeatother
+% ====================================================================================
+
+% ====================================================================================
+% 重定义强调字体的代码，解决默认强调字体是italic，此时中文会用楷体代替，
+% 在此设置为加粗，注意需要使用etoolbox宏包
+\makeatletter
+\let\origemph\emph
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CTEXunderline{#1}}}
+    {\@textemph{#1}}%
+}
+\RenewDocumentCommand\emph{s o m}{%
+  \IfBooleanTF{#1}
+    {\textem{#3}}
+    {\IfNoValueTF{#2}
+      {\textem{#3}\index{#3}}
+      {\textem{#3}\index{#2}}%
+     }%
+}
+\makeatother   
+% ====================================================================================
+
+% 代码显示模式设置(基于minted宏包)
+% ====================================================================================
+\usemintedstyle{default}  %codeblocks模式
+
+% 定义排版C语言代码命令
+\setminted{fontsize=\tiny, breaklines=true,
+  breakautoindent=false}
+\newmintinline{c}{fontsize=\normalsize, autogobble}
+\newmintinline[cinlinett]{c}{fontsize=\normalsize, escapeinside=||, autogobble}
+\newmintinline[cinttscr]{c}{fontsize=\scriptsize, escapeinside=||, autogobble}
+\newmintinline[cinttfts]{c}{fontsize=\footnotesize, escapeinside=||, autogobble}
+\newmintinline[cintttny]{c}{fontsize=\tiny, escapeinside=||, autogobble}
+\newmintinline[cinttlrg]{c}{fontsize=\large, escapeinside=||, autogobble}
+\newminted{c}{frame=lines, autogobble}
+\newminted[ctt]{c}{mathescape,frame=lines,escapeinside=||, autogobble}
+\newmintedfile{c}{frame=lines}%linenos=true,
+\newmintedfile[cfilett]{c}{frame=lines,escapeinside=||}%linenos=true,
+\newmintedfile[cfttscr]{c}{fontsize = \scriptsize, frame=lines,escapeinside=||}%linenos=true,
+\newmintedfile[cfiletikz]{c}{frame=lines}%linenos=true,
+% ====================================================================================
+
+% TikZ宏包扩展
+% ====================================================================================
+\usetikzlibrary{graphs}
+\usetikzlibrary{mindmap,trees}
+\tikzset{every concept/.style={minimum size=1cm, text width=1.5cm}}
+\usetikzlibrary{shapes,arrows,chains}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{matrix}
+\usetikzlibrary{backgrounds}
+% ====================================================================================
+
+% %%%%%%%%%% 绘制流程图时TiKz宏包的设置 %%%%%%%%
+% 作者: Brent Longborough
+% URL：http://www.texample.net/tikz/examples/author/brent-longborough/
+% ====================================================================================
+% 定义颜色名称
+\colorlet{lcfree}{green}
+\colorlet{lcnorm}{blue}
+\colorlet{lccong}{red}
+% 设置一个用于调试的标记符号图层，注意确保这一图层位于顶层
+\pgfdeclarelayer{marx}
+\pgfsetlayers{main,marx}
+
+% 标记坐标点的宏命令(指定使用的坐标名称)
+% 可以通过交替注释以下两个宏命令定义，以打开和关闭调试功能。
+\providecommand{\cmark}[2][]{%
+  \begin{pgfonlayer}{marx}
+    \node [nmark] at (c#2#1) {#2};
+  \end{pgfonlayer}{marx}
+  } 
+%\providecommand{\cmark}[2][]{\relax} 
+% -------------------------------------------------
+\tikzset{
+  start chain = going below,    % 自顶向下绘制
+  node distance = 6mm and 60mm, % 结点距离的全局设置
+  every join/.style = {norm},   % 默认的结点连线样式
+  %every picture/.style={thick},
+  base/.style = {draw, thick, on chain, on grid, align=center, minimum height=2ex},%基本样式
+  proc/.style={base, rectangle, text width=4em, fill=orange!10},%处理框样式
+  test/.style={base, diamond, aspect=2.5, text width=3em, fill=green!30},%判断框样式
+  io/.style={base, trapezium, trapezium left angle=70, trapezium right
+    angle=110, text width=6em,  fill=blue!30},%输入/输出框样式
+  term/.style={proc, rounded corners, text width=3em, fill=red!30},%开始结束框样式
+  % 流程连接点样式
+  connector/.style = {draw,circle,node distance=3cm,fill=yellow!20},
+  % coord结点样式用于绘制连接线的角点
+  coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
+  % nmark结点样式用于绘制调试中的坐标标记
+  nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
+  % 不相交的两个交汇路径的连接样式
+  connect/.style args={(#1) to (#2) over (#3) by #4}{
+        insert path={
+            let \p1=($(#1)-(#3)$), \n1={veclen(\x1,\y1)}, 
+            \n2={atan2(\y1,\x1)}, \n3={abs(#4)}, \n4={#4>0 ?-180:180}  in 
+            (#1) -- ($(#1)!\n1-\n3!(#3)$) 
+            arc (\n2:\n2+\n4:\n3) -- (#2)
+        }
+    }, 
+  % -------------------------------------------------
+  % 流程图中无箭头连线样式
+  lnorm/.style={thick, draw, lcnorm},
+  lfree/.style={thick, draw, lcfree},
+  lcong/.style={thick, draw, lccong},
+  % 流程图中流程线汇聚实心样式
+  dotnorm/.style={draw, fill = lcnorm, lcnorm},
+  dotfree/.style={draw, fill = lcfree, lcfree},
+  dotcong/.style={draw, fill = lccong, lccong},
+   % 流程图中流程线汇聚空心样式
+  cdotnorm/.style={draw, lcnorm},
+  cdotfree/.style={draw, lcfree},
+  cdotcong/.style={draw, lccong},
+  % 流程图中有箭头连线样式
+  norm/.style={thick, ->, >=stealth, draw, lcnorm},
+  free/.style={thick, ->, >=stealth, draw, lcfree},
+  cong/.style={thick, ->, >=stealth, draw, lccong},
+  it/.style={font={\small\itshape}},
+}
+% ====================================================================================
+
+% 设置动画显示样式
+% ====================================================================================
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+% ====================================================================================
+
+%%%%%%%%%% 绘制链表数据结构需要的命令TiKz%%%%%%%%
+% ====================================================================================
+\usetikzlibrary{shapes,arrows,calc}
+\newcommand{\data}{data \nodepart{second} \phantom{null}}
+
+\tikzstyle{ptr}  = [draw, -latex', blue]
+\tikzstyle{head} = [rectangle, draw, text height=3mm, text width=3mm, text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{data} = [rectangle split, rectangle split parts=2, draw, text centered, minimum height=3em]
+% ====================================================================================
+
+% 改变脚注的符号
+% ====================================================================================
+\setbeamerfont{footnote}{size=\zihao{7}} % 改变脚注字号
+\makeatletter
+\def\@fnsymbol#1{\ensuremath{\ifcase#1\or *\or \dagger\or \ddagger\or
+   \mathsection\or \mathparagraph\or \|\or **\or \dagger\dagger
+   \or \ddagger\ddagger \else\@ctrerr\fi}}
+\makeatother
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+% ====================================================================================
+
+% 定义C语言中的专有名词命令
+% ====================================================================================
+\newcommand{\cb}{\texttt{Code::Blocks}}
+\newcommand{\mww}{\texttt{MinGW-w64}}
+\newcommand{\mfile}{\qtmark{\texttt{Makefile}}}
+\newcommand{\vs}{\texttt{Visual Studio}}
+\newcommand{\gcc}{\texttt{gcc}}
+\newcommand{\db}{\texttt{DEBUG}}
+\newcommand{\dbger}{\texttt{Debugger}}
+\newcommand{\gdb}{\texttt{gdb}调试器}
+\newcommand{\cdb}{\texttt{cdb}调试器}
+\newcommand{\gdbcmd}{\texttt{(gdb)}}
+\newcommand{\scf}{\cinline[fontsize = \scriptsize]{scanf()}}
+\newcommand{\ptf}{\cinline{printf()}}
+\newcommand{\rn}{\cinline{'\n'}}
+\newcommand{\cch}[1]{\cinline{'#1'}}
+\newcommand{\lumos}{Linux、Unix、Mac OS}
+\newcommand{\win}{Windows}
+\newcommand{\unix}{UNIX}
+\newcommand{\lnx}{Linux}
+
+\newcommand{\cl}{{C语言}}
+\newcommand{\nint}{{\cinline{int}}}
+\newcommand{\flt}{{\cinline{float}}}
+\newcommand{\snint}{{\cinline{short int}}}
+\newcommand{\lint}{{\cinline{long int}}}
+\newcommand{\llint}{{\cinline{long long int}}}
+\newcommand{\ldb}{{\cinline{long double}}}
+\newcommand{\sch}{{\cinline{signed char}}}
+\newcommand{\sint}{{\cinline{signed int}}}
+\newcommand{\ssint}{{\cinline{signed short int}}}
+\newcommand{\slint}{{\cinline{signed long int}}}
+\newcommand{\sllint}{{\cinline{signed long long int}}}
+\newcommand{\usch}{{\cinline{unsigned char}}}
+\newcommand{\usint}{{\cinline{unsigned int}}}
+\newcommand{\ussint}{{\cinline{unsigned short int}}}
+\newcommand{\uslint}{{\cinline{unsigned long int}}}
+\newcommand{\usllint}{{\cinline{unsigned long long int}}}
+
+% 路径设置
+% ====================================================================================
+\graphicspath{{figure/}}%图片所在的目录
+% ====================================================================================
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main.tex"
+%%% End: 
