@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1512028941 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/07-DigitalString/digitalstring.c
+	"digitalstring.h"
+
+1512030565 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/07-DigitalString/digitalstring.h
+
+1512029239 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/07-DigitalString/main.c
+	<stdio.h>
+	<stdlib.h>
+	"digitalstring.h"
+

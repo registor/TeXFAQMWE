@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1510583350 source:/home/registor/Desktop/testc/chap11/ex11-10fseekstructdata/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+

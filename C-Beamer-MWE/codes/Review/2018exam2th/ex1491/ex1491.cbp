@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ex1491" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="in/;out/;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/ex1491" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/ex1491" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="data/1.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/1.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/10.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/10.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/11.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/11.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/12.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/12.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/13.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/13.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/14.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/14.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/15.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/15.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/2.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/2.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/3.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/3.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/4.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/4.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/5.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/5.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/6.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/6.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/7.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/7.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/8.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/8.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="data/9.in">
+			<Option virtualFolder="in/" />
+		</Unit>
+		<Unit filename="data/9.out">
+			<Option virtualFolder="out/" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

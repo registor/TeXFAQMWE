@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507468178 source:/home/registor/Desktop/testc/chap08/ex08-08InsertSort/main.c
+	<stdio.h>
+	<stdlib.h>
+

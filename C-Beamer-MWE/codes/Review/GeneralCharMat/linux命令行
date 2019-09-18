@@ -1,0 +1,8 @@
+1、构建程序
+gcc -g main.c -o test
+2、检查内存泄漏情况
+valgrind --tool=memcheck --leak-check=full ./test
+3、分析函数调用关系
+valgrind --tool=callgrind ./test #生成类似callgrind.out.XXXX文件
+gprof2dot -f callgrind ./callgrind.out.7620 |dot -Tsvg -o report.svg #使用类似callgrind.out.XXXX的文件
+

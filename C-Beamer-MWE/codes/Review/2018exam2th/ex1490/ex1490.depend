@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1547640159 source:/home/registor/Desktop/TestC/2018exam2th/ex1490/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

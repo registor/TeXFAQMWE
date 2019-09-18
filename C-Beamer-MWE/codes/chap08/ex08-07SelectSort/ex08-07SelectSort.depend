@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507383544 source:/home/registor/Desktop/testc/chap08/ex08-07SelectSort/main.c
+	<stdio.h>
+	<stdlib.h>
+

@@ -1,0 +1,56 @@
+# depslib dependency file v1.0
+1512000231 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/genericsort.c
+	<string.h>
+	"define.h"
+	"genericsort.h"
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/genericsort.h
+	<stdlib.h>
+
+1512005075 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/main.c
+	<time.h>
+	<genericlib.h>
+	"callback.h"
+	"test.h"
+
+1512000295 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/traversal.h
+
+1512003532 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/test.h
+
+1512005075 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/test.c
+	<stdio.h>
+	<string.h>
+	<time.h>
+	<genericlib.h>
+	"callback.h"
+	"test.h"
+	"define.h"
+
+1512000231 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/traversal.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"traversal.h"
+
+1511918189 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/define.h
+
+1512005082 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/callback.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"callback.h"
+
+1512004218 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/callback.h
+
+1512001217 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/genericlib.h
+	<stdlib.h>
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericMultiFilesProj/includes/genericlib.h
+	<stdlib.h>
+

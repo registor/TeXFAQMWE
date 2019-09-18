@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1510976685 source:/home/registor/Desktop/testc/recursiveMax/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1511142396 source:/home/registor/Desktop/VirtualBox/Win10/2017Autumn/教学工作/C/示例代码/RecursiveMax/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+

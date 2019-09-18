@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1509110810 source:/home/registor/Desktop/testc/chap09/ex09-10stringsortbypt/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

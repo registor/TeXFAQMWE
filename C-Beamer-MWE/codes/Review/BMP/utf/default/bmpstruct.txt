@@ -1,0 +1,99 @@
+typedef struct {
+   unsigned short int type;                 /* Magic identifier            */
+   unsigned int size;                       /* File size in bytes          */
+   unsigned short int reserved1, reserved2;
+   unsigned int offset;                     /* Offset to image data, bytes */
+} HEADER;
+
+
+typedef struct {
+   unsigned int size;               /* Header size in bytes      */
+   int width,height;                /* Width and height of image */
+   unsigned short int planes;       /* Number of colour planes   */
+   unsigned short int bits;         /* Bits per pixel            */
+   unsigned int compression;        /* Compression type          */
+   unsigned int imagesize;          /* Image size in bytes       */
+   int xresolution,yresolution;     /* Pixels per meter          */
+   unsigned int ncolours;           /* Number of colours         */
+   unsigned int importantcolours;   /* Important colours         */
+} INFOHEADER;
+
+196608
+
+
+BMP文件结构
+
+---- 1. BMP文件组成
+
+---- BMP文件由文件头、位图信息头、颜色信息和图形数据四部分组成。
+
+---- 2. BMP文件头
+
+---- BMP文件头数据结构含有BMP文件的类型、文件大小和位图起始位置等信息。
+
+---- 其结构定义如下:
+
+typedef struct tagBITMAPFILEHEADER
+{
+WORDbfType;   // 位图文件的类型，必须为BM
+DWORD   bfSize;   // 位图文件的大小，以字节为单位
+WORDbfReserved1;  // 位图文件保留字，必须为0
+WORDbfReserved2;  // 位图文件保留字，必须为0
+DWORD   bfOffBits; // 位图数据的起始位置，以相对于位图
+// 文件头的偏移量表示，以字节为单位
+} BITMAPFILEHEADER;
+
+---- 3. 位图信息头
+
+BMP位图信息头数据用于说明位图的尺寸等信息。
+typedef struct tagBITMAPINFOHEADER{
+   DWORD  biSize;   // 本结构所占用字节数
+   LONGbiWidth;  // 位图的宽度，以像素为单位
+   LONGbiHeight; // 位图的高度，以像素为单位
+   WORD   biPlanes; // 目标设备的级别，必须为1
+   WORD   biBitCount// 每个像素所需的位数，必须是1(双色),
+  // 4(16色)，8(256色)或24(真彩色)之一
+   DWORD  biCompression;   // 位图压缩类型，必须是 0(不压缩),
+  // 1(BI_RLE8压缩类型)或2(BI_RLE4压缩类型)之一
+   DWORD  biSizeImage; // 位图的大小，以字节为单位
+   LONGbiXPelsPerMeter; // 位图水平分辨率，每米像素数
+   LONGbiYPelsPerMeter;  // 位图垂直分辨率，每米像素数
+   DWORD  biClrUsed;// 位图实际使用的颜色表中的颜色数
+   DWORD  biClrImportant;// 位图显示过程中重要的颜色数
+} BITMAPINFOHEADER;
+
+---- 4. 颜色表
+
+---- 颜色表用于说明位图中的颜色，它有若干个表项，每一个表项是一个RGBQUAD类型的结构，定义一种颜色。RGBQUAD结构的定义如下:
+
+typedef struct tagRGBQUAD {
+BYTErgbBlue;// 蓝色的亮度(值范围为0-255)
+BYTErgbGreen;   // 绿色的亮度(值范围为0-255)
+BYTErgbRed; // 红色的亮度(值范围为0-255)
+BYTErgbReserved;// 保留，必须为0
+} RGBQUAD;
+颜色表中RGBQUAD结构数据的个数有biBitCount来确定:
+当biBitCount=1,4,8时，分别有2,16,256个表项;
+当biBitCount=24时，没有颜色表项。
+   位图信息头和颜色表组成位图信息，BITMAPINFO结构定义如下:
+typedef struct tagBITMAPINFO {
+   BITMAPINFOHEADER bmiHeader;   // 位图信息头
+   RGBQUAD  bmiColors[1];  // 颜色表
+} BITMAPINFO;
+
+---- 5. 位图数据
+
+---- 位图数据记录了位图的每一个像素值，记录顺序是在扫描行内是从左到右,扫描行之间是从下到上。位图的一个像素值所占的字节数:
+
+当biBitCount=1时，8个像素占1个字节;
+当biBitCount=4时，2个像素占1个字节;
+当biBitCount=8时，1个像素占1个字节;
+当biBitCount=24时,1个像素占3个字节;
+
+Windows规定一个扫描行所占的字节数必须是 4的倍数(即以long为单位),不足的以0填充，
+
+一个扫描行所占的字节数计算方法: DataSizePerLine= (biWidth* biBitCount+31)/8;
+
+// 一个扫描行所占的字节数 DataSizePerLine= DataSizePerLine/4*4; // 字节数必须是4的倍数
+
+位图数据的大小(不压缩情况下): DataSize= DataSizePerLine* biHeight; 

@@ -1,0 +1,14 @@
+3
+1001
+zhang
+male
+19
+1002
+wang
+female
+23
+1003
+li
+male
+20
+

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1506591420 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap06/ex06-02getaverage/main.c
+	<stdio.h>
+	<stdlib.h>
+

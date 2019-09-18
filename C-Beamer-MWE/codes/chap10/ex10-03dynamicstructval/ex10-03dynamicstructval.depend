@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1509412235 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-03dynamicstructval/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

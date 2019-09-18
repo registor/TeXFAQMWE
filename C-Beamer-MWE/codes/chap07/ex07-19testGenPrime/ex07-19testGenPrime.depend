@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1541722811 source:/home/registor/Desktop/testC/ex07-19testGenPrime/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<string.h>
+	<math.h>
+	<stdbool.h>
+

@@ -1,0 +1,54 @@
+101
+zhang
+male
+1998 10 23
+
+102
+wang
+male
+1999 3 2
+
+103
+li
+female
+2000 8 21
+
+104
+zhao
+male
+1997 7 28
+
+105
+zhou
+female
+2001 3 23
+
+106
+wu
+male
+1996 10 23
+
+107
+zheng
+male
+2002 3 27
+
+108
+lei
+female
+2000 6 20
+
+109
+xie
+female
+1997 7 28
+
+110
+quan
+male
+2004 11 11
+
+
+
+
+

@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1513042724 source:e:\testc\genericlibdll\genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1513042925 e:\testc\genericlibdll\genericlib.h
+	<windows.h>
+	<stdlib.h>
+

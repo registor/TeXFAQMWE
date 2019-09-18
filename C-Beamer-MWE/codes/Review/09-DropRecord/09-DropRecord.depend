@@ -1,0 +1,189 @@
+# depslib dependency file v1.0
+1513760076 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"droprecord.h"
+
+1513840696 d.h"
+
+1513839409 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/callback.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"callback.h"
+
+1514908093 h"
+
+1513731939 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/define.h
+
+1513839365 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/callback.h
+
+1512001217 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1512001216 b.h"
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/genericlib.h
+	<stdlib.h>
+
+1513768804 
+
+1513840262 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/loaddata.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"loaddata.h"
+
+1513759989 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/loaddata.h
+	"define.h"
+
+1513762527 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/droprecord.h
+	<stdlib.h>
+	"define.h"
+
+1513840327 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/savedata.c
+	<stdio.h>
+	<string.h>
+	"savedata.h"
+	"genericlib.h"
+	"callback.h"
+
+1513839862 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/droprecord.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"genericlib.h"
+	"callback.h"
+	"loaddata.h"
+	"droprecord.h"
+	"savedata.h"
+
+1513768805 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/savedata.h
+	<stdlib.h>
+	"define.h"
+
+1514907736 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\callback.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"callback.h"
+
+1514907000 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\define.h
+
+1514907131 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\callback.h
+
+1512001216 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1512000646 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\genericlib.h
+	<stdlib.h>
+
+1513840262 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\loaddata.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"loaddata.h"
+
+1513759988 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\loaddata.h
+	"define.h"
+
+1513840696 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"droprecord.h"
+
+1513762526 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\droprecord.h
+	<stdlib.h>
+	"define.h"
+
+1513840326 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\savedata.c
+	<stdio.h>
+	<string.h>
+	"savedata.h"
+	"genericlib.h"
+	"callback.h"
+
+1513768804 c:\users\wangjing\desktop\gengnan\testc\09-droprecord\savedata.h
+	<stdlib.h>
+	"define.h"
+
+1514908093 source:c:\users\wangjing\desktop\gengnan\testc\09-droprecord\droprecord.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"genericlib.h"
+	"callback.h"
+	"loaddata.h"
+	"droprecord.h"
+	"savedata.h"
+
+1515039918 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/callback.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"callback.h"
+
+1515039918 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/define.h
+
+1515039918 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/callback.h
+
+1515039918 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/droprecord.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"define.h"
+	"genericlib.h"
+	"callback.h"
+	"loaddata.h"
+	"droprecord.h"
+	"savedata.h"
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/genericlib.h
+	<stdlib.h>
+
+1513759988 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/loaddata.h
+	"define.h"
+
+1513762526 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/droprecord.h
+	<stdlib.h>
+	"define.h"
+
+1513768804 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/savedata.h
+	<stdlib.h>
+	"define.h"
+
+1512001216 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1513840696 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"droprecord.h"
+
+1515039918 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/savedata.c
+	<stdio.h>
+	<string.h>
+	"savedata.h"
+	"genericlib.h"
+	"callback.h"
+
+1515052243 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/09-DropRecord/loaddata.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"loaddata.h"
+

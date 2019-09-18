@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1510753562 source:/home/registor/Desktop/testc/chap11/ex11-12csvfile/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1543912415 source:/home/registor/Desktop/testC/ex09-15rshiftstring/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

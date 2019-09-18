@@ -1,0 +1,75 @@
+C--全排列的实现(递归方法) 傻子也能看懂的
+
+ 
+ 
+
+假设数组含有n个元素，则提取数组中的每一个元素做一次头元素，然后全排列除数组中除第一个元素之外的所有元素，这样就达到了对数组中所有元素进行全排列的得目的。【这句话才是重点！】
+
+比如 1，2，3.的全排列就是分别以1，2，3开始的全排列。
+
+　　　　　　　　　　　　以1开始的全排列也就是2，3.的全排列，（2，3）的全排列就是分别以2和3开始的全排列。
+
+设全排列R(n1,n2,n3.....nn)，可以化简为分别以n1,n2,n3……开始的全排列。
+
+即   n1R1(n2,n3.....nn)，n2R2(n1,n3.....nn)，n3R3(n1,n2,.....nn)……nnR(n1,n2,n3.....)
+
+其中，R1(n2,n3.....nn)又可以按照R的方式继续进行……以此类推可以得到全排列。
+
+ 
+
+复制代码
+#include<iostream>
+
+using namespace std;
+
+
+//index，代表递归过程中，子数列在原始数列中的位置
+//例如 a[] = {1,2,3},原始数列长度LENGTH = 3，
+//递归到其中某一步时index = 1，num= 2，代表要从原始数列的下表为1处，长度为2(即自数列2，3)开始，查找子数列
+//(2,3)的全排列
+
+//LENGTH 为原始数组的长度，这个是不会变的。
+void permutation(int values[], int index, int num,int LENGTH)
+{
+ int i = 0;
+ if(num == 0)//已经找到一个全排列，显示输出
+ {
+  for(i=0; i<LENGTH;++i)
+  {
+   cout<<values[i]<<" ";
+  }
+  cout<<endl;
+
+  return;
+ }
+ for(i=0; i<num; i++)
+ {
+  swap(values[index+i], values[index]);//第index个整数和第index+i个数字交换，保证自数列的第一个元素与该子数列中每一个元素进行一次交换，进行排列。
+
+  
+  permutation(values, index+1, num-1);//对从index+1到数组最末端的元素进行全排列
+
+  
+  swap(values[index], values[index+i]);//for循环中第一条语句的逆操作，其目的是使数组倒回原来的样子，
+  //这样做的目的是使排列不会产生重复的结果。
+ }
+
+ return;
+}
+
+int main()
+{
+ int values[]={1，3，5};
+ 
+ permutation(values,0,3,3);
+
+ cout<<endl<<endl;
+ for(int i=0;i<3;++i)
+ {
+  cout<<values[i]<<' ';
+ }
+ cout<<endl<<endl;
+ 
+ return 0;
+}
+复制代码

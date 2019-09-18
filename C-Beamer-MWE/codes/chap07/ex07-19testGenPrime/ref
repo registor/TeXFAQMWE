@@ -1,0 +1,24 @@
+Porting optimized Sieve of Eratosthenes from Python to C++
+
+https://stackoverflow.com/questions/5293238/porting-optimized-sieve-of-eratosthenes-from-python-to-c
+
+
+Fastest way to list all primes below N
+https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188
+
+Sieve of Eratosthenes optimization
+https://codereview.stackexchange.com/questions/7338/sieve-of-eratosthenes-optimization
+
+Finding prime numbers with the Sieve of Eratosthenes (Originally: Is there a better way to prepare this array?)
+
+int upperBound = (int) (1.25506 * n / Math.log(n));
+
+https://stackoverflow.com/questions/586284/finding-prime-numbers-with-the-sieve-of-eratosthenes-originally-is-there-a-bet
+
+A Fast Prime Number Sieve in Python
+https://stackoverflow.com/questions/16004407/a-fast-prime-number-sieve-in-python
+
+Optimizing Sieve of Eratosthenes, Adding Wheel to Bool Array
+https://stackoverflow.com/questions/48946107/optimizing-sieve-of-eratosthenes-adding-wheel-to-bool-array
+
+

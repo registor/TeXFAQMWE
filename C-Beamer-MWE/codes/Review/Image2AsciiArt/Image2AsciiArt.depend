@@ -1,0 +1,80 @@
+# depslib dependency file v1.0
+1547604167 source:/home/registor/Desktop/testC/Image2AsciiArt/bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1547603921 /home/registor/Desktop/testC/Image2AsciiArt/bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+	"define.h"
+
+1547601599 /home/registor/Desktop/testC/Image2AsciiArt/define.h
+
+1547619075 source:/home/registor/Desktop/testC/Image2AsciiArt/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"bmp.h"
+	"run.h"
+	"callbacks.h"
+
+1547619739 source:/home/registor/Desktop/testC/Image2AsciiArt/run.c
+	"bmp.h"
+	"run.h"
+	"define.h"
+
+1547609503 /home/registor/Desktop/testC/Image2AsciiArt/run.h
+	"define.h"
+
+1547611175 source:/home/registor/Desktop/testC/Image2AsciiArt/callbacks.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+	"callbacks.h"
+
+1547609628 /home/registor/Desktop/testC/Image2AsciiArt/callbacks.h
+
+1547626527 source:/home/registor/Desktop/TestC/Image2AsciiArt/bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1547631255 /home/registor/Desktop/TestC/Image2AsciiArt/bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+	"define.h"
+
+1547631255 /home/registor/Desktop/TestC/Image2AsciiArt/define.h
+
+1547632029 source:/home/registor/Desktop/TestC/Image2AsciiArt/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"bmp.h"
+	"run.h"
+	"callbacks.h"
+
+1547631255 /home/registor/Desktop/TestC/Image2AsciiArt/run.h
+	"define.h"
+
+1547631140 /home/registor/Desktop/TestC/Image2AsciiArt/callbacks.h
+
+1547631236 source:/home/registor/Desktop/TestC/Image2AsciiArt/run.c
+	"bmp.h"
+	"run.h"
+	"define.h"
+
+1547631255 source:/home/registor/Desktop/TestC/Image2AsciiArt/callbacks.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+	<math.h>
+	"callbacks.h"
+

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507378660 source:/home/registor/Desktop/testc/ex08-06InOutArrayFile/main.c
+	<stdio.h>
+	<stdlib.h>
+

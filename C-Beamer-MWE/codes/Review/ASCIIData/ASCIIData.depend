@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1547347354 source:/home/registor/Desktop/testC/ASCIIData/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1541659570 source:c:\users\pc\desktop\ex07-20testmathfoo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+

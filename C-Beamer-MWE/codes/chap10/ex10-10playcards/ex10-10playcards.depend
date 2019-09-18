@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1509860380 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-10playcards/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	<time.h>
+

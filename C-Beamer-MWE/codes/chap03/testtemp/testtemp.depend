@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1506470949 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap03/testtemp/main.c
+	<stdio.h>
+	<stdlib.h>
+

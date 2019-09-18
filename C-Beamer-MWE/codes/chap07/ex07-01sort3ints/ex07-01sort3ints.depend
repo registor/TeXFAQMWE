@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507118227 source:/home/registor/Desktop/testc/ex07-01sort3ints/main.c
+	<stdio.h>
+	<stdlib.h>
+

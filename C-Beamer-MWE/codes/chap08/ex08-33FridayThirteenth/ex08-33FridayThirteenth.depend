@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1542769828 source:/home/registor/Desktop/testC/ex08-33FridayThirteenth/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

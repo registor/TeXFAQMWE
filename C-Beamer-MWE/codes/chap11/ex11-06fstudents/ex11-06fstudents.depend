@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1510564550 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap11/ex11-06fstudents/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+
+1510570706 source:/home/registor/Desktop/testc/chap11/ex11-06fstudents/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+

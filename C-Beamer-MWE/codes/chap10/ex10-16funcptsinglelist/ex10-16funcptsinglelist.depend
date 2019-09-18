@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1510190383 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-16funcptsinglelist/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	<time.h>
+
+1510797050 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-16funcptsinglelist/listwithfuncpt.c
+	"listwithfuncpt.h"
+	<malloc.h>
+
+1510797040 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-16funcptsinglelist/listwithfuncpt.h
+

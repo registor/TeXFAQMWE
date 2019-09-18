@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1508832275 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap09/ex09-05countspaces01/main.c
+	<stdio.h>
+	<stdlib.h>
+

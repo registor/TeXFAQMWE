@@ -1,0 +1,175 @@
+# depslib dependency file v1.0
+1293520607 source:c:\users\administrator\desktop\chap10\bmp\read_bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"read_bmp.h"
+
+1293583519 h"
+
+1293519310 c:\users\administrator\desktop\chap10\bmp\read_bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+
+1386957983 
+
+1293520113 source:c:\users\administrator\desktop\chap10\bmp\main.c
+	<stdio.h>
+	<stdlib.h>
+	"read_bmp.h"
+
+1293699425 source:c:\users\administrator\desktop\bmporiginal\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293583436 c:\users\administrator\desktop\bmporiginal\read_bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+
+1293583519 source:c:\users\administrator\desktop\bmporiginal\read_bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"read_bmp.h"
+
+1293695681 c:\users\administrator\desktop\bmporiginal\bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+
+1293698442 source:c:\users\administrator\desktop\bmporiginal\bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293587650 source:d:\bmporiginal\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293587417 d:\bmporiginal\bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+
+1293587884 source:d:\bmporiginal\bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293587652 source:c:\documents and settings\administrator\����\bmporiginal\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293592000 c:\documents and settings\administrator\����\bmporiginal\bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+
+1293589596 source:c:\documents and settings\administrator\����\bmporiginal\bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293587652 source:c:\bmporiginal\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293592000 c:\bmporiginal\bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+
+1293593920 source:c:\bmporiginal\bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1293700071 source:c:\users\administrator\desktop\bmpprocess\bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1386949023 c:\users\administrator\desktop\bmpprocess\bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+	"define.h"
+
+1386957148 source:c:\users\administrator\desktop\bmpprocess\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+	"run.h"
+
+1386949026 c:\users\administrator\desktop\bmpprocess\define.h
+
+1386955107 source:c:\users\administrator\desktop\bmpprocess\configini.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<stdbool.h>
+	"define.h"
+	"configINI.h"
+
+1386958045 .h"
+
+1386957983 c:\users\administrator\desktop\bmpprocess\run.h
+	"define.h"
+
+1386958045 source:c:\users\administrator\desktop\bmpprocess\run.c
+	"bmp.h"
+	"run.h"
+	"define.h"
+	"configINI.h"
+
+1386955007 c:\users\administrator\desktop\bmpprocess\configini.h
+
+1514940743 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/bmp.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+
+1514940743 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/bmp.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<memory.h>
+	"define.h"
+
+1514940743 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/define.h
+
+1514940743 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/main.c
+	<stdio.h>
+	<stdlib.h>
+	"bmp.h"
+	"run.h"
+
+1514940743 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/run.h
+	"define.h"
+
+1514940743 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/configINI.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<stdbool.h>
+	"define.h"
+	"configINI.h"
+
+1514940743 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/configINI.h
+
+1514940743 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/BMP/bmpProcess/run.c
+	"bmp.h"
+	"run.h"
+	"define.h"
+	"configINI.h"
+

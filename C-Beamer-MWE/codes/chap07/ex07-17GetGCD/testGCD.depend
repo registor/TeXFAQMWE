@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1541401815 source:/home/registor/Desktop/testC/ex08-17GetGCD/main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+

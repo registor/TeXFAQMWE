@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507901848 source:/home/registor/Desktop/testc/chap08/ex08-23Array2DWith1D/main.c
+	<stdio.h>
+	<stdbool.h>
+

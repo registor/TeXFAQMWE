@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1512001217 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericLib/genericlib.c
+	<string.h>
+	"genericlib.h"
+
+1512000646 /home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/Review/06-GenericLib/genericlib.h
+	<stdlib.h>
+

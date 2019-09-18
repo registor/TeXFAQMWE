@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1509527191 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap10/ex10-05shallowcopy/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+

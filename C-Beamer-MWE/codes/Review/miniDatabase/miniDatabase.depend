@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1547867795 source:/home/registor/Desktop/testC/miniDatabase/main.c
+	<stdio.h>
+	<assert.h>
+	<stdlib.h>
+	<errno.h>
+	<string.h>
+

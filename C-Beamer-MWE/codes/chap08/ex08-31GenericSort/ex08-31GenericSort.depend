@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1511136878 source:/home/registor/Desktop/2017Autumn/教学工作/C语言/C-Slides/codes/chap08/ex08-31GenericSort/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<time.h>
+
