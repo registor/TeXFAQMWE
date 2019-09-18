@@ -8,7 +8,315 @@
 \input{settings/format.tex}
 
 \begin{document}
-  \begin{frame}[fragile]%{动态数组}{动态数组作函数参数} %must using [fragile]
+
+\begin{frame}[fragile] % minted宏包排版代码，需要[fragile]参数
+  \begin{itemize}
+  \item 应用实例
+  \end{itemize}
+  \begin{center}
+    \begin{tikzpicture}[font=\tiny]
+      \tikzset{ coord/.style={coordinate} }
+      \umlnote[text width=0.65\textwidth](code1) at (0, 0)
+      {
+        \begin{ccode}
+          int iValue;             /*整型类型*/
+          int * piValue;         /*整型地址类型*/
+          
+          piValue = &iValue;  /*将iValue的地址赋与指针*/
+          iValue = 65;            /*给iValue赋值*/
+          *piValue = 97;         /*给piValue指向的内存赋值*/
+        \end{ccode}
+      };                  
+
+      \node[below = 0.8 of code1, xshift = -2.5cm] (mem01) {
+        \begin{bytefield}[rightcurlyspace=0pt]{4}%rightcurly=.,{24}
+          \begin{rightwordgroup}{piValue}
+            \memsec{FFFF E317}{FFFF E310}{8}{0000 7FFF\\ FFFF E30C}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{iValue}
+            \memsec{FFFF E30F}{FFFF E30C}{4}{0000 0041}
+          \end{rightwordgroup}
+        \end{bytefield}
+      };
+      \node[below = 0.1 of mem01] (note01) {\cintttny{iValue = 65}};
+
+      % 计算绘图坐标
+      \path let \p1=(mem01) in
+      coordinate (org) at (\x1, \y1)
+      coordinate (ovBL1) at ($(org) + (-1.75, -1.32)$)
+      coordinate (ovUR1) at ($(ovBL1) + (1.35, 0.25)$)
+      coordinate (ovTL1) at ($(ovBL1) + (0.0, 0.25)$)
+      coordinate (ovML1) at ($(ovTL1)!0.5!(ovBL1)$)
+      coordinate (ovMLO1) at ($(ovML1) + (-0.2, 0.0)$)
+      
+      coordinate (ovBL2) at ($(ovBL1) + (1.35, 0.89)$)
+      coordinate (ovUR2) at ($(ovBL2) + (1.12, 1.69)$)
+      coordinate (ovTL2) at ($(ovBL2) + (0.0, 1.69)$)
+      coordinate (ovML2) at ($(ovTL2)!0.5!(ovBL2)$)
+      coordinate (ovMLO2) at ($(ovML2) + (-1.55, 0.0)$)
+      coordinate (ovVN1) at ($(ovML2) + (2.2, 0.0)$)
+      coordinate (ovVN2) at ($(ovVN1) + (-0.15, -1.25)$)
+      coordinate (ovVN2T) at ($(ovVN2) + (0.1, 0.0)$)
+      coordinate (ovDAT) at ($(ovVN2T) + (0.0, -0.8)$)
+      ;
+
+      \node[draw] (dat) at (ovDAT) {65};
+      
+      \draw[red,thick,fill=green!35, fill opacity=0.3](ovBL1) rectangle
+      (ovUR1);
+      \draw[blue,thick,fill=red!35, fill opacity=0.3](ovBL2) rectangle
+      (ovUR2);
+
+      \draw[-{Stealth[scale=1.0]}, red, thick] (ovML1) -- (ovMLO1) --
+      (ovMLO2)--node[above,black]{取地址}(ovML2);
+      
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN1) to [out =
+      -45, in = 45] node[right,align=left,yshift=0.0cm,black]{指
+        \\向}(ovVN2);
+      
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (dat.north) to [out =
+      90, in = -90] node[right,align=left,yshift=0.0cm,black]{赋
+        值}(ovVN2T);      
+
+      \node[right = 0.8 of mem01] (mem02) {
+        \begin{bytefield}[rightcurlyspace=0pt]{4}%rightcurly=.,{24}
+          \begin{rightwordgroup}{piValue}
+            \memsec{FFFF E317}{FFFF E310}{8}{0000 7FFF\\ FFFF E30C}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{iValue}
+            \memsec{FFFF E30F}{FFFF E30C}{4}{0000 0061}
+          \end{rightwordgroup}
+        \end{bytefield}
+      };
+      \node[below = 0.1 of mem02] (note02) {\cintttny{*piValue = 97}};
+
+      % 计算绘图坐标
+      \path let \p1=(mem02) in
+      coordinate (org) at (\x1, \y1)
+      coordinate (ovBL1) at ($(org) + (-1.75, -1.32)$)
+      coordinate (ovUR1) at ($(ovBL1) + (1.35, 0.25)$)
+      coordinate (ovTL1) at ($(ovBL1) + (0.0, 0.25)$)
+      coordinate (ovML1) at ($(ovTL1)!0.5!(ovBL1)$)
+      coordinate (ovMLO1) at ($(ovML1) + (-0.2, 0.0)$)
+      
+      coordinate (ovBL2) at ($(ovBL1) + (1.35, 0.89)$)
+      coordinate (ovUR2) at ($(ovBL2) + (1.12, 1.69)$)
+      coordinate (ovTL2) at ($(ovBL2) + (0.0, 1.69)$)
+      coordinate (ovML2) at ($(ovTL2)!0.5!(ovBL2)$)
+      coordinate (ovMLO2) at ($(ovML2) + (-1.55, 0.0)$)
+      coordinate (ovVN1) at ($(ovML2) + (2.2, 0.0)$)
+      coordinate (ovVN2) at ($(ovVN1) + (-0.15, -1.25)$)
+      coordinate (ovPT) at ($(ovVN1) + (0.0, 0.8)$)
+      ;
+
+      \node[draw] (dat) at (ovPT) {97};
+
+      \draw[red,thick,fill=green!35, fill opacity=0.3](ovBL1) rectangle
+      (ovUR1);
+      \draw[blue,thick,fill=red!35, fill opacity=0.3](ovBL2) rectangle
+      (ovUR2);
+
+      \draw[-{Stealth[scale=1.0]}, red, thick] (ovML1) -- (ovMLO1) --
+      (ovMLO2)--node[above,black]{取地址}(ovML2);
+      
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN1) to [out =
+      -45, in = 45] node[right,align=left,yshift=0.0cm,black]{指
+        \\向}(ovVN2);
+
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (dat) to [out =
+      -90, in = 90] node[right,align=left,xshift=0.3cm,yshift=0.2cm,black]{地\\
+        址}(ovVN1);
+    \end{tikzpicture}\let\thefootnote\relax\footnote[frame]{此处省略64位地址的前4个字节0X0000 7FFF。}
+  \end{center} 
+\end{frame}
+
+\begin{frame}[fragile] % minted宏包排版代码，需要[fragile]参数
+  \begin{itemize}
+  \item 同种数据类型的数据集合
+    \begin{itemize}
+    \item 指针索引
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \begin{tikzpicture}[font=\tiny]
+      \tikzset{ coord/.style={coordinate} }
+      \umlnote[text width=0.75\textwidth](code1) at(0, 0)
+      {
+        \cfile{codes/main.c}
+      };
+
+      \node[below = 0.02 of code1,xshift = 0.05cm] (mem01) {
+        \begin{bytefield}[rightcurly=., rightcurlyspace=0pt]{4}
+          \memsec{}{}{2}{\rvdots}\\
+          \begin{rightwordgroup}{fCGrade[89]}
+            \memsec{FFFF E317}{FFFF E314}{2}{}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{\rvdots}
+            \memsec{FFFF E313}{FFFF E1E0}{2}{\rvdots}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{fCGrade[11]}
+            \memsec{FFFF E1DF}{FFFF E1DC}{2}{80.0}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{\rvdots}
+            \memsec{FFFF E1DB}{FFFF E1C4}{2}{\rvdots}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{fCGrade[4]}
+            \memsec{FFFF E1C3}{FFFF E1C0}{2}{87.0}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{\rvdots}
+            \memsec{FFFF E1BF}{FFFF E1B4}{2}{\rvdots}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{fCGrade[0]}
+            \memsec{FFFF E1B3}{FFFF E1B0}{2}{80.0}
+          \end{rightwordgroup}\\
+          \begin{rightwordgroup}{pArray}
+            \memsec{FFFF E1AF}{FFFF E1AC}{2}{\alert{FFFF E1B0}}
+          \end{rightwordgroup}\\
+          \memsec{}{}{2}{\rvdots}
+        \end{bytefield}
+      };
+
+      % 计算绘图坐标
+      \path let \p1=(mem01) in coordinate (org) at (\x1, \y1)
+      coordinate (ovBL1) at ($(org) + (-1.84, -1.28)$)%
+      coordinate (ovUR1) at ($(ovBL1) + (1.32, 0.20)$)%
+      coordinate (ovTL1) at ($(ovBL1) + (0.0, 0.20)$)%
+      coordinate (ovML1) at ($(ovTL1)!0.5!(ovBL1)$)%
+      coordinate (ovMLO1) at ($(ovML1) + (-0.2, 0.0)$)%
+      
+      coordinate (ovBL2) at ($(ovBL1) + (1.35, -0.4)$)%
+      coordinate (ovUR2) at ($(ovBL2) + (1.12, 0.41)$)%
+      coordinate (ovTL2) at ($(ovBL2) + (0.0, 0.41)$)%
+      coordinate (ovML2) at ($(ovTL2)!0.5!(ovBL2)$)%
+      coordinate (ovMLO2) at ($(ovML2) + (-1.55, 0.0)$)%
+
+      coordinate (ovVN0) at ($(ovML2) + (1.9, 0.0)$)%
+      coordinate (ovVN1) at ($(ovVN0) + (0.5, 0.0)$)%
+      coordinate (ovVN2) at ($(ovVN1) + (-0.15, 0.4)$)%
+      coordinate (ovVN3) at ($(ovVN1) + (-0.05, 2.15)$)%
+      coordinate (ovVN4) at ($(ovVN1) + (-0.15, 1.35)$) ;
+
+      \draw[-{Stealth[scale=1.0]}, red, thick] (ovML1) -- (ovMLO1) --
+      node[left,align=right,black](getadd){取\\地\\址}(ovMLO2)--(ovML2);
+
+      \node[left = 0.05 of getadd] (getaddnote) {\cintttny{pArray = fCGrade}};
+
+      \draw[red,thick,fill=green!35, fill opacity=0.3](ovBL1)
+      rectangle (ovUR1);
+      \draw[blue,thick,fill=red!35, fill opacity=0.3](ovBL2) rectangle
+      (ovUR2);
+      
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN0) to [out = 0,
+      in = 180]node[below, xshift = 0.05cm, yshift = 0.1cm,
+      black](pt01){指向}(ovVN1) to [out = 0, in = -45]
+      node[fill=green!25, right,xshift = 0.25cm, xshift = 0.3cm, yshift = 0.25cm,
+      black] {\cintttny{*pArray =80.0}}(ovVN2);
+
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN1) to [out = 0,
+      in = -45] node[fill = green!25,right,xshift = -0.15cm,yshift =
+      1.3cm, black] {\cintttny{*(pArray + 5 + 6) = 80.0}}(ovVN3);
+          
+      \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN1) to [out = 0,
+      in = -45] node[fill = green!25, right, xshift = 0.25cm, yshift =
+      0.7cm, black] {\cintttny{pArray[4] = 87.0}}(ovVN4);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile] % minted宏包排版代码，需要[fragile]参数
+  \begin{itemize}
+  \item 冒泡排序(\alert{减少循环次数})
+  \end{itemize} 
+  \begin{center}
+    \begin{tikzpicture}[font=\scriptsize]
+      \tikzset{ coord/.style={coordinate} }
+      \begin{scope}[scale = 0.65, every node/.append style = {transform shape}]
+        % 布置结点单元
+        \node [term] (st1) at (0, 0) {Begin};
+        \node [io, join] (i1) {Input Array};
+        \node [test, join] (t0) {\alert{BubbleSort()}};
+        \node [io, join] (o1) {Output Array};
+        \node [term, join] (end1) {End};
+      \end{scope}
+      \begin{scope}[scale = 0.5, every node/.append style = {transform
+          shape}]%transform canvas = {scale=0.8}, overlay
+        % 布置结点单元
+        \node [term, right =8.5 of st1, shift={(0.0cm, 5.0cm)}] (st2) {Begin};
+        \node [proc, text width = 6em, join] (p1) {\cinttscr{int i, j}\\\cinttscr{int counter}};
+        \node [proc, join] (p2) {\cinttscr{i = 0}\\\cinttscr{counter = 0}};
+        \node [test, join] (t1) {\cinttscr{i < n - 1}};
+        \node [proc] (p3) {\cinttscr{j = 0}};
+        \node [test, text width = 6em, join] (t2) {\cinttscr{j < n - 1 - i}};
+        \node [test, text width = 6em] (t3) {\cinttscr{a[j] > a[j + 1]}};
+        \node [proc, text width = 8em] (p4) {\cinttscr{Swap(a[j], a[j + 1])}};
+        \node [proc, join] (p5) {\cinttscr{counter++}\\\cinttscr{j++}};
+        \node [proc] (p6) {\cinttscr{i++}};
+        \node [proc, text width = 6em] (p7) {\cinttscr{return counter}};
+        \node [term, join] (end2) {End};%, below = 1.6 of p3
+
+        % 布置用于连接的坐标结点，同时为其布置调试标记点。
+        \node [coord] (c1) at ($(p2.south)!0.5!(t1.north)$)  {};% \cmark{1}
+        \node [coord] (c2) at ($(p3.south)!0.5!(t2.north)$)  {};% \cmark{2}
+        \node [coord] (c3) at ($(p4.south)!0.5!(p5.north)$)  {};% \cmark{3}
+        \node [coord, below = 0.2 of p5] (c4)  {};% \cmark{4}
+        \node [coord, above = 0.25 of p6] (c5) {}; % \cmark{5}
+        \node [coord, below = 0.2 of p6] (c6)  {};% \cmark{6}
+        \node [coord, above = 0.25 of p7] (c7)  {};% \cmark{7}
+        \node [coord, right = 2.0 of t1] (c8) {}; % \cmark{8}
+        \node [coord, right = 1.5 of t2] (c9) {}; % \cmark{9}
+        \node [coord, right = 0.4 of t3] (c10) {}; % \cmark{10}
+        \node [coord, left = 1.5 of t2] (ct1) {}; % \cmark{t1}
+        \node [coord, left = 2.0 of t2] (ct2) {}; % \cmark{t2}
+        \node [coord] (c11) at (c6 -| ct2)  {};% \cmark{11}
+        \node [coord] (c12) at (c4 -| ct1)  {};% \cmark{12}
+        
+
+        % 判断框连线，每次绘制时，先绘制一个带有一个固定
+        % 位置标注的路径(path)，然后再绘制箭头本身(arrow)。
+        \path (t1.south) -- node [near start, right] {$Y$} (p3.north);
+        \draw [norm] (t1.south) -- (p3.north);
+        \path (t1.east) -- node [near start, above] {$N$} (c8);
+        \draw [norm] (t1.east) -- (c8) |- (c7) -- (p7.north);
+        
+        \path (t2.south) -- node [near start, right] {$Y$} (t3.north);
+        \draw [norm] (t2.south) -- (t3.north);
+        \path (t2.east) -- node [near start, above] {$N$} (c9);
+        \draw [norm] (t2.east) -- (c9) |- (c5) -- (p6.north);
+        
+        \path (t3.south) -- node [near start, right] {$Y$} (p4.north);
+        \draw [norm] (t3.south) -- (p4.north);
+        \path (t3.east) -- node [near start, above] {$N$} (c10);
+        \draw [norm] (t3.east) -- (c10) |- (c3);
+
+        % 其它连线
+        \draw [norm](p5.south) |- (c12) |- (c2);
+        \draw [norm](p6.south) |- (c11) |- (c1);
+      \end{scope}
+      \begin{scope}[scale = 0.65, every node/.append style = {transform
+          shape}]%transform canvas = {scale=0.8}, overlay
+        % 布置结点单元
+        \node [term,  right =6.0 of st2, shift={(0.0cm, -4.5cm)}] (st3) {Begin};
+        \node [proc, join] (p7) {int temp};
+        \node [proc, join] (p8) {temp = *pa};
+        \node [proc, join] (p9) {*pa = *pb};
+        \node [proc, join] (p10) {*pb = temp};        
+        \node [term, join] (end3) {End};
+      \end{scope}
+      % 绘制Sort函数调用关系
+      \draw [free] (t0.east) to [out = 45, in = 180] (st2.west);
+      \draw [free] (t0.east) to [out = -45, in = 180] (end2.west);
+      % 绘制Swap函数调用关系
+      \draw [free] (p4.east) to [out = 45, in = -135] (st3.west);
+      \draw [free] (p4.east) to [out = -45, in = 135] (end3.west);
+      % % 绘制函数调用关系
+      % \draw [free] (t0.east) to [out = 45, in = -175] (st2.west);
+      % \draw [free] (t0.east) to [out = -45, in = 175] (end2.west);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}[fragile] % minted宏包排版代码，需要[fragile]参数
   \begin{itemize}
   \item 动态数组作函数参数   
   \end{itemize}
@@ -16,10 +324,11 @@
     \begin{tikzpicture}[font=\tiny]
       \umlnote[scale = 0.8, text width=0.55\textwidth](code1) at(0, 0)
       {
-        \cfile{codes/memdiagram.c}
+        \cfile{codes/memdiagram.c} % 载入C代码文件，用minted排版
       };
 
       \node[scale = 0.95, right = 0.5 of code1, shift={(-1.8cm, 0.0cm)}] (mem01) {
+        % 用bytefield宏包绘制内存结构图
         \begin{bytefield}[leftcurlyspace=34pt,
           rightcurlyspace=0pt]{4}
           \memsec{}{}{2}{\rvdots}\\
@@ -63,102 +372,93 @@
         \end{bytefield}
       };
       
-      \def\clh{0.20}; %一行代码的高度宏
-      \def\clw{1.30}; %一行代码的宽度宏
-      \def\stpos{-2.18}
+      \def\clh{1.1ex}; % 一行代码高度
+      \def\clw{3.35em}; % 一行代码宽度
+      \def\stpos{-5.65em} % 标记框起始x轴位置
       \path let \p1=(code1) in coordinate (org1) at (\x1, \y1)
       % pa指针声明代码坐标
-      coordinate (ovBL10) at ($(org1) + (\stpos, 2.09)$)%左下角坐标
+      coordinate (ovBL10) at ($(org1) + (\stpos, 11.10 * \clh)$)%左下角坐标
       coordinate (ovUR10) at ($(ovBL10) + (\clw, \clh)$)%右上角坐标
       coordinate (ovCD10) at ($(ovBL10)!0.5!(ovUR10)$)%中心点坐标
       coordinate (ovCR10) at (ovUR10|-ovCD10)%右边线中点坐标
-
       % 通过pa指针分配内存代码坐标
-      coordinate (ovBL11) at ($(org1) + (\stpos, 1.50)$)%左下角坐标
-      coordinate (ovUR11) at ($(ovBL11) + (\clw + 1.8, \clh)$)%右上角坐标
+      coordinate (ovBL11) at ($(ovBL10) + (0.0, -3.08 * \clh)$)%左下角坐标
+      coordinate (ovUR11) at ($(ovBL11) + (2.35 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD11) at ($(ovBL11)!0.5!(ovUR11)$)%中心点坐标
       coordinate (ovCR11) at (ovUR11|-ovCD11)%右边线中点坐标
-
       % 遍历函数第1次调用pa实参代码坐标
-      coordinate (ovBL12) at ($(org1) + (\stpos + 0.91, 1.12)$)%左下角坐标
-      coordinate (ovUR12) at ($(ovBL12) + (\clw - 1.06, \clh)$)%右上角坐标
+      coordinate (ovBL12) at ($(ovBL10) + (0.7 * \clw, -5.18 * \clh)$)%左下角坐标
+      coordinate (ovUR12) at ($(ovBL12) + (0.17 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD12) at ($(ovBL12)!0.5!(ovUR12)$)%中心点坐标
       coordinate (ovCR12) at (ovUR12|-ovCD12)%右边线中点坐标
       % 遍历函数第1次调用Input实参代码坐标
-      coordinate (ovBL13) at ($(ovBL12) + (0.54, 0.0)$)%左下角坐标
-      coordinate (ovUR13) at ($(ovBL13) + (\clw - 0.81, \clh)$)%右上角坐标
+      coordinate (ovBL13) at ($(ovBL12) + (0.44 * \clw, 0.0)$)%左下角坐标
+      coordinate (ovUR13) at ($(ovBL13) + (0.37 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD13) at ($(ovBL13)!0.5!(ovUR13)$)%中心点坐标
       coordinate (ovCR13) at (ovUR13|-ovCD13)%右边线中点坐标
-
        % 遍历函数第2次调用pa实参代码坐标
-      coordinate (ovBL14) at ($(ovBL12) + (0.0, -0.41)$)%左下角坐标
-      coordinate (ovUR14) at ($(ovBL14) + (\clw - 1.06, \clh)$)%右上角坐标
+      coordinate (ovBL14) at ($(ovBL12) + (0.0, -2.10 * \clh)$)%左下角坐标
+      coordinate (ovUR14) at ($(ovBL14) + (0.17 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD14) at ($(ovBL14)!0.5!(ovUR14)$)%中心点坐标
       coordinate (ovCR14) at (ovUR14|-ovCD14)%右边线中点坐标
       % 遍历函数第2次调用Output实参代码坐标
-      coordinate (ovBL15) at ($(ovBL14) + (0.54, 0.0)$)%左下角坐标
-      coordinate (ovUR15) at ($(ovBL15) + (\clw - 0.73, \clh)$)%右上角坐标
+      coordinate (ovBL15) at ($(ovBL14) + (0.44 * \clw, 0.0)$)%左下角坐标
+      coordinate (ovUR15) at ($(ovBL15) + (0.44 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD15) at ($(ovBL15)!0.5!(ovUR15)$)%中心点坐标
       coordinate (ovCR15) at (ovUR15|-ovCD15)%右边线中点坐标
-
       % free函数调用代码坐标
-      coordinate (ovBL16) at ($(org1) + (\stpos, 0.12)$)%左下角坐标
-      coordinate (ovUR16) at ($(ovBL16) + (\clw - 0.45, \clh)$)%右上角坐标
+      coordinate (ovBL16) at ($(ovBL10) + (0.0, -10.40 * \clh)$)%左下角坐标
+      coordinate (ovUR16) at ($(ovBL16) + (0.66 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD16) at ($(ovBL16)!0.5!(ovUR16)$)%中心点坐标
       coordinate (ovCR16) at (ovUR16|-ovCD16)%右边线中点坐标
-
       % NULL空指针操作代码坐标
-      coordinate (ovBL17) at ($(ovBL16) + (0.0, -\clh - 0.02)$)%左下角坐标
-      coordinate (ovUR17) at ($(ovBL17) + (\clw - 0.45, \clh)$)%右上角坐标
+      coordinate (ovBL17) at ($(ovBL16) + (0.0, -1.10 * \clh)$)%左下角坐标
+      coordinate (ovUR17) at ($(ovBL17) + (0.66 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD17) at ($(ovBL17)!0.5!(ovUR17)$)%中心点坐标
       coordinate (ovCR17) at (ovUR17|-ovCD17)%右边线中点坐标
-
       % Traversal形参pa代码坐标
-      coordinate (ovBL18) at ($(org1) + (\stpos + 1.40, -0.67)$)%左下角坐标
-      coordinate (ovUR18) at ($(ovBL18) + (\clw - 0.98, \clh)$)%右上角坐标
+      coordinate (ovBL18) at ($(ovBL17) + (1.16 * \clw, -3.15 * \clh)$)%左下角坐标
+      coordinate (ovUR18) at ($(ovBL18) + (0.17 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD18) at ($(ovBL18)!0.5!(ovUR18)$)%中心点坐标
       coordinate (ovCR18) at (ovUR18|-ovCD18)%右边线中点坐标
-
       % Traversal形参pf代码坐标
-      coordinate (ovBL19) at ($(ovBL18) + (1.48, 0.0)$)%左下角坐标
-      coordinate (ovUR19) at ($(ovBL19) + (\clw - 0.98, \clh)$)%右上角坐标
+      coordinate (ovBL19) at ($(ovBL18) + (1.15 * \clw, 0.0)$)%左下角坐标
+      coordinate (ovUR19) at ($(ovBL19) + (0.16 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD19) at ($(ovBL19)!0.5!(ovUR19)$)%中心点坐标
       coordinate (ovCR19) at (ovUR19|-ovCD19)%右边线中点坐标
-
-      % 遍历函数内p指针代码坐标
-      coordinate (ovBL1a1) at ($(org1) + (\stpos, -1.05)$)%左下角坐标
-      coordinate (ovUR1a1) at ($(ovBL1a1) + (\clw - 0.68, \clh)$)%右上角坐标
+      % 遍历函数内p指针声明代码坐标
+      coordinate (ovBL1a1) at ($(ovBL17) + (0.00, -5.20 * \clh)$)%左下角坐标
+      coordinate (ovUR1a1) at ($(ovBL1a1) + (0.50 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1a1) at ($(ovBL1a1)!0.5!(ovUR1a1)$)%中心点坐标
       coordinate (ovCR1a1) at (ovUR1a1|-ovCD1a1)%右边线中点坐标
       % 遍历函数内for循环代码坐标
-      coordinate (ovBL1a2) at ($(ovBL1a1) + (0.0, -\clh - 0.01)$)%左下角坐标
-      coordinate (ovUR1a2) at ($(ovBL1a2) + (\clw + 0.98, \clh)$)%右上角坐标
+      coordinate (ovBL1a2) at ($(ovBL1a1) + (0.00, -1.08 * \clh)$)%左下角坐标
+      coordinate (ovUR1a2) at ($(ovBL1a2) + (1.76 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1a2) at ($(ovBL1a2)!0.5!(ovUR1a2)$)%中心点坐标
       coordinate (ovCR1a2) at (ovUR1a2|-ovCD1a2)%右边线中点坐标
       % 遍历函数内pf指针调用函数代码坐标
-      coordinate (ovBL1b) at ($(ovBL1a2) + (0.2, -\clh - 0.02)$)%左下角坐标
-      coordinate (ovUR1b) at ($(ovBL1b) + (\clw - 0.68, \clh)$)%右上角坐标
+      coordinate (ovBL1b) at ($(ovBL1a2) + (0.17 * \clw, -1.08 * \clh)$)%左下角坐标
+      coordinate (ovUR1b) at ($(ovBL1b) + (0.44 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1b) at ($(ovBL1b)!0.5!(ovUR1b)$)%中心点坐标
       coordinate (ovCR1b) at (ovUR1b|-ovCD1b)%右边线中点坐标
-
       % Input函数头代码坐标
-      coordinate (ovBL1c) at ($(org1) + (\stpos - 0.24, -2.03)$)%左下角坐标
-      coordinate (ovUR1c) at ($(ovBL1c) + (\clw + 0.75, \clh)$)%右上角坐标
+      coordinate (ovBL1c) at ($(ovBL1a2) + (-0.18 * \clw, -4.17 * \clh)$)%左下角坐标
+      coordinate (ovUR1c) at ($(ovBL1c) + (1.55 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1c) at ($(ovBL1c)!0.5!(ovUR1c)$)%中心点坐标
       coordinate (ovCR1c) at (ovUR1c|-ovCD1c)%右边线中点坐标
       % Input函数体代码坐标
-      coordinate (ovBL1d) at ($(ovBL1c) + (0.23, -0.41)$)%左下角坐标
-      coordinate (ovUR1d) at ($(ovBL1d) + (\clw + 0.45, \clh)$)%右上角坐标
+      coordinate (ovBL1d) at ($(ovBL1c) + (0.18 * \clw, -2.08 * \clh)$)%左下角坐标
+      coordinate (ovUR1d) at ($(ovBL1d) + (1.32 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1d) at ($(ovBL1d)!0.5!(ovUR1d)$)%中心点坐标
       coordinate (ovCR1d) at (ovUR1d|-ovCD1d)%右边线中点坐标
       % Output函数头代码坐标
-      coordinate (ovBL1e) at ($(ovBL1c) + (0.0, -0.80)$)%左下角坐标
-      coordinate (ovUR1e) at ($(ovBL1e) + (\clw + 0.83, \clh)$)%右上角坐标
+      coordinate (ovBL1e) at ($(ovBL1c) + (0.0, -4.17 * \clh)$)%左下角坐标
+      coordinate (ovUR1e) at ($(ovBL1e) + (1.61 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1e) at ($(ovBL1e)!0.5!(ovUR1e)$)%中心点坐标
       coordinate (ovCR1e) at (ovUR1e|-ovCD1e)%右边线中点坐标
       % Output函数体代码坐标
-      coordinate (ovBL1f) at ($(ovBL1e) + (0.23, -0.40)$)%左下角坐标
-      coordinate (ovUR1f) at ($(ovBL1f) + (\clw + 0.7, \clh)$)%右上角坐标
+      coordinate (ovBL1f) at ($(ovBL1e) + (0.18 * \clw, -2.10 * \clh)$)%左下角坐标
+      coordinate (ovUR1f) at ($(ovBL1f) + (1.50 * \clw, \clh)$)%右上角坐标
       coordinate (ovCD1f) at ($(ovBL1f)!0.5!(ovUR1f)$)%中心点坐标
       coordinate (ovCR1f) at (ovUR1f|-ovCD1f)%右边线中点坐标
       ;
@@ -585,6 +885,125 @@
     \end{tikzpicture}
   \end{center}
 \end{frame}
+
+\begin{frame}[fragile]  % minted宏包排版代码，需要[fragile]参数
+  \begin{itemize}
+  \item 为链表添加节点(无头节点)
+  \end{itemize}  
+  \begin{center}    
+    \begin{tikzpicture}[node distance=2cm, auto]%
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<1-5>]
+        \node[head, label=below:phead] (head) {};
+        \node[data, right of=head] (A) {\data};
+        \node[data, right of=A] (B) {\data};
+        \node[data, right of=B] (C) {\data};     
+        \node[data, right of=C, xshift=0.1cm] (D) {\data};
+        \node[data, right of=D] (last) {data \nodepart{second} \cinttfts{NULL}};
+
+        \draw[fill] (head.center) circle (0.05);
+
+        \path[ptr] (head.center) --++(right:7.5mm) |- (A.text west);
+        \draw[fill] ($(A.south)!0.5!(A.text split)$) circle (0.05);
+        \draw[ptr] ($(A.south)!0.5!(A.text split)$) --++(right:10mm) |- (B.text west);
+        \draw[fill] ($(B.south)!0.5!(B.text split)$) circle (0.05);
+        \draw[ptr] ($(B.south)!0.5!(B.text split)$) --++(right:10mm) |- (C.text west);
+        \draw[fill] ($(C.south)!0.5!(C.text split)$) circle (0.05);          
+        \draw[fill] ($(D.south)!0.5!(D.text split)$) circle (0.05);
+        \draw[ptr] ($(D.south)!0.5!(D.text split)$) --++(right:10mm) |- (last.text west);
+      \end{scope}
+
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<1-4>]
+        \draw[ptr] ($(C.south)!0.5!(C.text split)$) --++(right:10mm) |- (D.text west);
+      \end{scope}
+      
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<2-5>]
+        \node[above = 0.4 of C, node distance=0.5cm, label=above:pPrev] (nC){}; 
+        \node[above = 0.4 of D, node distance=0.5cm, label=above:pCur] (nD){}; 
+
+
+        \draw[ptr, red, thick] (nC.center) -- (C.north);
+        \draw[ptr, red, thick] (nD.center) -- (D.north);
+      \end{scope}
+
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<3-5>]
+        \node[data, below=1.5 of C, xshift=0.8cm, yshift=0.5cm] (CI) {\data};
+        \node[above of=CI,node distance=0.5cm,label=above:pNewNode] (nI){}; 
+      \end{scope}
+
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<4>]
+        \draw[fill] ($(CI.south)!0.5!(CI.text split)$) circle (0.05);
+        \draw[ptr, red] ($(CI.south)!0.5!(CI.text split)$) --++(right:6mm) |- ($(C.south)!0.5!(C.text split)$);
+      \end{scope}
+
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<5>]
+        \draw[fill] ($(CI.south)!0.5!(CI.text split)$) circle (0.05);
+        \draw[ptr, red] ($(CI.south)!0.5!(CI.text split)$) --++(right:6mm) |- (D.text west);
+        \draw[ptr, red] ($(C.south)!0.5!(C.text split)$) |- (CI.text west);
+      \end{scope}
+
+      \begin{scope}[scale = 0.7, every node/.append style = {transform shape}, visible on =<6>]
+        \node[head, label=below:phead] (head) {};
+        \node[data, right of=head] (A) {\data};
+        \node[data, right of=A] (B) {\data};
+        \node[data, right of=B] (C) {\data};     
+        \node[data, right of=C] (D) {\alert{data}};
+        \node[data, right of=D] (E) {\data};
+        \node[data, right of=E] (last) {data \nodepart{second} \cinttfts{NULL}};
+
+        \draw[fill] (head.center) circle (0.05);
+        \path[ptr] (head.center) --++(right:7.5mm) |- (A.text west);
+        \draw[fill] ($(A.south)!0.5!(A.text split)$) circle (0.05);
+        \draw[ptr] ($(A.south)!0.5!(A.text split)$) --++(right:10mm) |- (B.text west);
+        \draw[fill] ($(B.south)!0.5!(B.text split)$) circle (0.05);
+        \draw[ptr] ($(B.south)!0.5!(B.text split)$) --++(right:10mm) |- (C.text west);
+        \draw[fill] ($(C.south)!0.5!(C.text split)$) circle (0.05);
+        \draw[ptr] ($(C.south)!0.5!(C.text split)$) --++(right:10mm) |- (D.text west);
+        \draw[fill] ($(D.south)!0.5!(D.text split)$) circle (0.05);
+        \draw[ptr] ($(D.south)!0.5!(D.text split)$) --++(right:10mm) |- (E.text west);
+        \draw[fill] ($(E.south)!0.5!(E.text split)$) circle (0.05);
+        \draw[ptr] ($(E.south)!0.5!(E.text split)$) --++(right:10mm) |- (last.text west);
+      \end{scope}
+
+      \tikzset{ coord/.style={coordinate} }
+      \umlnote[scale = 1.1, text width=0.65\textwidth, below = 0.5 of
+      C, shift={(-0.5cm, -0.2cm)}, visible on = <2>](code1)
+      {
+        \cfile{codes/code71.c}
+      };
+
+      \umlnote[scale = 1.0, text width=0.6\textwidth, below = 0.5 of
+      head, shift={(3.5cm, -1.5cm)}, visible on = <3>](code1)
+      {
+        \begin{ccode}         
+         pNewNode = (ListNode*)malloc(sizeof(ListNode));
+       \end{ccode}
+      };
+
+      \umlnote[scale = 1.0, text width=0.6\textwidth, below = 0.5 of
+      head, shift={(3.5cm, -1.5cm)}, visible on = <4>](code1)
+      {
+        \begin{ccode}
+         pNewNode->next = pPrev->next;
+       \end{ccode}
+      };
+
+      \umlnote[scale = 1.0, text width=0.6\textwidth, below = 0.5 of
+      head, shift={(3.5cm, -1.5cm)}, visible on = <5>](code1)
+      {
+        \begin{ccode}
+         pPrev->next = pNewNode;
+       \end{ccode}
+      }; 
+      
+      \umlnote[scale = 0.78, text width=0.9\textwidth, below = 0.5 of
+      C, shift={(0.0cm, 0.2cm)}, visible on = <6>](code1)
+      {
+        \cfile{codes/code72.c}
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

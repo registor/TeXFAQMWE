@@ -51,7 +51,7 @@
 \makeatletter
 \DeclareRobustCommand{\rvdots}{%
   \vbox{
-    \baselineskip4\p@\lineskiplimit\z@
+    \baselineskip3\p@\lineskiplimit\z@
     \kern-\p@
     \hbox{.}\hbox{.}\hbox{.}
   }}
@@ -117,73 +117,19 @@
 \usetikzlibrary{decorations.text}
 \usetikzlibrary{matrix}
 \usetikzlibrary{backgrounds}
-% ====================================================================================
 
-% %%%%%%%%%% 绘制流程图时TiKz宏包的设置 %%%%%%%%
-% 作者: Brent Longborough
-% URL：http://www.texample.net/tikz/examples/author/brent-longborough/
+% 流程图属性设置
 % ====================================================================================
-% 定义颜色名称
-\colorlet{lcfree}{green}
-\colorlet{lcnorm}{blue}
-\colorlet{lccong}{red}
-% 设置一个用于调试的标记符号图层，注意确保这一图层位于顶层
-\pgfdeclarelayer{marx}
-\pgfsetlayers{main,marx}
-
-% 标记坐标点的宏命令(指定使用的坐标名称)
-% 可以通过交替注释以下两个宏命令定义，以打开和关闭调试功能。
-\providecommand{\cmark}[2][]{%
-  \begin{pgfonlayer}{marx}
-    \node [nmark] at (c#2#1) {#2};
-  \end{pgfonlayer}{marx}
-  } 
-%\providecommand{\cmark}[2][]{\relax} 
-% -------------------------------------------------
-\tikzset{
-  start chain = going below,    % 自顶向下绘制
-  node distance = 6mm and 60mm, % 结点距离的全局设置
-  every join/.style = {norm},   % 默认的结点连线样式
-  %every picture/.style={thick},
-  base/.style = {draw, thick, on chain, on grid, align=center, minimum height=2ex},%基本样式
-  proc/.style={base, rectangle, text width=4em, fill=orange!10},%处理框样式
-  test/.style={base, diamond, aspect=2.5, text width=3em, fill=green!30},%判断框样式
-  io/.style={base, trapezium, trapezium left angle=70, trapezium right
-    angle=110, text width=6em,  fill=blue!30},%输入/输出框样式
-  term/.style={proc, rounded corners, text width=3em, fill=red!30},%开始结束框样式
-  % 流程连接点样式
-  connector/.style = {draw,circle,node distance=3cm,fill=yellow!20},
-  % coord结点样式用于绘制连接线的角点
-  coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
-  % nmark结点样式用于绘制调试中的坐标标记
-  nmark/.style={draw, cyan, circle, font={\sffamily\bfseries}},
-  % 不相交的两个交汇路径的连接样式
-  connect/.style args={(#1) to (#2) over (#3) by #4}{
-        insert path={
-            let \p1=($(#1)-(#3)$), \n1={veclen(\x1,\y1)}, 
-            \n2={atan2(\y1,\x1)}, \n3={abs(#4)}, \n4={#4>0 ?-180:180}  in 
-            (#1) -- ($(#1)!\n1-\n3!(#3)$) 
-            arc (\n2:\n2+\n4:\n3) -- (#2)
-        }
-    }, 
-  % -------------------------------------------------
-  % 流程图中无箭头连线样式
-  lnorm/.style={thick, draw, lcnorm},
-  lfree/.style={thick, draw, lcfree},
-  lcong/.style={thick, draw, lccong},
-  % 流程图中流程线汇聚实心样式
-  dotnorm/.style={draw, fill = lcnorm, lcnorm},
-  dotfree/.style={draw, fill = lcfree, lcfree},
-  dotcong/.style={draw, fill = lccong, lccong},
-   % 流程图中流程线汇聚空心样式
-  cdotnorm/.style={draw, lcnorm},
-  cdotfree/.style={draw, lcfree},
-  cdotcong/.style={draw, lccong},
-  % 流程图中有箭头连线样式
-  norm/.style={thick, ->, >=stealth, draw, lcnorm},
-  free/.style={thick, ->, >=stealth, draw, lcfree},
-  cong/.style={thick, ->, >=stealth, draw, lccong},
-  it/.style={font={\small\itshape}},
+% 各参数默认值
+\flowchartset{
+  free color = green, % 自由连线颜色(默认取green)
+  norm color = blue, % 常规连线颜色(默认取blue)
+  cong color = red, % 关联连线颜色(默认取red)
+  proc fill color = orange!10, % 顺序处理框填充颜色(默认取白色)
+  test fill color = green!30, % 判断框填充颜色(默认取白色)
+  io fill color = blue!30, % 输入/输出框填充颜色(默认取白色)
+  term fill color = red!30, % 开始/结束框填充颜色(默认取白色)
+  flow line width = 1.3\pgflinewidth, % 各类流程线线条宽度(默认取当前线条宽度)
 }
 % ====================================================================================
 
