@@ -1,10 +1,80 @@
 % 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
-\documentclass{ctexart}
+\documentclass[12pt]{standalone}
+\usepackage{ctex}
+% 部分latex的Logo
+\usepackage{xltxtra}
 
-%导言区，可以在此引入必要的宏包
+\usepackage{tikz-flowchart}
+% \usepackage{tikz}
+% \usetikzlibrary{positioning}
+% \usetikzlibrary{calc}
+% \usetikzlibrary{arrows.meta}
+
+% 各参数默认值
+\flowchartset{
+  free color = green, % 自由连线颜色(默认取green)
+  norm color = blue, % 常规连线颜色(默认取blue)
+  cong color = red, % 关联连线颜色(默认取red)
+  proc fill color = red!10, % 顺序处理框填充颜色(默认取白色)
+  proc text width = 4em, % 顺序处理框宽度(默认取8em)
+  chain direction = right, % 结点自动布置方向(默认取below)
+  minimum node distance = 6mm, % 最小结点间距(默认取6mm)
+  maximum node distance = 10mm, % 最大结点间距(默认取60mm)
+  flow line width = \pgflinewidth, % 各类流程线线条宽度(默认取当前线条宽度)
+  stealth length = 1.5mm, % 箭头长度(默认取1.5mm)
+  stealth width = 1.0mm, % 箭头宽度(默认取1.0mm)
+}
+
+\tikzset{cirnum/.style={midway, circle, fill=black, inner
+    sep=0pt, minimum size=3pt, white, yshift=0.35em}} 
 
 \begin{document} %在document环境中撰写文档
-  欢迎来到\LaTeX 世界！
+
+\begin{tikzpicture}[font=\scriptsize]  
+  \node[proc, fill=yellow!30](tex){{\LaTeX}引擎};
+  \node[proc, join](nobibpdf){无文献PDF};
+  \node[proc, below = 1.0 of tex, text width = 4.2em, fill=yellow!30, dashed, shift={(3.0, 0.0)}](sty){biblatex宏包};
+  \node[proc, text width = 4.5em, fill=violet!40](bbxcbx){.bbx著录样式\\.cbx引用样式};
+  \node[proc, below=3.5 of tex, text width = 4.6em, fill=green!30, dashed](aux){.aux(辅助文件)};
+  \node[proc, right=2.5 of aux, text width = 4.6em, fill=green!30, dashed](bcf){.bcf(引用文件)};
+  \node[proc, right=3.0 of bcf, text width = 4.5em, fill=yellow!30](biber){biber工具};
+  \node[proc, right=3.0 of biber, text width = 4.8em, fill = violet!40](bib){.bib文献数据库};
+  \node[proc, above=1.2 of biber, text width = 4.5em, fill=green!30, dashed, shift = {(-0.6, 0.0)}](bbl){.bbl文献列表};
+  \node[proc, below=2.0 of aux, fill=yellow!30](btex){{\LaTeX}引擎};  
+  \node[proc, join, right=4.5 of btex, text width = 4.5em, fill=red!60](norefpdf){带文献PDF};
+  \node[proc, left = 3.2 of btex, fill=blue!30](src){.tex源文档};  
+  \node[proc, below=2.5 of btex, fill=yellow!30](bbtex){{\LaTeX}引擎};
+  \node[proc, join, text width = 7.6em, fill=red!80](pdf){带文献反向超链接PDF};
+
+  \path (tex.east) to node[cirnum] {\tiny 1} (nobibpdf);
+  \path (btex.east) to node[cirnum] {\tiny 3} (norefpdf);
+  \path (bbtex.east) to node[cirnum] {\tiny 4} (pdf);
+  
+  \draw[norm] (src) -- node[cirnum, below]{\tiny 3} (btex);
+  \draw[norm] (src) edge [bend left] node[cirnum, right]{\tiny 1} (tex);
+  \draw[norm] (src) edge [bend right] node[cirnum, right]{\tiny 4} (bbtex);
+
+  \draw[free, violet!80] (bbxcbx.west) -- node[cirnum, xshift=-0.6em]{\tiny 1}(sty.east);
+  \draw[free, violet!80] (bbxcbx.west) -- node[cirnum]{\tiny 3}(sty.east);
+  \draw[free, violet!80] (bbxcbx.west) -- node[cirnum, xshift=0.6em]{\tiny 4}(sty.east);
+
+  \draw[norm, dashed] (sty.north west) -- node[cirnum]{\tiny 1} (tex.south east);
+  
+  \draw[free, dashed, green!80] (tex.south) -- node[cirnum, fill=lightgray] {\tiny 1}(bcf.north);
+  \draw[free, dashed, green!80] (tex.south) -- node[cirnum, fill=lightgray] {\tiny 1}(aux.north);
+  \draw[free, dashed, red!40] (bcf.east) -- node[cirnum, fill=lightgray] {\tiny 2}(biber.west);
+  \draw[free, dashed, green!80] (biber) -- node[cirnum, fill=lightgray] {\tiny 2}(bbl); 
+  \draw[norm] (bib) -- node[cirnum]{\tiny 2} (biber);
+  
+  \draw[free, dashed, red!40] (bbl.north) -- node[cirnum, fill=lightgray] {\tiny 3}(sty.south);
+  \draw[norm, dashed] (sty.south)  to [out=-90, in = 45] node[cirnum, near end]{\tiny 3} (btex.north east);
+  \draw[norm, dashed] (sty.south) to [out=-90, in = 45] node[cirnum, near end]{\tiny 4} (bbtex.north east);
+
+  \draw[free, dashed, red!40] (aux.south) -- node[cirnum, fill=lightgray] {\tiny 4}(btex.north);
+  \draw[norm, dashed, red!40] (aux.south east) to [out=-45, in = 45]
+  node[cirnum, near end]{\tiny 4} (bbtex.north);
+\end{tikzpicture}
+
 \end{document}
 
 %%% Local Variables:

@@ -1,0 +1,78 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass[12pt]{standalone}
+\usepackage{ctex}
+% 部分latex的Logo
+\usepackage{xltxtra}
+
+\usepackage{tikz-flowchart}
+% \usepackage{tikz}
+% \usetikzlibrary{positioning}
+% \usetikzlibrary{calc}
+% \usetikzlibrary{arrows.meta}
+
+% 各参数默认值
+\flowchartset{
+  free color = green, % 自由连线颜色(默认取green)
+  norm color = blue, % 常规连线颜色(默认取blue)
+  cong color = red, % 关联连线颜色(默认取red)
+  proc fill color = red!10, % 顺序处理框填充颜色(默认取白色)
+  proc text width = 4em, % 顺序处理框宽度(默认取8em)
+  chain direction = right, % 结点自动布置方向(默认取below)
+  minimum node distance = 6mm, % 最小结点间距(默认取6mm)
+  maximum node distance = 10mm, % 最大结点间距(默认取60mm)
+  flow line width = \pgflinewidth, % 各类流程线线条宽度(默认取当前线条宽度)
+  stealth length = 1.5mm, % 箭头长度(默认取1.5mm)
+  stealth width = 1.0mm, % 箭头宽度(默认取1.0mm)
+}
+
+\tikzset{cirnum/.style={midway, circle, fill=black, inner
+    sep=0pt, minimum size=3pt, white, yshift=0.35em}} 
+
+\begin{document} %在document环境中撰写文档
+
+\begin{tikzpicture}[font=\scriptsize]
+  %\node[proc, fill=blue!30](src){.tex源文档};
+  \node[proc, fill=yellow!30](tex){{\LaTeX}引擎};
+  \node[proc, join](nobibpdf){无文献PDF};
+  \node[proc, below=1.5 of nobibpdf, text width = 4.8em, fill = violet!40, shift = {(-1.0, 0.0)}](bib){.bib文献数据库};
+  \node[proc, right=2.5 of bib, text width = 4.6em, fill = violet!40](bst){.bst文献样式};
+  \node[proc, below=3.0 of tex, text width = 4.6em, fill=green!30, dashed](aux){.aux(辅助文件)};
+  \node[proc, right=3.3 of aux, text width = 4.5em, fill=yellow!30](bibtex){bibtex工具};
+  \node[proc, right=3.0 of bibtex, text width = 4.5em, fill=green!30, dashed](bbl){.bbl文献列表};
+  \node[proc, below=2.5 of aux, fill=yellow!30](btex){{\LaTeX}引擎};  
+  \node[proc, join, text width = 4.5em](norefpdf){无引用PDF};
+  \node[proc, left = 3.2 of btex, fill=blue!30](src){.tex源文档};
+  \node[proc, below=1.5 of btex, text width = 4.6em, fill=green!30, dashed](baux){.aux(辅助文件)};
+  \node[proc, below=1.5 of baux, fill=yellow!30](bbtex){{\LaTeX}引擎};
+  \node[proc, join, text width = 4.5em, fill=red!60](pdf){最终PDF};
+
+  \path (tex.east) to node[cirnum] {\tiny 1} (nobibpdf);
+  \path (tex.east) to node[cirnum] {\tiny 1} (nobibpdf);
+  \path (btex.east) to node[cirnum] {\tiny 3} (norefpdf);
+  \path (bbtex.east) to node[cirnum] {\tiny 4} (pdf);
+  
+  \draw[norm] (src) -- node[cirnum, below]{\tiny 3} (btex);
+  \draw[norm] (src) edge [bend left] node[cirnum, right]{\tiny 1} (tex);
+  \draw[norm] (src) edge [bend right] node[cirnum, right]{\tiny 4} (bbtex);
+
+  \draw[free, dashed, green!80] (tex.south) -- node[cirnum, fill=lightgray] {\tiny 1}(aux.north);
+  \draw[free, dashed, red!40] (aux) -- node[cirnum, fill=lightgray] {\tiny 2}(bibtex);
+  \draw[free, dashed, green!80] (bibtex) -- node[cirnum, fill=lightgray] {\tiny 2}(bbl); 
+  \draw[norm] (bib.south) -- node[cirnum, below]{\tiny 2} (bibtex.north);
+  \draw[norm] (bst.south) -- node[cirnum, below]{\tiny 2} (bibtex.north);
+  
+  \draw[free, dashed, red!40] (aux) -- node[cirnum, fill=lightgray] {\tiny 3}(btex);
+  \draw[free, dashed, red!40] (bbl.south) -- node[cirnum, fill=lightgray] {\tiny 3}(btex.north);
+
+  \draw[free, dashed, green!80] (btex.south) -- node[cirnum, fill=lightgray] {\tiny 3}(baux.north);
+  \draw[free, dashed, red!40] (baux.south) -- node[cirnum, fill=lightgray] {\tiny 4}(bbtex.north); 
+  \draw[free, dashed, red!40] (bbl.south) to [out=-90, in = 45] 
+  node[cirnum, fill=lightgray] {\tiny 4}(bbtex.north east); 
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
