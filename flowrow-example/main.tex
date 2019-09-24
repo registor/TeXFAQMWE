@@ -1,0 +1,130 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+% 导言区，可以在此引入必要的宏包
+% 插图宏包
+\usepackage{graphicx}
+% 灵活排版浮动体
+\usepackage{floatrow}
+% 子标题宏包
+\usepackage{subcaption}
+
+
+\begin{document} %在document环境中撰写文档
+在浮动体中并排插入两个元素，按照题注规律，大致有以下一些组
+合：
+
+\begin{itemize}
+\item 无题注
+\item 共享题注无子题注
+\item 各自独立题注
+\item 共享题注带子题注
+\end{itemize}
+
+\section{共享题注无子题注}
+\begin{figure}[!htp]
+  \begin{floatrow}
+    \ffigbox[\FBwidth]{
+      \includegraphics[width=0.45\textwidth]{example-image-a}
+      \includegraphics[width=0.45\textwidth]{example-image-b}
+    }{\caption{共享题注}\label{sharefig:a}}
+  \end{floatrow}
+\end{figure}
+
+\section{各自独立题注}
+\begin{figure}[!htp]
+  \begin{floatrow}
+    \ffigbox[\FBwidth]{
+      \includegraphics[width=0.45\textwidth]{example-image-a}
+    }{\caption{独立题注}\label{sepfig:a}}
+    \ffigbox[\FBwidth]{
+      \includegraphics[width=0.45\textwidth]{example-image-b}
+    }{\caption{独立题注}\label{sepfig:b}}
+  \end{floatrow}
+\end{figure}
+
+\section{共享题注带子题注}
+\begin{figure}[!htp]
+  \begin{floatrow}
+    \ffigbox[\textwidth]{
+      \begin{subfloatrow}[2]
+        \ffigbox[\FBwidth]{
+          \includegraphics[width=0.45\textwidth]{example-image-a}
+        }{\caption{子题注}\label{subfig:a}}
+        \ffigbox[\FBwidth]{
+          \includegraphics[width=0.45\textwidth]{example-image-b}
+        }{\caption{子题注}\label{subfig:b}}
+      \end{subfloatrow}
+    }{\caption{共享题注带子题注}\label{fig:sub}}
+  \end{floatrow}
+\end{figure}
+
+\begin{figure}[!htp]
+  \begin{floatrow}
+    \ffigbox[\FBwidth]
+    {
+      \begin{subfloatrow}[2]
+        \ffigbox[\FBwidth]{
+          \includegraphics[height=0.16\textheight]{example-image-a}
+        }{\caption{子题注1}\label{sepsubfig:a}}
+        \ffigbox{
+          \includegraphics[height=0.16\textheight]{example-image-b}
+        }{\caption{子题注2}\label{sepsubfig:b}}
+      \end{subfloatrow}
+    }{\caption{独立题注1}\label{sepsubfig:ab}}
+    \ffigbox{
+      \includegraphics[height=0.16\textheight]{example-image-c}\\[5.5ex]
+    }{\caption{独立题注2}\label{sepsubfig:c}}
+  \end{floatrow}
+\end{figure}
+
+
+\begin{figure}[!htp]
+  \ffigbox[\textwidth]%
+  {%
+    \begin{subfloatrow}[1]%\useFCwidth
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-a}
+      }{\caption{子题注1}\label{trifig:a}}
+    \end{subfloatrow}    
+    \begin{subfloatrow}[2]%\useFCwidth      
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-b}
+      }{\caption{子题注2}\label{trifig:b}}
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-c}
+      }{\caption{子题注3}\label{trifig:c}}
+    \end{subfloatrow}
+  }{\caption{三个子图}\label{trifig}}
+\end{figure}
+
+\begin{figure}[!htp]
+  \ffigbox[\textwidth]%
+  {%
+    \begin{subfloatrow}[2]%\useFCwidth
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-a}
+      }{\caption{子题注1}\label{trifig:a}}
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-b}
+      }{\caption{子题注2}\label{trifig:b}}
+    \end{subfloatrow}    
+    \begin{subfloatrow}[2]%\useFCwidth      
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image-c}
+      }{\caption{子题注3}\label{trifig:c}}
+      \ffigbox[\FBwidth]{
+        \includegraphics[width=0.4\textwidth]{example-image}
+      }{\caption{子题注4}\label{trifig:d}}
+    \end{subfloatrow}
+  }{\caption{四个子图}\label{trifig}}
+\end{figure}
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
