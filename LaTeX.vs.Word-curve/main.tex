@@ -1,0 +1,86 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+% 导言区，可以在此引入必要的宏包
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\colorlet{msofficecolour}{red!90!white}
+\colorlet{latexcolour}{green!90!black}
+
+% 自定义LaTeX简单教程中要用到的宏命令
+% ====================================================================================
+\newcommand\latex{{\fontfamily{cmr}\selectfont \LaTeX}}
+\newcommand\msoffice{{\rmfamily MS Office}}
+\newcommand\msofficepdf{\texorpdfstring{\msoffice{}}{MS Office}}
+
+\begin{document} %在document环境中撰写文档
+\begin{figure}[!htp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotsset{every axis/.append style={line width=1pt}}
+    \begin{axis}[%
+      axis x line=bottom,
+      axis y line=left,
+      ymin=0,
+      xtick={},
+      xticklabels={},
+      xlabel near ticks,
+      ytick={},
+      yticklabels={},
+      ylabel near ticks,
+      xlabel={文档大小和复杂性},
+      ylabel={耗时和难度},
+      ]
+      \begin{scope}[decoration={random steps,segment length=1pt,amplitude=0.1pt},decorate]
+        \addplot [msofficecolour, samples=130, domain=0:2] {1+2*x^3}
+                  node[near end, sloped, above] {\msoffice}
+                  node[anchor=east, pos=.98] {\tiny (我不玩了！再见\ldots)};
+         \addplot [latexcolour, samples=130, domain=0:2] {2+x}
+                  node[near end, sloped, above] {\latex};
+      \end{scope}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{使用难度曲线}
+\end{figure}  
+
+\begin{figure}[!htp]
+  \centering
+  \begin{tikzpicture}
+    % pgfplots设置(否则学习曲线无法绘制)
+    \pgfplotsset{compat=newest,compat/show suggested
+      version=false,every axis/.append style={line width=1pt}}    
+    \begin{axis}[%
+      axis x line=bottom,
+      axis y line=left,      
+      xtick={},
+      xticklabels={},
+      xlabel near ticks,
+      ytick={},
+      yticklabels={},
+      ylabel near ticks,
+      xlabel={需求复杂度/经验},
+      ylabel={学习难度},
+      xmin=0,
+      xmax=4,
+      ymin=0,
+      ymax=4,
+      ]
+      % 用贝塞尔曲线(Bézier curve)绘制学习曲线示意图
+      \begin{scope}[decoration={random steps,segment length=1pt,amplitude=0.1pt},decorate]
+        \draw[color=msofficecolour] (0,0) .. controls (3.8,0.00) and (1.5,3.8)
+        .. (3.8,3.8) node[near end, sloped, above] {\msoffice};
+        \draw[latexcolour] (0,0) .. controls (0.1,1.8) and (1.8,1.8)
+        .. (3.8,1.6) node[xshift = -0.8cm, sloped, above] {\latex};
+      \end{scope}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{学习难度曲线}
+\end{figure}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

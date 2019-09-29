@@ -1,0 +1,20 @@
+\RequirePackage{fix-cm} % arbitrary font scaling
+\documentclass{article}
+%Here, \scaleto from the scalerel package operates on its arguments in math mode by default, unlike \scalebox of the graphicx package, which operates in text mode.
+\usepackage{scalerel}
+
+% \DeclareMathSizes{<current font size>}{<size for textstyle>}{<size for scriptstyle>}{<size for scriptscriptsize>}
+\DeclareMathSizes{10}{10}{7}{4}
+
+\begin{document}
+%  % For even smaller, you could scale the sub-subscript:
+%  $a_{b_{\scaleto{c}{1pt}}}$
+%  $a^{b^{\scaleto{c}{1pt}}}$
+%
+%  %If you need consistency across a range of subscripts, you may wish to add a normalizer like a \mathstrut
+%  $a_{b_{\scaleto{c\mathstrut}{2pt}}}$
+%  $a^{b^{\scaleto{g\mathstrut}{2pt}}}$
+%  
+  $a_{b_{c}}$
+  $a^{b^{g}}$
+\end{document}
