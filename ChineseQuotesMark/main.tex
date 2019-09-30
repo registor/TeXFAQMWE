@@ -1,0 +1,30 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{article}
+
+%导言区，可以在此引入必要的宏包
+\usepackage{ctex}
+\usepackage{csquotes}
+
+% ====================================================================================
+% csquote宏包的中文引号样式
+% ====================================================================================
+\DeclareQuoteStyle{zhquotestyle}% style name
+    {\symbol{"201C}}% opening outer mark
+    {\symbol{"201D}}% closing outer mark
+    {\symbol{"2018}}% opening inner mark
+    {\symbol{"2019}}% closing inner mark
+
+%\setquotestyle{zhquotestyle}
+
+\begin{document} %在document环境中撰写文档
+\setquotestyle{english}
+it says:\enquote{Wellcome to \enquote{\LaTeX{}} World!}
+
+\setquotestyle{zhquotestyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{\LaTeX{}}世界！}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
