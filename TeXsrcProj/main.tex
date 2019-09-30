@@ -1,0 +1,166 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{standalone}
+
+% 导言区，可以在此引入必要的宏包
+\usepackage{ctex}
+\usepackage[edges]{forest}
+
+%% 设置绘制目录结构的宏参数
+\definecolor{folderbg}{RGB}{124,166,198}
+\definecolor{folderborder}{RGB}{110,144,169}
+\newlength\Size
+\setlength\Size{4pt}
+\tikzset{%
+  folder/.pic={%
+    \filldraw [draw=folderborder, top color=folderbg!50, bottom
+    color=folderbg] (-1.05*\Size,0.2\Size+5pt) rectangle
+    ++(.75*\Size,-0.2\Size-5pt);
+    
+    \filldraw [draw=folderborder, top color=folderbg!50, bottom
+    color=folderbg] (-1.15*\Size,-\Size) rectangle (1.15*\Size,\Size);    
+  },
+  file/.pic={%
+    \filldraw [draw=folderborder, top color=folderbg!5, bottom
+    color=folderbg!10] (-\Size,.4*\Size+5pt) coordinate (a) |-
+    (\Size,-1.2*\Size) coordinate (b) -- ++(0,1.6*\Size) coordinate
+    (c) -- ++(-5pt,5pt) coordinate (d) -- cycle (d) |- (c) ;    
+  },
+}
+
+\forestset{%
+  declare autowrapped toks={pic me}{},
+  declare boolean register={pic root},
+  pic root=0,
+  pic dir tree/.style={%
+    for tree={%
+      folder,
+      %font=\ttfamily,
+      grow'=0,
+      s sep=1.0pt,
+      font=\small \sffamily,
+      %fit=band,
+      %ysep = 1.0pt,
+      inner ysep = 2.6pt,
+    },
+    before typesetting nodes={%
+      for tree={%
+        edge label+/.option={pic me},
+      },
+      if pic root={
+        tikz+={
+          \pic at ([xshift=\Size].west) {folder};
+        },
+        align={l}
+      }{},
+    },
+  },
+  pic me set/.code n args=2{%
+    \forestset{%
+      #1/.style={%
+        inner xsep=2\Size,
+        pic me={pic {#2}},
+      }
+    }
+  },
+  pic me set={directory}{folder},
+  pic me set={file}{file},  
+}
+%% ==================================================
+
+\begin{document} %在document环境中撰写文档
+%\centering
+\begin{forest}
+  pic dir tree,
+  pic root,
+  for tree={% folder icons by default; override using file for file icons
+            directory,
+           },
+  [jobname\%【工作根目录】%, 
+    [bibs\%【参考文献数据库目录，根据需要，可以有多个数据库】%
+      [sample.bib\%【参考文献数据库】, file%
+      ]
+      [$\cdots$,file]
+    ]
+    [codes\%【插图目录，可根据需要增减】
+      [chap01
+        [01helloworld.c\%【输入输出C语言代码】,file]
+        [$\cdots$,file]
+      ]
+      [chap02
+        [01bubblesort.c\%【冒泡排序C语言代码】,file]
+        [$\cdots$,file]
+      ]  
+      [$\cdots$,file]
+    ]  
+    [contents\%【各章节\LaTeX 源文件，可根据需要增减】        
+      [chap00-abs\%【摘要】.tex, file
+      ]
+      [chap01-intro.tex\%【第1章】, file
+      ]
+      [$\cdots$, file
+      ]
+      [chap10-conclusion.tex\%【第10章】, file
+      ]
+      [app01-denotation.tex\%【主要符号对照表】, file
+      ]
+      [app02-ack.tex\%【致谢】, file
+      ]
+      [app03-resume.tex\%【个人简历】, file
+      ]
+    ]      
+    [datasets\%【数据文件，可根据需要增减】        
+      [tab01-test01.csv\%【XXXX测试数据】, file
+      ]
+      [tab02-test02.csv\%【XXXX模拟数据】, file
+      ]
+      [$\cdots$, file
+      ]
+    ]  
+    [figs\%【插图目录，可根据需要增减】
+      [plot
+        [fig01.tex\%【TiKZ绘图代码】,file]
+        [$\cdots$,file]
+        ]
+      [chap01
+        [fig01-01.png\%【TiKZ绘图代码】,file]
+        [$\cdots$,file]
+        ]
+      [chap02
+        [fig02-01.jpg\%【TiKZ绘图代码】,file]
+        [$\cdots$,file]
+      ]
+      [xxxx.png\%【现场照片】, file
+      ]
+      [xxxx.png\%【屏幕截图】, file
+      ]
+      [xxxx.pdf\%【Matlab制图】, file
+      ]
+      [$\cdots$,file]
+    ]
+    [logo\%【学校LOGO图标】      
+      [XXXX.png\%【截图(不推荐)】, file
+      ]
+      [XXXX.pdf\%【矢量图标(强烈推荐)】, file
+      ]
+      [$\cdots$,file]
+    ]
+    [settings\%【自定义命令、环境、引入宏包等\LaTeX{}源文件，可根据需要调整】        
+      [format.tex\%【自定义命令、环境、参数设置等】, file
+      ]
+      [packages.tex\%【宏包引入】, file
+      ]
+    ]
+    [main.tex\%【主控文件，必须存在，且置于根目录】, file
+    ]
+    [Makefile\%【make命令需要的文件，若不执行make命令，可以不需要】, file
+    ]
+    [$\cdots$\%【其它必须置于根目录下的文件，可以不需要】,file]
+  ]
+\end{forest}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
