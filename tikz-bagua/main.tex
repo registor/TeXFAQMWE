@@ -1,0 +1,91 @@
+\documentclass[tikz,margin=10pt]{standalone}
+\usepackage{ctex}
+%\setCJKmainfont{STFangsong}
+
+%Lengths definition
+\newlength{\radiustai} %Radius of Taijitu symbol
+\setlength{\radiustai}{1cm}
+\newlength{\thickness} %Thickness of the trigram lines
+\setlength{\thickness}{0.3\radiustai} %Change this factor to make the lines thicker or thinner
+\newlength{\iradiusbagua} %Distance from center of Taijitu to the first line of Ba Gua.
+\setlength{\iradiusbagua}{1.4\radiustai} %Change the factor to make the Ba Gua bigger or smaller. Factor 1 would make it tangent to the Taijitu.
+\newlength{\smallradius} %Offset from the center for the trigram lines (see below for computation)
+\newlength{\basedistance} %Base distance from lowest corner of Ba Gua trigram
+
+%Colours definition
+\definecolor{triborder}{gray}{0.7}
+\definecolor{trifill}{gray}{0}
+\definecolor{octafill}{gray}{0.9}
+\definecolor{bckearth}{RGB}{240,230,140}
+\definecolor{bckwater}{RGB}{30,144,255}
+\definecolor{bckfire}{RGB}{220,20,60}
+\definecolor{bckwood}{RGB}{50,205,50}
+\definecolor{bckmetal}{RGB}{192,192,192}
+
+\tikzset{
+    nodeline/.style={midway, rotate=#1, minimum height=3.5mm, minimum width=2.5mm}, 
+}
+
+\newcommand\trigram[2]{%
+\begin{scope}[rotate=#1]% around={#1:(0,0)}
+\def\alenanno{w}
+\clip (-1.1,3) -- (1.1,3) -- (0,0) -- cycle;
+\foreach \x [count=\xx starting from 0, evaluate=\xx as \y using (1.75+.5*\xx)] in #2{%
+\ifx\x\alenanno
+    \draw[line width=3mm] (-1.2,\y) -- (1.2,\y) node[nodeline=#1,fill=white] {};
+\else
+    \draw[line width=3mm] (-1.2,\y) -- (1.2,\y);
+\fi
+}
+\end{scope}
+}
+
+\begin{document} %在document环境中撰写文档
+  \begin{tikzpicture}
+
+  %External octagon: thanks to Mark Wibrow for the idea (from an answer on stackexchange).
+\draw[line width=1,fill=octafill!80!black] (22.5:\iradiusbagua+8.5\thickness) 
+
+\foreach \i in {45,90,...,315}{
+    -- (\i+22.5:\iradiusbagua+8.5\thickness)
+} -- cycle;
+\draw[line width=2,fill=white] (22.5:\iradiusbagua+6.5\thickness) 
+
+\foreach \i in {45,90,...,315}{
+    -- (\i+22.5:\iradiusbagua+6.5\thickness)
+} -- cycle;
+
+\foreach \i in {22.5,67.5,...,337.5}{
+    \draw[line width=1] (\i:\iradiusbagua+6.5\thickness) -- (\i:\iradiusbagua+8.5\thickness);
+}
+%
+\foreach \trig/\blk/\pin/\wht [count=\xi, evaluate=\xi as \angle using int((45*\xi)-90)] in {%
+    {w,w,w}/坤/kūn/地,
+    {b,w,b}/離/lì/火,
+    {w,b,b}/巽/xùn/風,
+    {b,w,w}/震/zhèn/雷,
+    {w,w,b}/艮/gèn/山,
+    {w,b,w}/坎/kǎn/水,
+    {b,b,b}/乾/qián/天,
+    {b,b,w}/兌/duì/澤
+    }{
+    \trigram{\angle}{\trig}
+    \ifnum\xi<5
+        \node[rotate=45*(\xi-2)] at (45*\xi:\iradiusbagua+6.5\thickness) {\blk~\pin~\textcolor{white}{\wht}};
+    \else
+        \node[rotate=45*(\xi+2)] at (45*\xi:\iradiusbagua+6.7\thickness) {\blk~\pin~\textcolor{white}{\wht}};
+    \fi
+}
+%
+%\trigram{90}{b,w,b}
+\draw (0,0) circle (1cm);
+\fill (90:5mm) circle (3pt);
+\fill (90:1cm) arc (90:-90:5mm) arc (90:270:5mm) arc (-90:90:1cm);
+\fill[white] (-90:5mm) circle (3pt);
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

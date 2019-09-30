@@ -1,0 +1,95 @@
+\documentclass[tikz,margin=10pt]{standalone}
+
+\usepackage{ctex}
+\usepackage{makecell} % 单元格宏包
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.text}
+
+% 绘制五行图的颜色定义
+\definecolor{arylideyellow}{rgb}{0.91, 0.84, 0.42}
+\definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{mordantred19}{rgb}{0.68, 0.05, 0.0}
+
+\tikzset{
+  arcnode/.style 2 args={
+    decoration={
+      text along path,
+      text align=center,
+      raise=#1,
+      text={|\small|{#2}}},
+      postaction={decorate},
+    },
+  % 节点文本框样式
+  MN/.style args = {#1/#2}{
+    draw=#1,% line color
+    top color=#2!10,
+    bottom color=#2!80,
+    circle,
+    % rounded corners,
+    thick,
+    % text width=20mm,
+    % minimum height=13mm,
+    inner sep=0.5mm,
+    align=flush center
+  },
+  % 节点说明文本框样式
+  AN/.style args = {#1/#2}{
+    draw=#1,% line color
+    top color=#2!10,
+    bottom color=#2!80,          
+    rounded corners,
+    thick,
+    % text width=20mm,
+    % minimum height=13mm,
+    inner sep=1.0mm,
+    align=flush center
+  },
+  % 线条样式
+  line/.style = {
+    line width=0.3mm,
+    draw=#1,%line color
+    -{Stealth[length=1.5mm,width=1.0mm,fill=#1]},
+    shorten >=1mm,
+    shorten <=1mm
+  },
+  % 阴影
+  ds/.style = {drop shadow}
+}
+
+\begin{document} %在document环境中撰写文档
+\begin{tikzpicture}%[]
+  % 定义绘图尺寸宏
+  \def\n{5}
+  \def\radius{1.6cm}
+  \def\margin{8.5} % 角度边距，依赖于radius
+
+  % 布置节点
+  \foreach \clr/\v [count=\rang from 0] in {orange/木,green/火,magenta/土,blue/金,arylideyellow/水}
+  {
+    \node[MN=gray/\clr!40!white] at ({360/\n * -\rang + 90}:\radius) {\v};        
+  }
+
+  % 相生标签
+  \foreach \gen [count=\rang from 0] in {木生火, 火生土, 土生金, 金生水, 水生木}
+  {
+    \draw[line=forestgreen,
+     arcnode={3pt}{\textcolor{forestgreen}{\tiny\gen}}] ({360/\n * -\rang +
+      90 - \margin}:\radius) arc ({360/\n * -\rang + 90 -
+      \margin}:{360/\n * -(\rang + 1) + 90 + \margin}:\radius);           
+  }
+
+  \foreach \lab [count=\rang from 0] in {木克土, 火克金, 土克水, 金克木, 水克火}
+  {
+    \draw[line=red,
+    arcnode={2pt}{\textcolor{mordantred19}{\tiny\lab}}] ({360/\n *
+      -\rang + 90 - 4}:{\radius - 6.0}) -- ({360/\n * -(\rang + 2)
+      + 90 + 4}:{\radius - 6.0});         
+  }
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
