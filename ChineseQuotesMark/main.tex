@@ -1,27 +1,78 @@
 % 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
 \documentclass{article}
 
-%导言区，可以在此引入必要的宏包
+% 导言区，可以在此引入必要的宏包
 \usepackage{ctex}
 \usepackage{csquotes}
 
 % ====================================================================================
 % csquote宏包的中文引号样式
+% 「 = 300C
+% 」 = 300D
+% 『 = 300E
+% 』 = 300F
+% ﹁ = FE41
+% ﹂ = FE42
+% ﹃ = FE43
+% ﹄ = FE44
+% 《 = 300A
+% 》 = 300B
+% 〈 = 3008
+% 〉 = 3009
 % ====================================================================================
-\DeclareQuoteStyle{zhquotestyle}% style name
+% Unicode引号样式
+\DeclareQuoteStyle{ucstyle}% style name
     {\symbol{"201C}}% opening outer mark
     {\symbol{"201D}}% closing outer mark
     {\symbol{"2018}}% opening inner mark
     {\symbol{"2019}}% closing inner mark
+    
+% 传统中文样式
+\DeclareQuoteStyle{cnzhstyle}% style name
+    {\symbol{"300E}}% opening outer mark
+    {\symbol{"300F}}% closing outer mark
+    {\symbol{"300C}}% opening inner mark
+    {\symbol{"300D}}% closing inner mark
 
-%\setquotestyle{zhquotestyle}
+% 反转传统中文样式
+\DeclareQuoteStyle{zhcnstyle}% style name
+    {\symbol{"300C}}% opening outer mark
+    {\symbol{"300D}}% closing outer mark
+    {\symbol{"300E}}% opening inner mark
+    {\symbol{"300F}}% closing inner mark
 
+% 书名号样式
+\DeclareQuoteStyle{zhtitlestyle}% style name
+    {\symbol{"300A}}% opening outer mark
+    {\symbol{"300B}}% closing outer mark
+    {\symbol{"3008}}% opening inner mark
+    {\symbol{"3009}}% closing inner mark
+    
 \begin{document} %在document环境中撰写文档
 \setquotestyle{english}
-it says:\enquote{Wellcome to \enquote{\LaTeX{}} World!}
+He says:\enquote{Wellcome to \enquote{\LaTeX{}} World!}
 
-\setquotestyle{zhquotestyle}
+\setquotestyle{ucstyle}
+He says:\enquote{Wellcome to \enquote{\LaTeX{}} World!}
+
+\setquotestyle{english}
 遥远的地方有个声音说：\enquote{欢迎来到\enquote{\LaTeX{}}世界！}
+
+\setquotestyle{ucstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{\LaTeX{}}世界！}
+
+\setquotestyle{cnzhstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{\LaTeX{}}世界！}
+
+\setquotestyle{zhcnstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{\LaTeX{}}世界！}
+
+遥远的地方有个声音说：“欢迎来到‘\LaTeX{}’世界！”
+
+遥远的地方有个声音说：‘欢迎来到“\LaTeX{}”世界！’
+
+\setquotestyle{zhtitlestyle}
+有人写了一本书：\enquote{论学习\enquote{\LaTeX{}}的重要性}
 \end{document}
 
 %%% Local Variables:
