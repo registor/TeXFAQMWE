@@ -1,12 +1,12 @@
 用tikz-imagelabels宏包实现插图注解
 
-在使用插图时，往往需要对插图进行注解，如添加说明文字、强调标记等。
+在使用插图时，往往需要对插图进行注解，如添加说明、强调标记等。
 
 用户通常会使用“绘图”、“Photoshop”等工具通过图像编辑来实现插图注解。这是一种简单直接的方法，但这种方法会存在如下问题：
-需要额外的软件支持，降低了文档的独立性。
-字体、字号无法与正文匹配，整体效果不协调。
-无法生成矢量注释文字，缩放会发生变形。
-不便后期修改、编辑和维护。
+- 需要额外的软件支持，降低了文档的独立性。
+- 字体、字号无法与正文匹配，整体效果不协调。
+- 无法生成矢量注释文字，缩放会发生变形。
+- 不便后期修改、编辑和维护。
 
 为此，可采用TiKZ绘图工具，通过各种绘图命令实现注解。为简化操作，也可使用基于TiKZ的宏包实现注解。这类宏包较多，在此，以tikz-imagelabels为例进行说明。
 
@@ -17,13 +17,15 @@ annotationimage环境用于载入插图，其语法为：
 ```tex
 annotationimage[<grid>]{<options>}{<file name>}
 ```
-其中，可选参数[grid]用于打开/关闭辅助坐标网格。{<options>}和{<file name>}两个参数与\\includegraphics命令的对应参数含义完全相同，如：
+其中，可选参数`[<grid>]`用于打开/关闭辅助坐标网格。`{<options>}`和`{<file name>}`两个参数与\\includegraphics命令的对应参数含义完全相同，如：
 ```tex
 \begin{annotationimage}[grid]{width=6cm}{pleiades.jpg}
 \end{annotationimage}
 ```
 用于载入图像“pleiades.jpg”，将宽度为6cm，并显示辅助坐标网格，结果为：
-
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191001/cZMVzNSi.png" width=70% />
+</center>
 载入插图后，便可以在annotationimage环境中使用TiKZ的\\draw命令，结合tikz-imagelabels宏包定义的image label、coordinate label和annotation三个绘图样式为插图进行注解。
 
 ###image label样式
@@ -31,8 +33,8 @@ image label样式用于按**罗盘坐标系**在**插图内部**进行注解，�
 ```tex
 \draw[image label = {<text> at <placement>}];
 ```
-该样式用于在插图的<placement>位置添加<text>标记，<placement>按罗盘坐标取值，可取north west、
-north、north east、east、south east、south、south west、west、center中的任意一个值。如：
+该样式用于在插图的`<placement>`位置添加`<text>`标记，`<placement>`按罗盘坐标取值，可取**north west**、
+**north**、**north east**、**east**、**south east**、**south**、**south west**、**west**、**center**中的任意一个值。如：
 ```tex
 \begin{annotationimage}{width=6cm}{example-image}
   \draw[image label = {north at north}];
@@ -47,13 +49,15 @@ north、north east、east、south east、south、south west、west、center中�
   \end{annotationimage}
 ```
 其结果为：
-
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191001/8XiNEwqo.png" width=70% />
+</center>
 ###coordinate label样式
 coordinate label样式用于按**笛卡尔坐标系**在**插图内部**进行注解，其语法为：
 ```tex
 \draw[coordinate label = {<text> at (<coordinate>)}];
 ```
-该样式用于在插图的<coordinate>位置添加<text>标记，<coordinate>按笛卡尔坐标取值。如：
+该样式用于在插图的`<coordinate>`位置添加`<text>`标记，`<coordinate>`按笛卡尔坐标取值。如：
 ```tex
 \begin{annotationimage}{width=6cm}{pleiades.jpg}
   \draw[coordinate label = {1 at (0.1,0.3)}];
@@ -66,15 +70,17 @@ coordinate label样式用于按**笛卡尔坐标系**在**插图内部**进行�
 \end{annotationimage}
 ```
 其结果为(同时使用了image label样式)：
-
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191001/SlLpFjY1.png" width=70% />
+</center>
 ###annotation样式
 annotation样式用于按**制图格式**在**插图外部**进行注解，其语法为：
 ```tex
 \draw[annotation <placement> = {<text> at <position>}] to (<x>, <y>);
 ```
-该样式用于在插图外部的<placement>位置的<position>坐标添加<text>标记，并绘制标记指示线到图像内部按笛卡尔坐标确定的(<x>, <y>)位置。
+该样式用于在插图外部的`<placement>`位置的`<position>`坐标添加<text>标记，并绘制标记指示线到图像内部按笛卡尔坐标确定的`(<x>, <y>)`位置。
 
-其中，<placement>可取above, right, below或left，分别表示在插图外部上、右、下、左四个方向进行标记。当<placement>取above、below时，<position>表示标记的x坐标。当<placement>取right、left时，<position>表示标记的y坐标。
+其中，`<placement>`可取**above**, **right**, **below**或**left**，分别表示在插图外部上、右、下、左四个方向进行标记。当`<placement>`取above、below时，`<position>`表示标记的x坐标。当`<placement>`取right、left时，`<position>`表示标记的y坐标。
 
 如：
 ```tex
@@ -91,7 +97,9 @@ annotation样式用于按**制图格式**在**插图外部**进行注解，其�
 \end{annotationimage}
 ```
 其结果为(同时使用了image label样式)：
-
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191001/GqI69CgW.png" width=70% />
+</center>
 ##\\imagelabelset命令
 \\imagelabelset命令用于设置注解属性，可以在导言区进行全局设置，也可在使用中进行局部设置。
 
@@ -104,15 +112,15 @@ annotation样式用于按**制图格式**在**插图外部**进行注解，其�
 \imagelabelset{
   coarse grid color = red,
   fine grid color = gray,
-  image label font = \sffamily\bfseries\small,
+  image label font = sffamilybfseriessmall,
   image label distance = 2mm,
   image label back = black,
   image label text = white,
-  coordinate label font = \sffamily\bfseries\scriptsize,
+  coordinate label font = sffamilybfseriesscriptsize,
   coordinate label distance = 2mm,
   coordinate label back = black,
   coordinate label text = white,
-  annotation font = \normalfont\small,
+  annotation font = normalfontsmall,
   arrow distance = 1.5mm,
   border thickness = 0.6pt,
   arrow thickness = 0.4pt,
@@ -123,6 +131,6 @@ annotation样式用于按**制图格式**在**插图外部**进行注解，其�
 
 有关该宏包的使用细节，请在命令行用`texdoc tikz-imagelabels`查阅其使用说明书。
 
-另外，该宏包的源码非常简洁，可以模仿该宏包开发其它的宏包。笔者模仿该宏包编写的一个用于绘制程序流程的宏包见：https://github.com/registor/tikz-flowchart。
+另外，该宏包的源码非常简洁，可以模仿该宏包开发其它的宏包。笔者模仿该宏包编写的一个用于绘制程序流程的宏包见：https://github.com/registor/tikz-flowchart 。
 
 Happy TiKZing！

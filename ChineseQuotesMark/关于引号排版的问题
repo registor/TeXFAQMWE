@@ -1,3 +1,83 @@
-在LaTeX排版中，单引号‘’需要用`和'输入；双引号“”需要用``和''输入。(虽然"也能表示双引号，但没有合适的单个符号用来表示前双引号，所以不常用在正文)，lshort-zh-cn.pdf的2.3.5节。
+用csquotes宏包排版引号
+在LaTeX排版中，正确使用**引号**的方法是使用分别使用`和'排版单引号‘和’，分别用``和''排版双引号“和”。虽然"也能表示双引号，但却没有没有合适的单个符号用来表示前双引号，所以在正文中并不常用(lshort-zh-cn.pdf, “2.3.5 标点符号”)。
 
+另外，在排版要求中，当两层双引号嵌套使用时，其外层需要使用**双引号**，而内层则应该使用**单引号**，并且不同的语言中，用于表示引号的字符也不完全一致。
 
+为解决这些排版中的问题，可以使用**csquotes宏包**实现引号的灵活排版。本文仅以该宏包提供的引号`\enquote`命令、引号样式设置`\DeclareQuoteStyle`命令及样式切换`\setquotestyle`命令为例，简单介绍该红包的使用。
+
+一个简单的引号排版代码如下：
+```tex
+\documentclass{article}
+
+% 导言区，引入必要的宏包
+\usepackage{ctex}
+\usepackage{csquotes}
+
+%========================================================
+% 定义csquote宏包的中文引号样式
+%========================================================
+% Unicode引号样式
+\DeclareQuoteStyle{ucstyle}% style name
+    {symbol{"201C}}% opening outer mark
+    {symbol{"201D}}% closing outer mark
+    {symbol{"2018}}% opening inner mark
+    {symbol{"2019}}% closing inner mark
+    
+% 传统中文样式
+\DeclareQuoteStyle{cnzhstyle}% style name
+    {symbol{"300E}}% opening outer mark
+    {symbol{"300F}}% closing outer mark
+    {symbol{"300C}}% opening inner mark
+    {symbol{"300D}}% closing inner mark
+
+% 反转传统中文样式
+\DeclareQuoteStyle{zhcnstyle}% style name
+    {symbol{"300C}}% opening outer mark
+    {symbol{"300D}}% closing outer mark
+    {symbol{"300E}}% opening inner mark
+    {symbol{"300F}}% closing inner mark
+
+% 书名号样式
+\DeclareQuoteStyle{zhtitlestyle}% style name
+    {symbol{"300A}}% opening outer mark
+    {symbol{"300B}}% closing outer mark
+    {symbol{"3008}}% opening inner mark
+    {symbol{"3009}}% closing inner mark
+    
+\begin{document} %在document环境中撰写文档
+% 默认样式
+He says:\enquote{Wellcome to \enquote{LaTeX{}} World!}
+
+% 切换样式
+\setquotestyle{ucstyle}
+He says:\enquote{Wellcome to \enquote{LaTeX{}} World!}
+
+\setquotestyle{english}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{LaTeX{}}世界！}
+
+\setquotestyle{ucstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{LaTeX{}}世界！}
+
+\setquotestyle{cnzhstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{LaTeX{}}世界！}
+
+\setquotestyle{zhcnstyle}
+遥远的地方有个声音说：\enquote{欢迎来到\enquote{LaTeX{}}世界！}
+
+% 也可以直接输入中文标点符号排版，显然这样不便于后续修改
+遥远的地方有个声音说：“欢迎来到‘LaTeX{}’世界！”
+
+遥远的地方有个声音说：‘欢迎来到“LaTeX{}”世界！’
+
+\setquotestyle{zhtitlestyle}
+有人写了一本书：\enquote{论学习\enquote{LaTeX{}}的重要性}
+\end{document}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191004/I2L5veba.png" width=65% />
+</center>
+
+看见，使用**csquotes宏包**排版引号，可以实现更加灵活的样式控制。有关该红包的细节，请在命令行使用`texdoc csquotes`查看其使用说明书。
+
+Happy LaTeXing!
