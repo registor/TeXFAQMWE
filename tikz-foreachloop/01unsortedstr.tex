@@ -1,0 +1,74 @@
+\documentclass[tikz,margin=5pt]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+% TikZ宏包扩展
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+% 语法高亮显示排版代码宏包
+\usepackage{minted}
+
+% 自定义代码排版命令与环境
+% =============================================================================
+\usemintedstyle{default}  %codeblocks模式
+% 共用设置
+\setminted{fontsize=\tiny, breaklines=true, breakautoindent=false}
+% 不同字号的行内代码命令
+\newmintinline[cinttscr]{c}{fontsize=\scriptsize, escapeinside=||, autogobble}
+\newmintinline[cintttny]{c}{fontsize=\tiny, escapeinside=||, autogobble}
+% 代码排版环境
+\newminted{c}{frame=lines, autogobble}
+% =============================================================================
+
+\begin{document} %在document环境中撰写文档
+\begin{tikzpicture}[font=\scriptsize,
+  x=4.5mm, y=5.0mm,
+  cell/.style={draw,
+    minimum size=4.5mm,
+    inner sep=0pt,
+  },
+  cellp/.style={draw,
+    minimum size=5.0mm,
+    inner sep=0pt,
+  },
+  >=stealth,
+  ]
+
+  % 定义数组
+  \def\planets{{M,e,r,c,u,r,y}, {V,e,n,u,s}, {E,a,r,t,h}, {M,a,r,s},
+    {J,u,p,i,t,e,r}, {S,a,t,u,r,n}, {U,r,a,n,u,s}, {N,e,p,t,u,n,e},
+    {P,l,u,t,o}}%
+    
+  \foreach \l [count=\i] in \planets % \l宏分别取值：{M,e,r,c,u,r,y}、{V,e,n,u,s}等
+  {
+    \pgfmathsetmacro{\idx}{int(\i-1)} % 计数是从1开始的，减1变为从0开始
+    \node[cellp,label=left:\scriptsize \cinttscr{planets[}\idx \cinttscr{]}] (p\i) at (0, 1-\i) {};% 绘制竖向指针数组
+
+    \edef\j{1} % 记录最后一次的\cnt
+    \foreach \m [count=\cnt] in \l % \m是{M,e,r,c,u,r,y}中的每一个字母 cnt是计数值
+    {
+      \node[cell](str\i\cnt) at (\cnt + 1, -\i + 1) {\centering \m};% 绘制横向字符数组
+      \xdef\j{\cnt} % 将计数值赋给\j
+    }
+    \pgfmathsetmacro{\inull}{int(\j+1)} % 计算空字符框编号
+    \node[cell, right=-0.11mm of str\i\j](str\i\inull) {\centering \cintttny{'\0'}};% 绘制结束空字符
+    \draw[fill] (p\i.center) circle (0.05); % 绘制指针数组元素框中心圆点
+    \draw[-{Stealth[scale=1.0]}, magenta, thick] (p\i.center) -- (str\i1);% 绘制指针数组元素框中心到字符数组的指向线
+  }
+      
+  % 绘制代码
+  \node[scale = 1.0, align = left, text width=0.60\textwidth, above= 0.5 of str12](code1) 
+  {
+    \begin{ccode}
+      char *planets[] = {"Mercury", "Venus", "Earth", "Mars", "Jupiter", 
+                          "Saturn", "Uranus", "Neptune", "Pluto"};
+    \end{ccode}
+  };
+\end{tikzpicture}  
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
