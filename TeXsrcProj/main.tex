@@ -1,5 +1,5 @@
 % 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
-\documentclass{standalone}
+\documentclass{article}
 
 % 导言区，可以在此引入必要的宏包
 \usepackage{ctex}
@@ -81,7 +81,7 @@
       ]
       [$\cdots$,file]
     ]
-    [codes\%【插图目录，可根据需要增减】
+    [codes\%【源代码目录，可根据需要增减】
       [chap01
         [01helloworld.c\%【输入输出C语言代码】,file]
         [$\cdots$,file]
@@ -111,29 +111,19 @@
     [datasets\%【数据文件，可根据需要增减】        
       [tab01-test01.csv\%【XXXX测试数据】, file
       ]
-      [tab02-test02.csv\%【XXXX模拟数据】, file
-      ]
       [$\cdots$, file
       ]
     ]  
     [figs\%【插图目录，可根据需要增减】
-      [plot
-        [fig01.tex\%【TiKZ绘图代码】,file]
-        [$\cdots$,file]
-        ]
       [chap01
-        [fig01-01.png\%【TiKZ绘图代码】,file]
+        [fig01-01.tex\%【TiKZ代码绘图】,file]
+        [fig01-02.png\%【屏幕截图】,file]
+        [fig01-03.jpg\%【现场/实物照片】,file]
+        [fig01-04.pdf\%【Matlab制图】,file]
         [$\cdots$,file]
-        ]
+      ]
       [chap02
-        [fig02-01.jpg\%【TiKZ绘图代码】,file]
         [$\cdots$,file]
-      ]
-      [xxxx.png\%【现场照片】, file
-      ]
-      [xxxx.png\%【屏幕截图】, file
-      ]
-      [xxxx.pdf\%【Matlab制图】, file
       ]
       [$\cdots$,file]
     ]
