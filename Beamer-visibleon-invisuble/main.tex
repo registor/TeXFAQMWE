@@ -1,0 +1,50 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{mindmap,trees,shadows}
+\begin{document}
+  % https://tex.stackexchange.com/questions/55806/mindmap-tikzpicture-in-beamer-reveal-step-by-step#55849
+  % Keys to support piece-wise uncovering of elements in TikZ pictures:
+  % \node[visible on=<2->](foo){Foo}
+  % \node[visible on=<{2,4}>](bar){Bar}   % put braces around comma expressions
+  %
+  % Internally works by setting opacity=0 when invisible, which has the 
+  % adavantage (compared to \node<2->(foo){Foo} that the node is always there, hence
+  % always consumes space plus that coordinate (foo) is always available.
+  %
+  % The actual command that implements the invisibility can be overriden
+  % by altering the style invisible. For instance \tikzsset{invisible/.style={opacity=0.2}}
+  % would dim the "invisible" parts. Alternatively, the color might be set to white, if the
+  % output driver does not support transparencies (e.g., PS) 
+  %
+  \tikzset{
+    invisible/.style={opacity=0.2,text opacity=0.8},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+
+\begin{frame}
+\frametitle{Charakteristika}
+\begin{tikzpicture}[mindmap, concept color=gray!50, font=\sf, text=white]
+
+  \tikzstyle{level 1 concept}+=[font=\sf, sibling angle=90,level distance = 30mm]
+
+  \node[concept,scale=0.7] {Gedächtnis}
+    [clockwise from=135]
+        child[concept color=orange, visible on=<2->]{ node[concept,scale=0.7]{Musik} } 
+        child[concept color=orange, visible on=<3->]{ node[concept,scale=0.7]{Kunst} } 
+        child[concept color=orange, visible on=<4->]{ node[concept,scale=0.7]{Mathematik} } 
+        child[concept color=orange, visible on=<5->]{ node[concept,scale=0.7]{Seltenere} };
+
+\end{tikzpicture}
+
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
