@@ -1,0 +1,75 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+% 导言区，可以在此引入必要的宏包
+% 中文乱数假文
+\usepackage{zhlipsum}
+% 插图
+\usepackage{graphicx}
+% 文字绕排
+\usepackage{wrapfig}
+% 绘制流程图
+\usepackage{tikz-flowchart}
+% 带圈数字
+\usepackage{pifont}
+
+\begin{document} %在document环境中撰写文档
+
+% 各流程图绘制参数默认值
+\flowchartset{
+  norm color = black, % 常规连线颜色(默认取blue)
+  proc text width = 4em, % 顺序处理框宽度(默认取8em)
+  test text width = 2em, % 判断框宽度(默认取5em)
+  io text width = 3em, % 输入/输出框宽度(默认取6em)
+  term text width = 3em, % 开始/结束宽度(默认取3em)
+  flow line width = 1.3\pgflinewidth, % 各类流程线线条宽度(默认取当前线条宽度)
+}
+
+劳仑衣普桑,认至将指点效则机,最你更枝。想极整月正进好志次回总般,段然取向
+使张规军证回,世市总李率英茄持伴。用阶千样响领交出,器程办管据家元写,名其
+直金团。化达书据始价算每百青,金低给天济办作照明,取路豆学丽适市确。如提
+单各样备再成农各政,设头律走克美技说没,体交才路此在杠。响育油命转处他住
+有,一须通给对非交矿今该,花象更面据压来。与花断第然调,很处己队音,程承明
+邮。常系单要外史按机速引也书,个此
+\begin{wrapfigure}{r}{0.5\textwidth}
+  \centering
+  \begin{tikzpicture}[font=\small]
+    % 布置结点单元
+    \node [term] (st) {开始};
+    \node [proc, join] (p1) {\verb|S=1, i =2|};
+    \node [test, join] (t1) {\ding{182}};
+    \node [proc, join] (p2) {\verb|S=S*i|};
+    \node [proc, join] (p3) {\ding{183}};
+    \node [io, right =2.0 of p2](o){输出\verb|i|};
+    \node [term, join] (end) {结束};
+
+    % 布置用于连接的坐标结点，同时为其布置调试标记点。
+    \node [coord] (c1) at ($(p1.south)!0.5!(t1.north)$)  {}; \cmark{1}
+    \node [coord, below = 0.3 of p3] (c2) {};  \cmark{2}
+    \node [coord] (c3) at (t1.east -| o.north)  {}; \cmark{3}
+    \node [coord, left =1.5 of c1] (c4) {}; \cmark{4}
+
+    % 判断框连线，每次绘制时，先绘制一个带有一个固定
+    % 位置标注的路径(path)，然后再绘制箭头本身(arrow)。
+    \path (t1.south) -- node [midway, left] {否} (p2.north);
+    \draw [norm] (t1.south) -- (p2.north);
+    \path (t1.east) -| node [near start, above] {是} (o.north);
+    \draw [norm] (t1.east) -| (o);
+    \draw [norm] (p3.south)--(c2)-|(c4)--(c1);
+  \end{tikzpicture}   
+  \caption{XXXX流程图}
+\end{wrapfigure}
+\noindent{}少管品务美直管战,子大标蠢主盯写族般本。农现离门亲事以响规,局
+观先示从开示,动和导便命复机李,办队呆等需杯。见何细线名必子适取米制近,内
+信时型系节新候节好当我,队农否志杏空适花。又我具料划每地,对算由那基高放,育
+天孝。派则指细流金义月无采列,走压看计和眼提问接,作半极水红素支花。果都
+济素各半走,意红接器长标,等杏近乱共。层题提万任号,信来查段格,农张雨。省
+着素科程建持色被什,所界走置派农难取眼,并细杆至志本。
+
+\zhlipsum[1]
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
