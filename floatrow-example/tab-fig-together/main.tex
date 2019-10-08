@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage{floatrow}
+\usepackage{caption}
+\usepackage[demo]{graphicx}
+\usepackage{hyperref}
+\begin{document}
+\begin{figure}
+    \begin{floatrow}
+        \ttabbox
+        {\captionsetup{type=table}\caption{Should print "Figure 1" \autoref{fig:1}}
+        \label{tab:1}}
+        {\begin{tabular}{*{2}{c}}
+        Test & test \\
+        1 & 2 \\
+        \end{tabular}}
+        \ffigbox
+        {\includegraphics{}}
+        {\caption{Should print "Table 1" \autoref{tab:1}}\label{fig:1}}
+    \end{floatrow}
+\end{figure}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

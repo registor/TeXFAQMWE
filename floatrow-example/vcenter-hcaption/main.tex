@@ -1,0 +1,30 @@
+% https://tex.stackexchange.com/questions/240807/top-alignment-of-subfigure
+\documentclass[12pt]{article}
+
+\usepackage{caption,floatrow}
+
+\DeclareCaptionSubType[alph]{figure}
+\captionsetup[figure]{labelsep=colon}
+\captionsetup[subfigure]{labelformat=brace,labelsep=space,labelfont=bf}
+\floatsetup[subfigure]{capposition=bottom,heightadjust=object,valign=c}
+
+\begin{document}
+\begin{figure}[htp]
+  \ffigbox[\FBwidth]
+  {\begin{subfloatrow}
+      \ffigbox
+        {\caption{First subfigure}}%
+        {\rule{3cm}{3cm}}
+
+        \ffigbox
+        {\caption{Second subfigure with more Text so we have a line break}}%
+        {\rule{1.5cm}{1.5cm}}
+  \end{subfloatrow}}
+  {\caption{Two figures}}
+\end{figure}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

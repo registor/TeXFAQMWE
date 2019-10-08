@@ -1,0 +1,15 @@
+Is it possible to achieve the following layout with the subfigure package (and any other package/command I don't know about):
+
+############# ##############
+#           # #            #
+#  pic1     # #            #
+#           # #      pic2  #
+#           # #            #
+############# #            #
+              #            #
+############# #            #
+#           # #            #
+#   pic3    # #            #
+#           # #            #
+#           # #            #
+############# ############## 

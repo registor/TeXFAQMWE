@@ -1,0 +1,36 @@
+% https://tex.stackexchange.com/questions/124537/is-the-following-layout-possible-with-the-subfigure-package
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{floatrow}
+\usepackage{subfig}
+
+\begin{document}
+
+As can be seen in Figure~\ref{fig:test}, we have the three subfigures~\ref{sfig:testa}, \ref{sfig:testb}, and \ref{sfig:testc}.
+\begin{figure}
+\ffigbox[7.8cm]{%
+\begin{subfloatrow}
+  \hsize0.7\hsize
+  \vbox to 6.35cm{
+  \ffigbox[\FBwidth]
+    {\caption{small subfigure A}\label{sfig:testa}}
+    {\includegraphics[width=3cm,height=3cm]{example-image-a}}\vss
+  \ffigbox[\FBwidth]
+    {\caption{small subfigure B}\label{sfig:testb}}
+    {\includegraphics[width=3cm,height=2cm]{example-image-b}}
+  }
+\end{subfloatrow}\hspace*{\columnsep}
+\begin{subfloatrow}
+  \ffigbox[\FBwidth][]
+    {\caption{A large subfigure}\label{sfig:testc}}
+    {\includegraphics[width=3cm,height=6cm]{example-image-c}}
+\end{subfloatrow}
+}{\caption{three subfigures}\label{fig:test}}
+\end{figure}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

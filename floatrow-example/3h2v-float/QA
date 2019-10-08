@@ -1,0 +1,11 @@
+how can I get a layout like the one below in my document?
+
+_____________  _____________  _______________
+|Big Picture1| |Big Picture2| |Small Picture1|
+|            | |            | |______________|
+|            | |            |   c) subfigure
+|            | |            | _______________
+|            | |            | |Small Picture2|
+|____________| |____________| |______________|
+ a) subfigure   b) subfigure    d) subfigure
+            Fig. 1: four subfigures
