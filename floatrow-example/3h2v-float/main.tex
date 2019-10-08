@@ -1,33 +1,29 @@
 % https://tex.stackexchange.com/questions/75466/how-to-layout-four-figures-with-floatrow-two-of-them-vertically
-\documentclass{article}
+\documentclass{ctexart}
 \usepackage[demo]{graphicx}
 \usepackage{floatrow}
 \usepackage{subfig}
 
 \begin{document}
-
+% https://tex.stackexchange.com/questions/75466/how-to-layout-four-figures-with-floatrow-two-of-them-vertically
 \begin{figure}
-\ffigbox[][7.8cm]{%
-\begin{subfloatrow}
-  \ffigbox[\FBwidth][]
-    {\caption{subfigure-a}}
-    {\includegraphics[width=3cm,height=6cm]{bigpicture1}}
-  \ffigbox[\FBwidth][]
-    {\caption{subfigure-b}}
-    {\includegraphics[width=3cm,height=6cm]{bigpicture2}}
-\end{subfloatrow}\hspace*{\columnsep}%
-\begin{subfloatrow}
-  %\hsize 0.7 \hsize
-  \vbox to 6.3cm{%
-  \ffigbox[\FBwidth]
-    {\caption{subfigure-c}}
-    {\includegraphics[width=3cm,height=2cm]{smallpicture1}}\vss
-  \ffigbox[\FBwidth]
-    {\caption{subfigure-d}}
-    {\includegraphics[width=3cm,height=2cm]{smallpicture2}}
-  }%
-\end{subfloatrow}
-}{\caption{four subfigures}}
+  \ffigbox[][7.8cm]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth][]
+      {\caption{子图a}}{\includegraphics[width=3cm,height=6cm]{bigpicture1}}
+      \ffigbox[\FBwidth][]
+      {\caption{子图b}}{\includegraphics[width=3cm,height=6cm]{bigpicture2}}
+    \end{subfloatrow}\hspace*{\columnsep}%
+    \begin{subfloatrow}
+      \hsize 0.7 \hsize
+      \vbox to 6.3cm{%
+        \ffigbox[\FBwidth]
+        {\caption{子图c}}{\includegraphics[width=3cm,height=2cm]{smallpicture1}}\vss
+        \ffigbox[\FBwidth]
+        {\caption{子图-d}}{\includegraphics[width=3cm,height=2cm]{smallpicture2}}
+      }%
+    \end{subfloatrow}
+  }{\caption{四个图}}
 \end{figure}
 
 \end{document}

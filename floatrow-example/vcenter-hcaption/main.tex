@@ -1,26 +1,54 @@
 % https://tex.stackexchange.com/questions/240807/top-alignment-of-subfigure
-\documentclass[12pt]{article}
-
+\documentclass[12pt]{ctexart}
+\usepackage{graphicx}
 \usepackage{caption,floatrow}
 
 \DeclareCaptionSubType[alph]{figure}
 \captionsetup[figure]{labelsep=colon}
 \captionsetup[subfigure]{labelformat=brace,labelsep=space,labelfont=bf}
-\floatsetup[subfigure]{capposition=bottom,heightadjust=object,valign=c}
+
 
 \begin{document}
-\begin{figure}[htp]
-  \ffigbox[\FBwidth]
-  {\begin{subfloatrow}
-      \ffigbox
-        {\caption{First subfigure}}%
-        {\rule{3cm}{3cm}}
+\thisfloatsetup{heightadjust=all,valign=t}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:testa}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testb}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图顶端对齐}}
+\end{figure}
 
-        \ffigbox
-        {\caption{Second subfigure with more Text so we have a line break}}%
-        {\rule{1.5cm}{1.5cm}}
-  \end{subfloatrow}}
-  {\caption{Two figures}}
+\thisfloatsetup{heightadjust=all,valign=c}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:testc}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testd}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图居中对齐}}
+\end{figure}
+
+\thisfloatsetup{heightadjust=all,valign=b}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:teste}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testf}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图底端对齐}}
 \end{figure}
 \end{document}
 

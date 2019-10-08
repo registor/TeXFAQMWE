@@ -1,0 +1,145 @@
+在插图排版中，难免会遇到一些**异形排列**的情况，如：3个图排成两列，左列或是右列按上下排列、两个不同尺寸的图水平两列排列，但要求图注水平高低对齐。类似这些异形排列，当然可以使用minipage等宏包，通过适当布置实现。但使用floatrow宏包，也可以实现类似排版需求。
+
+*注意*：以下所有示例需要在导言区添加如下3个宏包引用。
+```tex
+\usepackage{graphicx}
+\usepackage{floatrow}
+\usepackage{subfig}
+```
+##排版两列3个图
+实现代码：
+```tex
+% https://tex.stackexchange.com/questions/124537/is-the-following-layout-possible-with-the-subfigure-package
+\documentclass{ctexart}
+\usepackage{graphicx}
+\usepackage{floatrow}
+\usepackage{subfig}
+
+\begin{document}
+% 请根据实际调整各个参数
+\begin{figure}
+  \ffigbox[7.8cm]{%
+    \begin{subfloatrow}
+      \hsize0.7\hsize
+      \vbox to 6.35cm{
+        \ffigbox[\FBwidth]
+        {\caption{小图a}\label{sfig:testa}}
+        {\includegraphics[width=3cm,height=3cm]{example-image-a}}\vss
+        \ffigbox[\FBwidth]
+        {\caption{小图b}\label{sfig:testb}}
+        {\includegraphics[width=3cm,height=2cm]{example-image-b}}
+      }
+    \end{subfloatrow}
+    \hspace*{\columnsep}
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\caption{大图}\label{sfig:testc}}
+      {\includegraphics[width=3cm,height=6cm]{example-image-c}}
+    \end{subfloatrow}
+  }{\caption{三个子图}\label{fig:test}}
+\end{figure}
+\end{document}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191008/gK5kIJ6b.png" width=50% />
+</center>
+
+##排版三列4个图
+实现代码：
+```tex
+\begin{figure}
+  \ffigbox[][7.8cm]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth][]
+      {\caption{subfigure-a}}{\includegraphics[width=3cm,height=6cm]{bigpicture1}}
+      \ffigbox[\FBwidth][]
+      {\caption{subfigure-b}}{\includegraphics[width=3cm,height=6cm]{bigpicture2}}
+    \end{subfloatrow}\hspace*{\columnsep}%
+    \begin{subfloatrow}
+      \hsize 0.7 \hsize
+      \vbox to 6.3cm{%
+        \ffigbox[\FBwidth]
+        {\caption{subfigure-c}}{\includegraphics[width=3cm,height=2cm]{smallpicture1}}\vss
+        \ffigbox[\FBwidth]
+        {\caption{subfigure-d}}{\includegraphics[width=3cm,height=2cm]{smallpicture2}}
+      }%
+    \end{subfloatrow}
+  }{\caption{four subfigures}}
+\end{figure}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191008/gLDIjuO8.png" width=50% />
+</center>
+
+##大小不同插图图注水平对齐
+对于这样的排版需要，可以使用`\floatsetup`命令全局设置或是使用`\thisfloatsetup`命令进行局部设置实现。以下示例摘录自：[https://tex.stackexchange.com/questions/240807/top-alignment-of-subfigure](https://tex.stackexchange.com/questions/240807/top-alignment-of-subfigure "https://tex.stackexchange.com/questions/240807/top-alignment-of-subfigure")
+
+###插图垂直顶端对齐
+对于这样的排版需要可以通过`\thisfloatsetup{heightadjust=all,valign=t}`设置实现，其实现代码为：
+```tex
+\thisfloatsetup{heightadjust=all,valign=t}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:testa}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testb}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图顶端对齐}}
+\end{figure}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191008/QzV8bTnS.png" width=50% />
+</center>
+
+###插图垂直居中对齐
+对于这样的排版需要可以通过`\thisfloatsetup{heightadjust=all,valign=c}`设置实现，其实现代码为：
+```tex
+\thisfloatsetup{heightadjust=all,valign=c}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:testc}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testd}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图居中对齐}}
+\end{figure}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191008/tSDbtENt.png" width=50% />
+</center>
+
+###插图垂直底端对齐
+对于这样的排版需要可以通过`\thisfloatsetup{heightadjust=all,valign=b}`设置实现，其实现代码为：
+```tex
+\thisfloatsetup{heightadjust=all,valign=b}
+\begin{figure}
+  \ffigbox[\FBwidth]{%
+    \begin{subfloatrow}
+      \ffigbox[\FBwidth]
+      {\includegraphics[width=3cm,height=5cm]{example-image-b}}
+      {\caption{子图a}\label{sfig:teste}}%
+      \ffigbox%[\FBwidth]
+      {\caption{子图b}\label{sfig:testf}}
+      {\includegraphics[width=3cm,height=2cm]{example-image-a}}
+    \end{subfloatrow}
+  }{\caption{两个图底端对齐}}
+\end{figure}
+```
+其排版结果为：
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191008/629XmvCQ.png" width=50% />
+</center>
+
+Happy LaTeXing!
