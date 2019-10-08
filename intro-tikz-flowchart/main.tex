@@ -1,0 +1,72 @@
+\documentclass[margin=10pt]{standalone}
+% 支持中文
+\usepackage{ctex}
+% 流程图绘制宏包
+\usepackage{tikz-flowchart}
+
+\begin{document} %在document环境中撰写文档
+
+% 可以局部更改各参数
+\flowchartset{
+  proc fill color = orange!10, % 顺序处理框填充颜色(默认取白色)
+  test fill color = green!30, % 判断框填充颜色(默认取白色)
+  io fill color = blue!30, % 输入/输出框填充颜色(默认取白色)
+  term fill color = red!30, % 开始/结束框填充颜色(默认取白色)
+  proc text width = 6em, % 顺序处理框宽度(默认取8em)
+}
+
+\begin{tikzpicture}
+  % 布置结点单元
+  \node [term] (st) {开始};
+  \node [proc, join] (p1) {\verb|int divisor|};       
+  \node [test, join] (t1) {\verb|n <= 1|};
+  \node [proc, ] (p2) {\verb|divisor = 2|};
+  % 可以根据需要单独指定结点文字宽度
+  \node [test, text width = 10em, join] (t2) {\verb|divisor * divisor <= n|};
+  \node [test, text width = 8em] (t3) {\verb|n % divisor == 0|};
+  \node [proc, text width = 6em] (p3) {\verb|divisor++|};
+  \node [term, below = 1.6 of p3] (end) {结束};
+  \node [proc, left = 4.8 of t2] (p4) {\verb|return 0|};
+  \node [proc, right = 3.5 of p3] (p5) {\verb|return 0|};
+  \node [proc, right = 5.8 of t3] (p6) {\verb|return 1|};
+
+  % 布置用于连接的坐标结点，同时为其布置调试标记点。
+  \node [coord] (c1) at ($(p2.south)!0.5!(t2.north)$)  {}; \cmark{1}
+  \node [coord, below = 0.25 of p3] (c2)  {}; \cmark{2}
+  \node [coord, above = 0.5 of end] (c3) {};  \cmark{3}
+  \node [coord, left = 0.5 of t2] (ct) {};  \cmark{t}
+  \node [coord] (c4) at (c3 -| p5)  {}; \cmark{4}
+  \node [coord] (c5) at (c2 -| ct)  {}; \cmark{5}
+        
+  % 判断框连线，每次绘制时，先绘制一个带有一个固定
+  % 位置标注的路径(path)，然后再绘制箭头本身(arrow)。
+  \path (t1.south) -- node [near start, right] {$N$} (p2.north);
+  \draw [norm] (t1.south) -- (p2.north);
+  \path (t1.west) -| node [near start, above] {$Y$} (p4.north);
+  \draw [norm] (t1.west) -| (p4.north);
+        
+  \path (t2.south) -- node [near start, right] {$Y$} (t3.north);
+  \draw [norm] (t2.south) -- (t3.north);
+  \path (t2.east) -| node [near start, above] {$N$} (p6.north);
+  \draw [norm] (t2.east) -| (p6.north);
+        
+  \path (t3.south) -- node [near start, right] {$N$} (p3.north);
+  \draw [norm] (t3.south) -- (p3.north);
+  \path (t3.east) -| node [near start, above] {$Y$} (p5.north);
+  \draw [norm] (t3.east) -| (p5.north);
+
+  % 其它连线
+  \draw [norm](p3.south) |- (c5) |- (c1);
+  \draw [norm](p4.south) |- (c3);
+  \draw [norm](p4.south) |- (c3) -- (end);
+  \draw [norm](p5.south) -- (c4);
+  \draw [norm](p6.south) |- (c3);
+  \draw [norm](p6.south) |- (c3) -- (end);
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
