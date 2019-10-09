@@ -1,0 +1,158 @@
+% https://tex.stackexchange.com/questions/435193/3d-histogram-without-external-programs
+\documentclass[tikz,border=3.14pt]{standalone}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% from https://tex.stackexchange.com/a/102770/121799
+\def\pgfplotsinvokeiflessthan#1#2#3#4{%
+    \pgfkeysvalueof{/pgfplots/iflessthan/.@cmd}{#1}{#2}{#3}{#4}\pgfeov
+}%
+\def\pgfplotsmulticmpthree#1#2#3#4#5#6\do#7#8{%
+    \pgfplotsset{float <}%
+    \pgfplotsinvokeiflessthan{#1}{#4}{%
+        % first key <:
+        #7%
+    }{%
+        \pgfplotsinvokeiflessthan{#4}{#1}{%
+            % first key >:
+            #8%
+        }{%
+            % first key ==:
+            \pgfplotsset{float <}%
+            \pgfplotsinvokeiflessthan{#2}{#5}{%
+                % second key <
+                #7%
+            }{%
+                \pgfplotsinvokeiflessthan{#5}{#2}{%
+                    % second key >
+                    #8%
+                }{%
+                    % second key ==
+                    \pgfplotsset{float <}%
+                    \pgfplotsinvokeiflessthan{#3}{#6}{%
+                        % third key <
+                        #7%
+                    }{%
+                        % third key >=
+                        #8%
+                    }%
+                }%
+            }%
+        }%
+    }%
+}%
+
+\begin{document}
+\ifdefined\gconv
+\else
+\pgfmathsetmacro{\gconv}{0.1}
+\fi
+\pgfplotstableread[col sep=comma,header=true]{%
+x,y,color,myvalue
+2,3,1,1000
+4,3,2,30
+2,7,3,0.75
+7,7,4,450
+8,5,2,300
+2,5,1,100
+4,-4,2,1
+4,1,3,750
+5,-1,4,4
+5,2,2,300
+1,-2,1,100
+2,5,2,5
+3,-8,3,750
+4,5,4,420
+7,-2,2,200
+}{\datatable}
+%
+%\pgfplotstablesort[col sep=comma,header=true]\resulttable{\datatable}
+\pgfplotstablesort[create on use/sortkey/.style={
+        create col/assign/.code={%
+            \edef\entry{{\thisrow{x}}{\thisrow{y}}{\thisrow{myvalue}}}%
+            \pgfkeyslet{/pgfplots/table/create col/next content}\entry
+        }
+    },
+    sort key=sortkey,
+    sort cmp={%
+        iflessthan/.code args={#1#2#3#4}{%
+            \edef\temp{#1#2}%
+            \expandafter\pgfplotsmulticmpthree\temp\do{#3}{#4}%
+        },
+    },
+    sort,
+    columns/Mtx/.style={string type},
+    columns/Kind/.style={string type},]\resulttable{\datatable}
+
+\begin{tikzpicture}%[x={(0.866cm,-0.5cm)},y={(0.866cm,0.5cm)},z={(0cm,1 cm)}]
+\pgfplotsset{set layers}
+\begin{axis}[% from section 4.6.4 of the pgfplotsmanual
+        view={120}{40},
+        width=320pt,
+        height=280pt,
+        z buffer=none,
+        xmin=-1,xmax=9,
+        ymin=-10,ymax=8,
+        zmin=0,zmax=2000,
+        enlargelimits=upper,
+        ztick={0,1000,2000},
+        zticklabels={0,500,1000}, % here one has to "cheat"
+        % meaning that one has to put labels which are the actual value 
+        % divided by 2. This is because the bars will be centered at these
+        % values
+        xtick=data,
+        extra tick style={grid=major},
+        ytick=data,
+        grid=minor,
+        xlabel={$x$},
+        ylabel={$y$},
+        zlabel={$z$},
+        minor tick num=1,
+        point meta=explicit,
+        colormap name=viridis,
+        scatter/use mapped color={
+            draw=mapped color,fill=mapped color!70},
+        execute at begin plot={}            
+        ]
+\path let \p1=($(axis cs:0,0,1)-(axis cs:0,0,0)$) in 
+\pgfextra{\pgfmathsetmacro{\conv}{2*\y1}
+\ifx\gconv\conv
+\else
+\xdef\gconv{\conv}
+\typeout{Please\space recompile\space the\space file!}
+\fi     
+        };  
+\path let \p1=($(axis cs:1,0,0)-(axis cs:0,0,0)$) in 
+\pgfextra{\pgfmathsetmacro{\convx}{veclen(\x1,\y1)}
+\typeout{One\space unit\space in\space x\space 
+        direction\space is\space\convx pt}
+        };                  
+\path let \p1=($(axis cs:0,1,0)-(axis cs:0,0,0)$) in 
+\pgfextra{\pgfmathsetmacro{\convy}{veclen(\x1,\y1)}
+\typeout{One\space unit\space in\space y\space 
+        direction\space is\space\convy pt}
+        };                  
+\addplot3 [visualization depends on={
+\gconv*z \as \myz}, % you may have to recompile to get the prefactor right
+scatter/@pre marker code/.append style={/pgfplots/cube/size z=\myz},%
+scatter/@pre marker code/.append style={/pgfplots/cube/size x=11.66135pt},%
+scatter/@pre marker code/.append style={/pgfplots/cube/size y=9.10493pt},%
+scatter,only marks,
+mark=cube*,mark size=5,opacity=1]
+ table[x expr={\thisrow{x}},y expr={\thisrow{y}},z
+ expr={1*\thisrow{myvalue}},
+ meta expr={\thisrow{color}}
+        ] \resulttable;
+    \end{axis}
+\makeatletter
+\immediate\write\@mainaux{\xdef\string\gconv{\gconv}\relax}
+\makeatother
+
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
