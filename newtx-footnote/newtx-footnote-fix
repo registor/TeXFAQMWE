@@ -1,0 +1,68 @@
+tlmgr: saving backups to /usr/local/texlive/2019/tlpkg/backups
+[ 1/66, ??:??/??:??] update: acro [598k] (52170 -> 52303) ... done
+[ 2/66, 00:01/03:40] update: adforn [47k] (20019 -> 52265) ... done
+[ 3/66, 00:02/06:48] update: adfsymbols [38k] (19766 -> 52264) ... done
+[ 4/66, 00:06/19:17] update: alegreya [24750k] (50277 -> 52320) ... done
+[ 5/66, 00:16/01:22] update: amiri [600k] (46104 -> 52218) ... done
+[ 6/66, 00:18/01:30] update: amsmath [2362k] (52096 -> 52286) ... done
+[ 7/66, 00:20/01:32] update: apxproof [571k] (49865 -> 52324) ... done
+[ 8/66, 00:22/01:39] update: asmeconf [481k] (51583 -> 52270) ... done
+[ 9/66, 00:23/01:42] update: beamer-rl [180k] (50970 -> 52284) ... done
+[10/66, 00:25/01:50] update: beebe [851k] (52252 -> 52317) ... done
+[11/66, 00:26/01:52] update: booktabs [307k] (40846 -> 52326) ... done
+[12/66, 00:27/01:55] update: bxpapersize [8k] (45501 -> 52304) ... done
+[13/66, 00:29/02:03] update: coelacanth [6826k] (45270 -> 52338) ... done
+[14/66, 00:33/01:55] update: countriesofeurope [316k] (49525 -> 52285) ... done
+[15/66, 00:34/01:57] update: datetime2-slovak [79k] (36700 -> 52281) ... done
+[16/66, 00:36/02:04] update: datetime2-slovene [78k] (36700 -> 52282) ... done
+[17/66, 00:37/02:07] update: datetime2-turkish [77k] (36700 -> 52331) ... done
+[18/66, 00:38/02:10] update: dccpaper [295k] (50294 -> 52310) ... done
+[19/66, 00:40/02:16] update: duckuments [966k] (52207 -> 52271) ... done
+[20/66, 00:42/02:20] update: esindex [71k] (52226 -> 52342) ... done
+[21/66, 00:43/02:23] update: fei [319k] (51287 -> 52322) ... done
+[22/66, 00:44/02:25] update: filehook [275k] (51910 -> 52272) ... done
+[23/66, 00:47/02:34] update: fira [16723k] (51328 -> 52339) ... done
+[24/66, 00:56/02:09] update: fnpct [575k] (52228 -> 52294) ... done
+[25/66, 00:57/02:10] update: fontools [165k] (51625 -> 52291) ... done
+[26/66, 00:58/02:12] update: gindex [36k] (52246 -> 52311) ... done
+[27/66, 00:59/02:14] update: graphics [2017k] (51733 -> 52286) ... done
+[28/66, 01:01/02:14] update: hyperref [3632k] (52100 -> 52295) ... done
+[29/66, 01:04/02:13] update: knowledge [774k] (50031 -> 52273) ... done
+[30/66, 01:05/02:13] update: kpathsea [1075k] (51911 -> 52333) ... done
+[31/66, 01:07/02:15] update: l3backend [746k] (52041 -> 52343) ... done
+[32/66, 01:10/02:19] update: l3kernel [8425k] (52247 -> 52343) ... done
+[33/66, 01:15/02:12] update: latex [16812k] (49390 -> 52286) ... done
+[34/66, 01:23/01:59] update: leadsheets [953k] (45405 -> 52275) ... done
+[35/66, 01:25/02:01] update: luamplib [187k] (50608 -> 52345) ... done
+[36/66, 01:26/02:02] update: lwarp [2811k] (52161 -> 52327) ... done
+[37/66, 01:29/02:03] update: mathalpha [974k] (51179 -> 52305) ... done
+[38/66, 01:30/02:03] update: mcf2graph [1038k] (51573 -> 52292) ... done
+[39/66, 01:32/02:04] update: metrix [629k] (51125 -> 52323) ... done
+[40/66, 01:33/02:05] update: microtype [1787k] (50187 -> 52344) ... done
+[41/66, 01:35/02:05] update: multicolrule [620k] (49579 -> 52283) ... done
+[42/66, 01:36/02:06] update: newpx [2012k] (49438 -> 52321) ... done
+[43/66, 01:38/02:06] update: newtx [5217k] (52219 -> 52340) ... done
+[44/66, 01:42/02:04] update: nicematrix [983k] (52248 -> 52296) ... done
+[45/66, 01:44/02:06] update: practicalreports [184k] (52249 -> 52312) ... done
+[46/66, 01:45/02:07] update: pxchfon [371k] (51617 -> 52325) ... done
+[47/66, 01:46/02:08] update: shipunov [2988k] (29349 -> 52334) ... done
+[48/66, 01:50/02:09] update: siunitx [752k] (47746 -> 52332) ... done
+[49/66, 01:52/02:10] update: stickstoo [3150k] (47858 -> 52341) ... done
+[50/66, 01:54/02:09] update: tasks [450k] (41851 -> 52313) ... done
+[51/66, 01:56/02:11] update: tetex [584k] (52078 -> 52289) ... done
+[52/66, 02:00/02:15] update: tex4ht [936k] (52215 -> 52328) ... done
+[53/66, 02:02/02:16] update: texlive-docindex [259k] (52252 -> 52336) ... done
+[54/66, 02:03/02:17] update: texlive-msg-translations [138k] (51992 -> 52290) ... done
+[55/66, 02:04/02:18] update: texlive-scripts [134k] (52235 -> 52337) ... done
+[56/66, 02:06/02:20] update: tikzmark [428k] (51050 -> 52293) ... done
+[57/66, 02:13/02:27] update: tlshell [26k] (51677 -> 52337) ... done
+[58/66, 02:14/02:28] update: tools [5351k] (49619 -> 52286) ... done
+[59/66, 02:18/02:26] update: tracklang [968k] (52003 -> 52302) ... done
+[60/66, 02:20/02:27] update: updmap-map [281k] (52078 -> 52289) ... done
+[61/66, 02:21/02:27] update: xcharter [2312k] (52220 -> 52280) ... done
+[62/66, 02:23/02:27] update: xecyr [643k] (20221 -> 52315) ... done
+[63/66, 02:25/02:28] update: xindex [482k] (52140 -> 52268) ... done
+[64/66, 02:26/02:29] update: xsim [2534k] (52232 -> 52314) ... done
+[65/66, 02:28/02:28] auto-install: quiz2socrative (52276) [211k] ... done
+[66/66, 02:29/02:29] update: collection-latexextra [6k] (52246 -> 52276) ... done
+

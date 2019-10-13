@@ -1,6 +1,15 @@
-\documentclass{beamer}
+% https://github.com/gdiepen/latexbeamer-handoutWithNotes/issues/4
+% For some reason, I got an ! Undefined sequence error on compilation
+% (Ubuntu 18.04 with texlive-full installed) returned on compilation
+% by \pageheight.
+
+% The solution : replace \pageheight with \paperheight in handoutWithNotes.sty.
+
+% Not sure if this is ideal, I followed the discussion here : https://tex.stackexchange.com/questions/61469/pageheight-just-inside-layout-package
+
+\documentclass{ctexbeamer}
 \usepackage{handoutWithNotes}
-\pgfpagesuselayout{1 on 1 with notes}[a4paper,border shrink=5mm]
+\pgfpagesuselayout{2 on 1 with notes landscape}[a4paper,border shrink=5mm]
 \begin{document}
     \begin{frame}
         1
