@@ -1,0 +1,27 @@
+\documentclass{ctexart}
+% 引入minted宏包
+\usepackage{minted}
+
+\begin{document} 
+这是一个简单的Python代码：
+\begin{minted}{python}
+  def boring(args = None):
+  pass
+\end{minted}
+可以对Python有一个简单的了解。
+
+可以通过：
+\mint{python}|import this|
+导入相关模块。
+
+可以通过\mintinline{python}{print(x**2)}输出结果。
+
+下面是一个Hello World C语言的代码：
+\inputminted{c}{helloworld.c}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

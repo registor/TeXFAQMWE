@@ -1,0 +1,108 @@
+使用minted宏包实现源代码语法高亮排版
+
+在LaTeX中，常用**listings**宏包实现源代码语法高亮排版。另一个类似的是**minted**宏包，该宏包借助于Python的**Pygments**工具包，能够更加灵活地实现不同语言、不同配色方案的源代码语法高亮排版。
+
+## 软件安装
+**minted**宏包已包含在TeXLive发行版中(其它发行版请自查)，无需再独立安装。但要使用**minted**宏包，必须有**Python支持**，并且需安装其**Pygments**语法高亮显示**工具包**。
+
+### 安装Python
+Python是跨平台的，不同平台的安装方式，请参考[Python主页](https://www.python.org/ "Python主页")相关指南。
+### 安装**Pygments**工具包
+安装完成Python后，可以使用其**easy_install工具**或是**pip工具**，安装**Pygments**工具包。
+例如，对于Ubuntu Linux下Python3，可以在终端执行如下命令即可完成安装：
+```shell
+sudo pip3 Pygments
+```
+对于Windows下Python3，可以**以管理员权限**打开命令行窗口，然后执行如下命令即可完成安装：
+```shell
+pip3 Pygments
+```
+更多详情，请参阅[Pygments官网](http://pygments.org/ "Pygments官网")。
+### 测试**Pygments**工具包
+在终端或命令行窗口，执行如下命令可以得到高亮显示样式：
+```shell
+pygmentize -L styles
+```
+在终端或命令行窗口，执行如下命令可以得到支持的语言类型：
+```shell
+pygmentize -L lexers
+```
+如果在命令行无法执行这两个命令，说明Python或Pygments工具包安装中有错误，请重新进行安装和测试，直致这两个命令能够正常执行。
+
+## LaTeX编译参数设置
+由于**minted**宏包使用外部工具实现排版，因此，需要为LaTeX编译器添加**-shell-escape编译参数**。如：
+```shell
+xelatex -shell-escape jobname.tex
+```
+```shell
+pdflatex -shell-escape jobname.tex
+```
+```shell
+latex -shell-escape jobname.tex
+```
+如果使用的是集成IDE环境，请在其配置中确认带有该参数进行LaTeX编译。
+
+## 源代码高亮显示排版环境及命令
+**minted**宏包提供了行间排版环境`minted`、单行排版命令`\mint`、行内排版命令`\mintinline`和从文件读取源代码文件排版命令`\inputminted`。
+
+一个简单的排版示例如：
+```tex
+\documentclass{ctexart}
+% 引入minted宏包
+\usepackage{minted}
+
+\begin{document} 
+这是一个简单的Python代码：
+\begin{minted}{python}
+  def boring(args = None):
+  pass
+\end{minted}
+可以对Python有一个简单的了解。
+
+可以通过：
+\mint{python}|import this|
+导入相关模块。
+
+可以通过\mintinline{python}{print(x**2)}输出结果。
+
+下面是一个Hello World C语言的代码：
+\inputminted{c}{helloworld.c}
+
+\end{document}
+```
+
+其排版结果为：
+
+<center>
+<img  src="https://wenda.latexstudio.net/data/attach/191015/WwnH7k9G.png" width=50% />
+</center>
+
+其中能够使用的**语言类型名称**，请在命令行使用`pygmentize -L lexers`进行查看。
+
+### 排版细节控制
+minted宏包的排版环境和命令都可以通过**可选参数**或者通过该宏包提供的**设置命令**来实现详细控制，详情请查阅其使用说明。
+
+*强烈建议*：可以在相关开发环境IDE中采用其IDE提供的工具对源代码按需要在开发环境IDE中实现排版后，再**用minted宏包载入到LaTeX中进行排版**。
+
+## 自定义排版环境和命令
+为了能够更方便的使用minted宏包提供的功能，该宏包提供了`\newminted`、`\newmint`、`\newmintinline`和`\newmintedfile`4个命令用于自定义需要的排版环境和命令，如：
+```tex
+% minted代码排版样式设置
+\usemintedstyle{default} 
+% 定义C语言代码参数
+% 公有用设置
+\setminted{fontsize=\tiny, breaklines=true, breakautoindent=false}
+% 定义不同字号的行内代码排版命令
+\newmintinline{c}{fontsize=\normalsize, autogobble}
+\newmintinline[cinttscr]{c}{fontsize=\scriptsize, escapeinside=||, autogobble}
+\newmintinline[cinttfts]{c}{fontsize=\footnotesize, escapeinside=||, autogobble}
+\newmintinline[cintttny]{c}{fontsize=\tiny, escapeinside=||, autogobble}
+\newmintinline[cinttlrg]{c}{fontsize=\large, escapeinside=||, autogobble}
+% 定义ccode环境
+\newminted{c}{frame=lines, autogobble}
+% 定义\cfile命令
+\newmintedfile{c}{frame=lines}
+```
+**minted**宏包还提供了浮动体等强大功能，有关其使用细节，请在命令行通过`texdoc minted`命令阅读其使用说明书。
+
+Happy LaTeXing!
