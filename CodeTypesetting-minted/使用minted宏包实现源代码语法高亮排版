@@ -30,7 +30,7 @@ pygmentize -L lexers
 如果在命令行无法执行这两个命令，说明Python或Pygments工具包安装中有错误，请重新进行安装和测试，直至这两个命令能够正常执行。
 
 ## LaTeX编译参数设置
-由于**minted**宏包使用外部工具实现排版，因此，需要为LaTeX编译命令添加**-shell-escape**编译参数，如：
+由于**minted**宏包借助外部工具实现排版，因此，需为LaTeX编译命令添加“**-shell-escape**”编译参数，如：
 ```shell
 xelatex -shell-escape jobname.tex
 ```
@@ -65,7 +65,7 @@ latex -shell-escape jobname.tex
 
 可以通过\mintinline{python}{print(x**2)}输出结果。
 
-下面是一个Hello World C语言的代码：
+下面是一个输出Hello World的C语言代码：
 \inputminted{c}{helloworld.c}
 
 \end{document}
@@ -74,7 +74,7 @@ latex -shell-escape jobname.tex
 其排版结果为：
 
 <center>
-<img  src="https://wenda.latexstudio.net/data/attach/191015/VHmpIJYH.png" width=50% />
+<img  src="https://wenda.latexstudio.net/data/attach/191015/xmRjSk3h.png" width=55% />
 </center>
 
 其中能够使用的**语言类型名称**，请在命令行使用`pygmentize -L lexers`进行查看。
