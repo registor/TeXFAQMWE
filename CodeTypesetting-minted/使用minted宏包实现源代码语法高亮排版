@@ -9,11 +9,11 @@
 Python是跨平台的，不同平台的安装方式，请参考[Python主页](https://www.python.org/ "Python主页")相关指南。
 ### 安装**Pygments**工具包
 安装完成Python后，可以使用其**easy_install工具**或是**pip工具**，安装**Pygments**工具包。
-例如，对于Ubuntu Linux下Python3，可以在终端执行如下命令即可完成安装：
+例如，对于Ubuntu Linux下Python3，可以在终端执行如下命令安装：
 ```shell
 sudo pip3 Pygments
 ```
-对于Windows下Python3，可以**以管理员权限**打开命令行窗口，然后执行如下命令即可完成安装：
+对于Windows下Python3，可以**以管理员权限**打开命令行窗口，然后执行如下命令安装：
 ```shell
 pip3 Pygments
 ```
@@ -27,7 +27,7 @@ pygmentize -L styles
 ```shell
 pygmentize -L lexers
 ```
-如果在命令行无法执行这两个命令，说明Python或Pygments工具包安装中有错误，请重新进行安装和测试，直致这两个命令能够正常执行。
+如果在命令行无法执行这两个命令，说明Python或Pygments工具包安装中有错误，请重新进行安装和测试，直至这两个命令能够正常执行。
 
 ## LaTeX编译参数设置
 由于**minted**宏包使用外部工具实现排版，因此，需要为LaTeX编译器添加**-shell-escape编译参数**。如：
@@ -103,6 +103,14 @@ minted宏包的排版环境和命令都可以通过**可选参数**或者通过�
 % 定义\cfile命令
 \newmintedfile{c}{frame=lines}
 ```
+
+另外，如果要在**beamer**中使用minted排版，需要在frame环境中使用**[fragile]**可选参数，如：
+```tex
+\begin{frame}[fragile]{数据类型概述}{引例}
+...
+\end{frame}
+```
+
 **minted**宏包还提供了浮动体等强大功能，有关其使用细节，请在命令行通过`texdoc minted`命令阅读其使用说明书。
 
 Happy LaTeXing!
