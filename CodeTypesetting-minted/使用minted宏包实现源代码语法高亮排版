@@ -11,15 +11,15 @@ Python是跨平台的，不同平台的安装方式，请参考[Python主页](ht
 安装完成Python后，可以使用其**easy_install工具**或是**pip工具**，安装**Pygments**工具包。
 例如，对于Ubuntu Linux下Python3，可以在终端执行如下命令安装：
 ```shell
-sudo pip3 Pygments
+sudo pip3 install Pygments
 ```
 对于Windows下Python3，可以**以管理员权限**打开命令行窗口，然后执行如下命令安装：
 ```shell
-pip3 Pygments
+pip3 install Pygments
 ```
 更多详情，请参阅[Pygments官网](http://pygments.org/ "Pygments官网")。
 ### 测试**Pygments**工具包
-在终端或命令行窗口，执行如下命令可以得到高亮显示样式：
+在终端或命令行窗口，执行如下命令可以得到支持的高亮显示样式：
 ```shell
 pygmentize -L styles
 ```
@@ -30,7 +30,7 @@ pygmentize -L lexers
 如果在命令行无法执行这两个命令，说明Python或Pygments工具包安装中有错误，请重新进行安装和测试，直至这两个命令能够正常执行。
 
 ## LaTeX编译参数设置
-由于**minted**宏包使用外部工具实现排版，因此，需要为LaTeX编译器添加**-shell-escape编译参数**。如：
+由于**minted**宏包使用外部工具实现排版，因此，需要为LaTeX编译命令添加**-shell-escape**编译参数，如：
 ```shell
 xelatex -shell-escape jobname.tex
 ```
@@ -55,7 +55,7 @@ latex -shell-escape jobname.tex
 这是一个简单的Python代码：
 \begin{minted}{python}
   def boring(args = None):
-  pass
+      pass
 \end{minted}
 可以对Python有一个简单的了解。
 
@@ -74,7 +74,7 @@ latex -shell-escape jobname.tex
 其排版结果为：
 
 <center>
-<img  src="https://wenda.latexstudio.net/data/attach/191015/WwnH7k9G.png" width=50% />
+<img  src="https://wenda.latexstudio.net/data/attach/191015/VHmpIJYH.png" width=50% />
 </center>
 
 其中能够使用的**语言类型名称**，请在命令行使用`pygmentize -L lexers`进行查看。
@@ -85,12 +85,12 @@ minted宏包的排版环境和命令都可以通过**可选参数**或者通过�
 *强烈建议*：可以在相关开发环境IDE中采用其IDE提供的工具对源代码按需要在开发环境IDE中实现排版后，再**用minted宏包载入到LaTeX中进行排版**。
 
 ## 自定义排版环境和命令
-为了能够更方便的使用minted宏包提供的功能，该宏包提供了`\newminted`、`\newmint`、`\newmintinline`和`\newmintedfile`4个命令用于自定义需要的排版环境和命令，如：
+该宏包还提供了`\newminted`、`\newmint`、`\newmintinline`和`\newmintedfile`4个命令用于自定义需要的排版环境和命令，如：
 ```tex
 % minted代码排版样式设置
 \usemintedstyle{default} 
 % 定义C语言代码参数
-% 公有用设置
+% 公有设置
 \setminted{fontsize=\tiny, breaklines=true, breakautoindent=false}
 % 定义不同字号的行内代码排版命令
 \newmintinline{c}{fontsize=\normalsize, autogobble}
