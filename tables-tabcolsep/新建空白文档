@@ -1,0 +1,8 @@
+How do I change column or row separation in LaTeX tables?
+One option is to use the commands \setlength and \arraystretch to change the horizontal spacing (column separation) and the vertical spacing (row separation) respectively.
+
+Example settings:
+
+\setlength{\tabcolsep}{20pt}
+\renewcommand{\arraystretch}{1.5}
+Click here to see a full example of tables with different spacings.
