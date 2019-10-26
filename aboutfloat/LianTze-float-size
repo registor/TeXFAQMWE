@@ -1,0 +1,21 @@
+https://www.latexstudio.net/archives/4683.html
+
+从今天起，我们邀请林莲枝（ChinaTeX专访）在本站开通LaTeX专栏，将陆续呈上原汁原味LaTeX的妙趣应用。
+“图片又飘到下一页去了！”
+“学姐，LaTeX 烦死了！您帮我去和导师说说，这次的论文就让我用 Word 了好吧！” “没门！到底又怎么了？” “明明这一页，我看下半部空间还够，想要加个图恰恰好。可是\includegraphics[height=4.24cm]{graph} 尺寸调整了老半天了，还总是太大，一直飘到下一页去了！又不能太小，待会看不清。用 Word 的话就可以直接拉曳调整了。” “用 Word？到时你再慢慢折腾文献引用吧，哼哼。再说，待会如果之前一段的文字再增加，剩余空间少了，图还不是一样会在 Word 里飘个不停。” “……那您说怎么办？！LaTeX 还不一样，还也不是又要再来调整尺寸？“ “给，这段代码拿去，会自动计算这一页到底还剩多少空间可用。”
+\includegraphics[
+  height=\dimexpr\pagegoal-\pagetotal\relax,
+  width=\textwidth,
+  keepaspectratio]
+{graph}
+“……唉？！真的行了。” “是吧，就是拿终点线 \pagegoal 减掉至今已用了多少空间 \pagetotal，用来做图的高度就好了。你这是不是要放在figure里的？那再减掉四行文字的空间吧，别忘了 \caption、figure 上下都是要占些位的。”
+\begin{figure}[h!]
+\centering
+\includegraphics[
+  height=\dimexpr\pagegoal-\pagetotal-4\baselineskip\relax,
+  width=\textwidth,
+  keepaspectratio]
+{graph}
+\caption{Survey results}
+\end{figure}
+“……LaTeX 真好使，想起来了，我用 Word 拉曳调整尺寸，时常还会会手滑出岔子。” “是吧。快继续写稿！”

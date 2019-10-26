@@ -1,0 +1,42 @@
+关于图表浮动体“飘”的问题
+
+在排版图表时，经常会碰到“LaTeX里的插图怎么总是**飘来飘去**，烦死了！”这样的问题。
+
+殊不知，这是**LaTeX的精髓之一**，请参考[https://www.latexstudio.net/archives/12049.html](https://www.latexstudio.net/archives/12049.html "https://www.latexstudio.net/archives/12049.html")的“LianTze-presentation-0320-forReading.pdf”中第8页-第18页的讲解。
+
+关于浮动体，《LaTeX2ε插图指南》第87页也明确指出：
+
+1. **不要使用依赖于图形放置位置的文本**。如“这幅图...”或“下面的图形...”等短语要求所指的图形需在固定位置。而像“图5...”这样的短语则允许图形出现在任意位置。
+2. **放松**。一些使用者在发现图形没有十分准确的出现在他们所想要的位置时，往往非常着急。这没有必要，图形的放置是LaTeX的工作，最好放松一些。
+
+但是，总是有把图表布置于紧随当前文本位置或是不远位置的需求和习惯。浮动体无法布置于指定位置，其**主要原因是没有足够的空间**。此时，可以有三种方式来实现这一需求。
+
+###精简文本
+如果当前页为图表留下的空间只差少量几行文本的话，可以适当精简图表位置之前的文本，为图表**腾出**足空间即可。
+
+注意：在排版中，也应该尽量避免孤字成行或2-3个字成行这样的现象。
+
+###添加文本
+当页面留下的空间太小，通过精简文本也无法为浮动体留足空间时，可以适当润色丰富当前的文本，将图表浮动体“**挤到**”下一页中。
+
+###调整尺寸
+必要时，需要适当**调整图表的尺寸**，以将浮动体布置于指定的位置。对于用`\includegraphics`命令实现的插图，可以用**height**、**width**、**keepaspectratio**、**scale**等可选参数调整插图尺寸，以满足排版空间要求。
+
+显然手动调整插图尺寸的话，将是一个比较繁琐的过程。其实，LaTeX是可以**自动计算**一页到底还剩多少空间可用。请参考[https://www.latexstudio.net/archives/4683.html](https://www.latexstudio.net/archives/4683.html "https://www.latexstudio.net/archives/4683.html")中林前辈的说明，用如下代码实现这一计算：
+
+```tex
+\begin{figure}[h!]
+  \centering
+  \includegraphics[
+    height=dimexprpagegoal-pagetotal-4baselineskiprelax,
+    width=textwidth,
+    keepaspectratio]{examle-image}
+  \caption{Survey results}
+\end{figure}
+```
+
+一般来讲，在使用LaTeX排版时，没有定稿以前，尽量不要操心图表位置这些事，就让它们浮动到它们想浮动的位置。在定稿以后，再做适当调整，以实现特殊的需求。
+
+另外，如果是投稿，有的期刊会要求所有图、表都排在文章最后。此时，不要去做非要将图、表排在当前位置这样**出力不讨好**的事。
+
+Happy LaTeXing!
