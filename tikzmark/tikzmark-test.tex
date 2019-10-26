@@ -1,0 +1,21 @@
+\documentclass{ctexart}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,arrows.meta}
+\tikzset{every picture/.style={remember picture}}
+
+
+\begin{document}
+	
+	方程$f(x)=0$\tikz[baseline]{\node(d1){}}有实根\tikz[baseline]{\node(d2){}}\phantom{方程根}\tikz[baseline]{\node(d3) {}}函数$y=f(x)$\tikz[baseline]{\node(d4){}}的图像与$x$轴有交点。
+	\vspace{4ex}
+	\begin{center}
+		\tikz[baseline]{\node(d5){}}方程$f(x)$有零点\tikz[baseline]{\node(d6){}}
+	\end{center}
+	
+	\begin{tikzpicture}[remember picture,overlay,>=stealth]
+	\draw[double, double distance=.6mm, line width=.4mm, <->] (d1) --(d5);
+	\draw[double, double distance=.6mm, line width=.4mm, <->] (d2) -- (d3);
+	\draw[double, double distance=.6mm, line width=.4mm, <->] (d4) -- (d6);
+	\end{tikzpicture}
+	
+\end{document}

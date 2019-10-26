@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{array}
+\begin{document}
+	\[
+	IM_x^t\left\{
+	\begin{array}{l}
+	\begin{array}{>{$}p{4.8cm}<{$}l}
+	CT_x^t,&(t=1)\\
+	\end{array}	\\
+	\left\{\begin{array}{>{$}p{4.5cm}<{$}l}
+	CT_x^t- CT_x^t \ast \bigl( CT_x^t - IM_x^{t-1} \bigr), & \text{if} \; IM_x^{t-1} \neq 0, \\
+	CT_x^t \ast 0.5, & \text{if} \; IM_x^{t-1}=0.
+	\end{array}\right. 
+	\end{array}\right.
+	\]
+\end{document}

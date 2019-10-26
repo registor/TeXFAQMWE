@@ -1,0 +1,40 @@
+      \begin{algorithm}[H]
+        \SetAlgoLined
+        \LinesNumbered          
+        \SetKwInput{KwIn}{输入}
+        \SetKwInput{KwOut}{输出}
+        \KwIn{$x_i=\{1,\nicefrac{1}{2},\nicefrac{1}{3},\nicefrac{1}{4},\nicefrac{1}{5},\cdots,\nicefrac{1}{100}\}$}
+        \KwOut{$sum=\sum\limits_{i=1}^{100}  x_i$}              
+        \BlankLine 
+        初始化$sum=0$\;
+        \For{$i\leftarrow1$ \KwTo $100$}{
+          $sum=sum+\nicefrac{1}{i}$\;
+          $i=i+1$\;
+        }
+        输出$sum$\;
+        \caption{计算分数累加和}
+      \end{algorithm}
+
+      \begin{algorithm}[H]
+        \SetKwInput{KwIn}{输入}
+        \SetKwInput{KwOut}{输出}
+        \KwIn{$x_i=\{1,\nicefrac{1}{2},\nicefrac{1}{3},\nicefrac{1}{4},\nicefrac{1}{5},\cdots,\nicefrac{1}{100}\}$}
+        \KwOut{$sum=\sum\limits_{i=1}^{100}  x_i$}              
+        \BlankLine                              
+        \newcommand{\forcond}{$i=0$ \KwTo $n$}
+        \AlgoDisplayBlockMarkers
+        \SetAlgoBlockMarkers{begin}{end}%
+        \SetAlgoNoEnd
+        \SetKwFunction{FSum}{getSum}%
+        \SetKwProg{Fn}{}{}{}
+        \Fn{}{
+          sum = 0\;
+          i = 1\;
+          \While{$i<=100$}{
+            sum = sum + 1 / i\;
+            i = i + 1\;
+          }     
+          print sum\;
+        }
+        \caption{计算分数累加和}
+      \end{algorithm}

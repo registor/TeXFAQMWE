@@ -1,0 +1,63 @@
+
+% 排版算法的Algorithm2e宏包的设置
+% 需要用到etoolbox宏包
+% ====================================================================================
+\AtBeginEnvironment{algorithm}{
+  \scriptsize
+  \SetStartEndCondition{ (}{)}{)}%条件前后的括号
+  \SetAlgoBlockMarkers{\{}{\}}%程序块起始结束标记
+  \SetKwProg{Fn}{函数: }{}{}%函数或过程宏  
+  %\SetKwFunction{FRecurs}{void FnRecursive}%函数名称宏
+  \SetKwFor{For}{for}{}{}%for名称宏\For
+  \SetKwIF{If}{ElseIf}{Else}{if}{}{elif}{else}{}%If等名称宏
+  \SetKwFor{While}{while}{}{}%While名称宏
+  \SetKwRepeat{Repeat}{repeat}{until}%Repeat名称宏
+  \AlgoDisplayBlockMarkers%允许显示程序块标记
+  \SetAlgoNoLine%程序块间不画竖线
+  %\SetAlgoLined%程序块间画竖线
+  %\LinesNumbered%行号
+  %\NoCaptionOfAlgo
+  \SetKwInput{KwIn}{输入}%中文
+  \SetKwInput{KwOut}{输出}%中文
+}
+
+% 不显示算法标题的编号
+\makeatletter
+\newcommand{\RemoveAlgoNumber}{\renewcommand{\fnum@algocf}{\AlCapSty{\AlCapFnt\algorithmcfname}}}
+\newcommand{\RevertAlgoNumber}{\algocf@resetfnum}
+\makeatother
+\RemoveAlgoNumber
+% 设置算法标题中的文字
+\SetAlgorithmName{算法}{算法}{算法列表}
+
+% 设置算法标题中的字体字号
+% \newcommand{\mycapsty}[1]{\scriptsize{#1}}
+% \SetAlCapNameSty{mycapsty}
+\SetAlCapNameFnt{\scriptsize}
+\SetAlCapFnt{\scriptsize}
+% \renewcommand\AlCapFnt{\normalfont\scshape\small\itshape}
+% \renewcommand\AlCapNameFnt{\small\itshape}
+
+% 赋值标识
+\newcommand{\assignAl}{\longleftarrow}
+
+% 设置框线颜色
+\makeatletter
+\newcommand{\setalgotoprulecolor}[1]{\colorlet{toprulecolor}{#1}}
+\let\old@algocf@pre@ruled\@algocf@pre@ruled % Adjust top rule colour
+\renewcommand{\@algocf@pre@ruled}{\textcolor{toprulecolor}{\old@algocf@pre@ruled}}
+
+\newcommand{\setalgobotrulecolor}[1]{\colorlet{bottomrulecolor}{#1}}
+\let\old@algocf@post@ruled\@algocf@post@ruled % Adjust middle rule colour
+\renewcommand{\@algocf@post@ruled}{\textcolor{bottomrulecolor}{\old@algocf@post@ruled}}
+
+\newcommand{\setalgomidrulecolor}[1]{\colorlet{midrulecolor}{#1}}
+\renewcommand{\algocf@caption@ruled}{%
+  \box\algocf@capbox{\color{midrulecolor}\kern\interspacetitleruled\hrule
+    width\algocf@ruledwidth height\algotitleheightrule depth0pt\kern\interspacealgoruled}}
+\makeatother
+
+\setalgotoprulecolor{blue!90}% Default
+\setalgobotrulecolor{red!90}% Default
+\setalgomidrulecolor{green!90}% Default
+% ====================================================================================
