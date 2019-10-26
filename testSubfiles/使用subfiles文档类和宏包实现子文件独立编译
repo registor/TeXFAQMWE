@@ -1,0 +1,130 @@
+使用subfiles文档类和宏包实现子文件独立编译
+
+在书籍、学位论文等大型文档的排版中，往往需要将大文档拆分成子文档，然后用`\input`或`\include`命令将子加载到主文档中(如`main.tex`)。
+
+但是，在排版中，往往需要通过“**试错法**”来对单个子文档，甚至是一个图/表的代码进行不断调试。这就需要不断的编译和测试，虽然可以通过`\includeonly`命令指定编译文件，但却无法独立编译某一个子文档或是代码片段。为了实现编译子文档或是代码片段的编译，一般需要：
+1. 重新建立一个新文件，然后将主文档中导言区中的内容按需拷贝到新建文件中。
+2. 在新文件中撰写需要的内容，独立编译调试。
+3. 保留`\begin{document}`和`\end{document}`内的内容，然后用`\input`或`\include`命令加载到主文档。
+
+显然，这是一个比较繁琐的工作。当内容再次变化，需要调试时，可能还得重复类似的工作。
+
+`subfiles.cls`文档类和`subfiles.sty`宏包可以很好地解决这一问题，它们能够在独立提取子文档或是代码片段的基础上，通过共享主文档的导言区，实现独立编译子文档或是代码片段。
+
+## 使用方法
+### 主控文档
+在主控文档`main.tex`引入`subfiles.sty`宏包，需要注意的是引入该宏包命令必须是主控文档导言区中的最后一条命令，如：
+```tex
+...
+\usepackage{subfiles}
+\begin{document}
+...
+```
+引入宏包后就可以用`\subfile`命令在主控文件中载入子文档或代码片段，如：
+```tex
+...
+\subfile{<subfile name>}
+...
+```
+其中，`<subfile name>`中可以带有用“/”分割(不能用“\”)的路径名称。
+### 子文档
+子文档的撰写与常规文档撰写方式一致，但要求文档类必须是`subfiles.cls`，如：
+```tex
+\documentclass[<main file name>]{subfiles}
+\begin{document}
+...
+\end{document}
+...
+```
+其中，`<main file name>`中可以带有用“/”分割(不能用“\”)的路径名称。
+### 独立编译
+使用`subfiles.cls`文档类和`subfiles.sty`宏包完成文档组织后，打开主控文档main.tex时，将编译所有的文档内容，而打开子文档时，则仅编译独立编译指定的内容，并共享主控文档main.tex导言区中见容。
+## 排版实例
+### 文档组织
+按不同属性在不同子目录中组织文件，是较为非常方便的管理方式，假设文件目录结构如下：
+```shell
+jobname
+├── chap01
+│   ├── chap01.tex
+│   └── figs
+│       └── fig01-01lion.eps
+├── chap02
+│   ├── chap02.tex
+│   ├── figs
+│   │   └── fig02-01frame.png
+│   └── sec01
+│       ├── chap02-01.tex
+│       └── figs
+│           └── fig02-01-01pdflogo.png
+├── figs
+├── main.tex
+└── tree.txt
+```
+### 文档撰写
+一个综合实例撰写方式如下：
+#### 主控文档main.tex
+```tex
+\documentclass{ctexbook}
+% 导言区，可以在此引入必要的宏包
+\usepackage{zhlipsum}
+\usepackage{graphicx}
+%必须是document环境的前最后一行代码
+\usepackage{subfiles}
+\begin{document}
+  \chapter*{摘要}
+  \zhlipsum[1]%
+  \subfile{chap01/chap01}%
+  \subfile{chap02/chap02}%
+  \chapter{结论}
+  \zhlipsum[4]%
+\end{document}
+```
+#### 子文档chap01.tex
+```tex
+\documentclass[../main]{subfiles}
+\begin{document}
+\chapter{发展历程}
+\zhlipsum[2]
+\begin{figure}[htp]
+  \centering
+  \includegraphics[scale=0.6]{figs/fig01-01lion}
+  \caption{blalala}
+\end{figure}
+\end{document}
+```
+#### 子文档chap02.tex
+```tex
+\documentclass[../main]{subfiles}
+\begin{document}
+\chapter{现状分析}
+\zhlipsum[3]
+\begin{figure}[htp]
+  \centering
+  \includegraphics[scale=0.6]{figs/fig02-01frame}
+  \caption{bbbbbb}
+\end{figure}
+\subfile{sec01/chap02-01}
+\end{document}
+```
+#### 子子文档chap02-01.tex
+```tex
+\documentclass[../../main]{subfiles}
+\begin{document}
+\section{并行计算}
+\zhlipsum[6]
+\begin{figure}[htp]
+  \centering
+  \includegraphics[scale=0.3]{figs/fig02-01-01pdflogo}
+  \caption{cccccc}
+\end{figure}  
+\end{document}
+```
+在各个文档撰写中，建议使用**相对路径**，禁止使用**绝对路径**。
+
+这样打开main.tex编译就可以生成完整的结果，分别打开chap01.tex、chap02.tex、chap02-01.tex就可以在共享main.tex导言区的前提下独立编译并进行调试。
+
+使用subfiles文档类和宏包实现子文件独立编译时，一方面可以提高调试中的编译速度，另一方面也可以集中精力在小范围内调试代码，提高解决问题的效率。
+
+有关subfiles文档类和宏包的使用细节，请在命令行通过`texdoc subfiles`命令查阅其使用手册。
+
+Happy LaTeXing!

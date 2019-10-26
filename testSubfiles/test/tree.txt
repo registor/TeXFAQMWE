@@ -1,0 +1,18 @@
+jobname
+├── chap01
+│   ├── chap01.tex
+│   └── figs
+│       └── fig01-01lion.eps
+├── chap02
+│   ├── chap02.tex
+│   ├── figs
+│   │   └── fig02-01frame.png
+│   └── sec01
+│       ├── chap02-01.tex
+│       └── figs
+│           └── fig02-01-01pdflogo.png
+├── figs
+├── main.tex
+└── tree.txt
+
+7 directories, 8 files

@@ -1,0 +1,19 @@
+\documentclass{ctexbook}
+% 导言区，可以在此引入必要的宏包
+\usepackage{zhlipsum}
+\usepackage{graphicx}
+%必须是document环境的前最后一行代码
+\usepackage{subfiles}
+\begin{document}
+  \chapter*{摘要}
+  \zhlipsum[1]%
+  \subfile{chap01/chap01}%
+  \subfile{chap02/chap02}%
+  \chapter{结论}
+  \zhlipsum[4]%
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
