@@ -1,113 +1,237 @@
-使用自定义tikz-flowchart宏包绘制流程图
+使用pdftocairo工具将pdf文件转换为png图像
 
-由于工作需要，经常需要在各类文档中绘制**传统程序流程图**。流程图当然可以在Visio、亿图等工具进行绘制，截图(**位图，不推荐**)或是导出为PDF(**矢量图，推荐**)后，再通过graphicx宏包的`\includegraphics`命令插入到LaTeX实现排版。这是一种简单直接的方法，但这种方法会存在如下问题：
+在LaTeX的实际使用中，有时需要将pdf格式的文件转换为png、jpg等图像格式。在[https://wenda.latexstudio.net/article-5051.html](https://wenda.latexstudio.net/article-5051.html "https://wenda.latexstudio.net/article-5051.html")中，给出了“**LaTeX(TiKZ)转换为图像**”的一个很好的方法。通过查阅其[https://github.com/iruletheworld/latex2img](https://github.com/iruletheworld/latex2img "https://github.com/iruletheworld/latex2img")中的使用说明链接[https://latex2img.readthedocs.io/zh_CN/latest/](https://latex2img.readthedocs.io/zh_CN/latest/ "https://latex2img.readthedocs.io/zh_CN/latest/")，发现该方案主要使用了texlive自带`standalone`文档类和`pdftocairo`工具实现。由于该方案基于Windows平台下的批处理方式(`*.bat`文件)实现，为简化操作并摆脱平台依赖，在此，将`pdftocairo`工具独立出来，并直接使用`standalone`文档类参数实现转换。
 
--  需要额外的软件支持，降低了文档的独立性。
-- 字体、字号无法与正文匹配，整体效果不协调。
-- 缩放时字号会产生变化，无法满足字号比正文小1号的常规要求。
-- 不便后期修改、编辑和维护。
+## `pdftocairo`工具
+`pdftocairo`是一个将pdf文件转换为图像的工具，该工具支持将pdf转换为png、jpeg、tiff、ps、eps、svg等格式的图像。
 
-因此，在LaTeX中直接使用TikZ工具绘制流程图，是一个相对较好的选择。
+例如，可以在命令行使用`pdftocairo -r 600 -png demo.pdf`命令将demo.pdf文件转换为分辨率为600PPI的名称为`demo-1.png`的png图像文件。
 
-## 直接绘制
-流程图的基本形状有矩形、菱形、平行四边形、圆角矩形等。可以使用TikZ的`\node`命令布置这些形状结点，然后绘制对应流程线就可以实现流程图的绘制。
+## 使用`standalone`文档类参数实现转换
+如果使用`standalone`文档类，则可以直接在其参数中指定转换方式，直接编译`*.tex`LaTeX源文件就可以同时得到pdf文件和转换后的图像文件。
 
-为绘制不同形状的结点，可以为`\node`命令的可选参数中设置`rectangle`、`diamond`、`trapezium`、`rounded corners`等绘制属性。
-
-显然，直接用TikZ代码进行流程图绘制是一个比较烦琐的过程，并且不符合LaTeX**内容与格式分离**的基本思想。同时，当有多个流程图需要绘制时，代码过于冗余，不便维护，代码的复用性也较差，不同流程图也容易产生不一致现象。
-
-## 使用`flowchart`宏包绘制
-为简化流程图的绘制代码，可以引入合适的LaTeX宏包进行流程图绘制。一个比较方便的宏包是`flowchart`宏包，它提供了如下基本的流程图形状：
-<center>
-<img  src="https://wenda.latexstudio.net/data/attach/191008/GTfgoZqR.png" width=50% />
-</center>
-显然，该宏包提供的基本流程图形状不能完全符合我国的绘制习惯。关于该宏包的使用细节，请在命令行用`texdoc flowchart`命令查阅其使用说明书。
-
-## 设置node样式绘制
-当然，可以将`\node`命令的可选参数中的`rectangle`、`diamond`、`trapezium`、`rounded corners`等绘制属性用`tikzset`命令定义为绘图样式，以实现代码的简化和代码的复用。在[Brent Longborough](http://www.texample.net/tikz/examples/author/brent-longborough/)中，给出了使用这一方式的绘制样例和实现代码。
-
-## 自定义宏包绘制
-根据LaTeX**内容与格式分离**的基本思想，显然将`\tikzset`样式定义及其它的设置封装为宏包，使用起来则更为方便。在完成这一封装之前，笔者刚好阅读了**tikz-imagelabels**宏包的源代码，发现其`key-value`实现思路非常值得借鉴。因此，基于[Brent Longborough](http://www.texample.net/tikz/examples/author/brent-longborough/)的代码，结合tikz-imagelabels宏包的`key-value`思路，笔者设计与制作了**tikz-flowchart**宏包，以便在LaTeX中用TikZ实现流程图绘制，详见[tikz-flowchart](https://github.com/registor/tikz-flowchart/)。
-
-使用该宏包绘制流程图的**基本过程**是：
-1. 用`\flowchartset`命令设置全局(导言区)或局部绘制参数。
-2. 在`tikzpicture`环境中使用类似`\node [proc, join] (p1) {$k -= 1$};`命令采用`proc`、`test`、`io`或`term`各个node样式参数分别布置需要的流程框结点。
-3. 在`tikzpicture`环境中使用类似`\node [coord, right=0.8 of t1] (c1)  {}; cmark{1}`命令采用`coord`样式布置其它需要的坐标点(用于流程线的转接)。
-4. 在`tikzpicture`环境中使用类似`\path (t1.south) to node [near start, xshift=1em] {$y$} (p2);`命令进行流程线条件标注。
-5. 使用类似`\path (t1.south) to node [near start, xshift=1em] {$y$} (p2);`命令进行流程线条件标注。
-6. 使用类似`\draw [norm] (t1.south) -- (p2);`命令绘制流程线。
-
-个人建议在绘制流程前最好先用纸和笔绘制一个草图，然后再用tikz-flowchart宏包进行绘制，如下图是一个用辗转相除法求最大公约数的草图：
-<center>
-<img  src="https://wenda.latexstudio.net/data/attach/191008/p1RdiZGb.jpg" width=50% />
-</center>
-根据该草图可以使用如下代码：
+实现转换的文档类参数代码可以是：
 ```tex
-......
-%导言区，可以在此引入必要的宏包
+\documentclass[margin=5pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 600 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+```
+### 转换`TikZ`绘图
+以下代码实现将`TikZ`绘图转换为png图像：
+```tex
+\documentclass[margin=5pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 600 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+% 流程图绘制宏包
 \usepackage{tikz-flowchart}
-......
-% 可以局部更改各参数
+
+% 设置流程图绘制参数
 \flowchartset{
   proc fill color = orange!10, % 顺序处理框填充颜色(默认取白色)
   test fill color = green!30, % 判断框填充颜色(默认取白色)
   io fill color = blue!30, % 输入/输出框填充颜色(默认取白色)
   term fill color = red!30, % 开始/结束框填充颜色(默认取白色)
+  proc text width = 6em, % 顺序处理框宽度(默认取8em)
 }
 
-\begin{tikzpicture}
-  % 布置结点单元
-  \node [term] (st) {开始};
-  \node [proc, text width = 6em, join] (p1) {\verb|int divisor|};       
-  \node [test, join] (t1) {\verb|n <= 1|};
-  \node [proc, text width = 6em] (p2) {\verb|divisor = 2|};
-  \node [test, text width = 10em, join] (t2) {\verb|divisor * divisor <= n|};
-  \node [test, text width = 8em] (t3) {\verb|n % divisor == 0|};
-  \node [proc, text width = 6em] (p3) {\verb|divisor++|};
-  \node [term, below = 1.6 of p3] (end) {结束};
-  \node [proc, text width = 6em, left = 4.8 of t2] (p4) {\verb|return 0|};
-  \node [proc, text width = 6em, right = 3.5 of p3] (p5) {\verb|return 0|};
-  \node [proc, text width = 6em, right = 5.8 of t3] (p6) {\verb|return 1|};
+\begin{document}
+  \begin{tikzpicture}
+    % 布置结点单元
+    \node [term] (st) {开始};
+    \node [proc, join] (p1) {\verb|int divisor|};       
+    \node [test, join] (t1) {\verb|n <= 1|};
+    \node [proc, ] (p2) {\verb|divisor = 2|};
+    % 可以根据需要多带带指定结点文字宽度
+    \node [test, text width = 10em, join] (t2) {\verb|divisor * divisor <= n|};
+    \node [test, text width = 8em] (t3) {\verb|n % divisor == 0|};
+    \node [proc, text width = 6em] (p3) {\verb|divisor++|};
+    \node [term, below = 1.6 of p3] (end) {结束};
+    \node [proc, left = 4.8 of t2] (p4) {\verb|return 0|};
+    \node [proc, right = 3.5 of p3] (p5) {\verb|return 0|};
+    \node [proc, right = 5.8 of t3] (p6) {\verb|return 1|};
 
-  % 布置用于连接的坐标结点，同时为其布置调试标记点。
-  \node [coord] (c1) at ($(p2.south)!0.5!(t2.north)$)  {}; \cmark{1}
-  \node [coord, below = 0.25 of p3] (c2)  {}; \cmark{2}
-  \node [coord, above = 0.5 of end] (c3) {};  \cmark{3}
-  \node [coord, left = 0.5 of t2] (ct) {};  \cmark{t}
-  \node [coord] (c4) at (c3 -| p5)  {}; \cmark{4}
-  \node [coord] (c5) at (c2 -| ct)  {}; \cmark{5}
+    % 布置用于连接的坐标结点，同时为其布置调试标记点。
+    \node [coord] (c1) at ($(p2.south)!0.5!(t2.north)$)  {}; \cmark{1}
+    \node [coord, below = 0.25 of p3] (c2)  {}; \cmark{2}
+    \node [coord, above = 0.5 of end] (c3) {};  \cmark{3}
+    \node [coord, left = 0.5 of t2] (ct) {};  \cmark{t}
+    \node [coord] (c4) at (c3 -| p5)  {}; \cmark{4}
+    \node [coord] (c5) at (c2 -| ct)  {}; \cmark{5}
         
-  % 判断框连线，每次绘制时，先绘制一个带有一个固定
-  % 位置标注的路径(path)，然后再绘制箭头本身(arrow)。
-  \path (t1.south) -- node [near start, right] {$N$} (p2.north);
-  \draw [norm] (t1.south) -- (p2.north);
-  \path (t1.west) -| node [near start, above] {$Y$} (p4.north);
-  \draw [norm] (t1.west) -| (p4.north);
+    % 判断框连线，每次绘制时，先绘制一个带有一个固定
+    % 位置标注的路径(path)，然后再绘制箭头本身(arrow)。
+    \path (t1.south) -- node [near start, right] {$N$} (p2.north);
+    \draw [norm] (t1.south) -- (p2.north);
+    \path (t1.west) -| node [near start, above] {$Y$} (p4.north);
+    \draw [norm] (t1.west) -| (p4.north);
         
-  \path (t2.south) -- node [near start, right] {$Y$} (t3.north);
-  \draw [norm] (t2.south) -- (t3.north);
-  \path (t2.east) -| node [near start, above] {$N$} (p6.north);
-  \draw [norm] (t2.east) -| (p6.north);
+    \path (t2.south) -- node [near start, right] {$Y$} (t3.north);
+    \draw [norm] (t2.south) -- (t3.north);
+    \path (t2.east) -| node [near start, above] {$N$} (p6.north);
+    \draw [norm] (t2.east) -| (p6.north);
         
-  \path (t3.south) -- node [near start, right] {$N$} (p3.north);
-  \draw [norm] (t3.south) -- (p3.north);
-  \path (t3.east) -| node [near start, above] {$Y$} (p5.north);
-  \draw [norm] (t3.east) -| (p5.north);
+    \path (t3.south) -- node [near start, right] {$N$} (p3.north);
+    \draw [norm] (t3.south) -- (p3.north);
+    \path (t3.east) -| node [near start, above] {$Y$} (p5.north);
+    \draw [norm] (t3.east) -| (p5.north);
 
-  % 其它连线
-  \draw [norm](p3.south) |- (c5) |- (c1);
-  \draw [norm](p4.south) |- (c3);
-  \draw [norm](p4.south) |- (c3) -- (end);
-  \draw [norm](p5.south) -- (c4);
-  \draw [norm](p6.south) |- (c3);
-  \draw [norm](p6.south) |- (c3) -- (end);
-\end{tikzpicture}
-......
+    % 其它连线
+    \draw [norm](p3.south) |- (c5) |- (c1);
+    \draw [norm](p4.south) |- (c3);
+    \draw [norm](p4.south) |- (c3) -- (end);
+    \draw [norm](p5.south) -- (c4);
+    \draw [norm](p6.south) |- (c3);
+    \draw [norm](p6.south) |- (c3) -- (end);
+  \end{tikzpicture}
+\end{document}
 ```
-绘制如下流程图：
+转换结果为：
 <center>
-<img  src="https://wenda.latexstudio.net/data/attach/191008/5ZJxmqEE.png" width=65% />
+<img  src="https://pics.latexstudio.net/data/images/201911/83a9aba6e8136a4.png" width=80% />
 </center>
-关于tikz-flowchart宏包的使用细节，请参阅[tikz-flowchart](https://github.com/registor/tikz-flowchart/)中的相关文档说明及使用LaTeX样例代码。
 
-Happy TikZing!
+### 转换`tabular`表格
+以下代码实现将`tabular`表格转换为png图像：
+```tex
+\documentclass[margin=5pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 600 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+
+\begin{document}
+    % 用minipage实现段落排版
+  \begin{minipage}{1.8in}
+    \begin{table}[!htp]
+      \centering
+      \caption{测试表格}
+      \begin{tabular}{cccc}
+        \hline
+        序号 & 姓名 & 性别 & 年龄\\\hline
+        1 & 张三 & 男 & 38\\\hline
+        2 & 李四 & 女 & 26\\\hline
+        3 & 王五 & 男 & 18\\\hline
+      \end{tabular}    
+    \end{table}    
+  \end{minipage}
+\end{document}
+```
+转换结果为：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201911/8ebe24d8bd9e86d.png" width=80% />
+</center>
+
+### 转换普通文本
+以下代码实现将普通文本转换为png图像：
+```tex
+\documentclass[margin=5pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 600 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+\usepackage{zhlipsum}
+
+\begin{document}
+  % 用minipage实现段落排版
+  \begin{minipage}{4in}
+    \setlength{\parindent}{2em}
+    \setlength{\parskip}{3ex plus 0.5ex minus 0.2ex}
+    \zhlipsum[1]
+  \end{minipage}
+\end{document}
+
+```
+转换结果为：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201911/81ff07decd373ca.png" width=80% />
+</center>
+
+## `pdftocairo`工具详细说明
+关于`pdftocairo`工具的使用细节，可以在命令行通过`pdftocairo --help`命令查看其使用说明：
+```shell
+pdftocairo version 0.80.0
+Copyright 2005-2019 The Poppler Developers - http://poppler.freedesktop.org
+Copyright 1996-2011 Glyph & Cog, LLC
+Usage: pdftocairo [options] <PDF-file> [<output-file>]
+  -png                     : generate a PNG file
+  -jpeg                    : generate a JPEG file
+  -jpegopt <string>        : jpeg options, with format <opt1>=<val1>[,<optN>=<valN>]*
+  -tiff                    : generate a TIFF file
+  -tiffcompression <string>: set TIFF compression: none, packbits, jpeg, lzw, deflate
+  -ps                      : generate PostScript file
+  -eps                     : generate Encapsulated PostScript (EPS)
+  -pdf                     : generate a PDF file
+  -svg                     : generate a Scalable Vector Graphics (SVG) file
+  -f <int>                 : first page to print
+  -l <int>                 : last page to print
+  -o                       : print only odd pages
+  -e                       : print only even pages
+  -singlefile              : write only the first page and do not add digits
+  -r <fp>                  : resolution, in PPI (default is 150)
+  -rx <fp>                 : X resolution, in PPI (default is 150)
+  -ry <fp>                 : Y resolution, in PPI (default is 150)
+  -scale-to <int>          : scales each page to fit within scale-to*scale-to pixel box
+  -scale-to-x <int>        : scales each page horizontally to fit in scale-to-x pixels
+  -scale-to-y <int>        : scales each page vertically to fit in scale-to-y pixels
+  -x <int>                 : x-coordinate of the crop area top left corner
+  -y <int>                 : y-coordinate of the crop area top left corner
+  -W <int>                 : width of crop area in pixels (default is 0)
+  -H <int>                 : height of crop area in pixels (default is 0)
+  -sz <int>                : size of crop square in pixels (sets W and H)
+  -cropbox                 : use the crop box rather than media box
+  -mono                    : generate a monochrome image file (PNG, JPEG)
+  -gray                    : generate a grayscale image file (PNG, JPEG)
+  -transp                  : use a transparent background instead of white (PNG)
+  -antialias <string>      : set cairo antialias option
+  -icc <string>            : ICC color profile to use
+  -level2                  : generate Level 2 PostScript (PS, EPS)
+  -level3                  : generate Level 3 PostScript (PS, EPS)
+  -origpagesizes           : conserve original page sizes (PS, PDF, SVG)
+  -paper <string>          : paper size (letter, legal, A4, A3, match)
+  -paperw <int>            : paper width, in points
+  -paperh <int>            : paper height, in points
+  -nocrop                  : don't crop pages to CropBox
+  -expand                  : expand pages smaller than the paper size
+  -noshrink                : don't shrink pages larger than the paper size
+  -nocenter                : don't center pages smaller than the paper size
+  -duplex                  : enable duplex printing
+  -opw <string>            : owner password (for encrypted files)
+  -upw <string>            : user password (for encrypted files)
+  -q                       : don't print any messages or errors
+  -v                       : print copyright and version info
+  -h                       : print usage information
+  -help                    : print usage information
+  --help                   : print usage information
+  -?                       : print usage information
+```
+
+Happy LaTeXing!
