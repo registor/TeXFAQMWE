@@ -1,0 +1,34 @@
+\documentclass[margin=5pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 600 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+
+\begin{document}
+    % 用minipage实现段落排版
+  \begin{minipage}{1.8in}
+    \begin{table}[!htp]
+      \centering
+      \caption{测试表格}
+      \begin{tabular}{cccc}
+        \hline
+        序号 & 姓名 & 性别 & 年龄\\\hline
+        1 & 张三 & 男 & 38\\\hline
+        2 & 李四 & 女 & 26\\\hline
+        3 & 王五 & 男 & 18\\\hline
+      \end{tabular}    
+    \end{table}    
+  \end{minipage}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
