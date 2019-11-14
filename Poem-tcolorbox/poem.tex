@@ -1,0 +1,165 @@
+\documentclass{ctexart}
+\usepackage[a4paper]{geometry}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, xparse}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usepackage{xpinyin}
+\newfontfamily\PinYinFont{TeX Gyre Adventor}
+\xpinyinsetup{ratio=0.45,font=\PinYinFont}
+% 调整至环境定义中，只调整正文字距
+%\ziju{0.3}
+\usepackage{cncolours}
+\usepackage{pgfornament-han}
+
+% 提供\ifthenelse命令
+\usepackage{xifthen}
+
+\colorlet{大轴}{朱红}
+\colorlet{轴心}{栗色}
+
+\tcbset{
+  halign=center,
+  valign=center,
+  poem margin/.style 2 args={
+    width=#1\linewidth,
+    left=#2mm,
+    right=#2mm,    
+  },
+  % left=10mm,
+  % right=10mm,
+  top=8mm,
+  bottom=8mm,
+  poem style/.style = {
+    before skip=30pt,
+    after skip=30pt,
+    toptitle=5mm,
+    bottomtitle=5mm,
+    enhanced,
+    colback=牙色,
+    overlay={
+      \fill[
+        decorate,
+        decoration={
+          markings,
+          mark = between positions 0.05 and 0.97 step 0.05 with{%
+            \node{\pgfornamenthan[color=red, scale=0.2]{41}};
+          }
+        }
+        ]([yshift=-3mm]frame.north west)--([yshift=-3mm]frame.north east);
+      \fill[
+        decorate,
+        decoration={
+          markings,
+          mark = between positions 0.05 and 0.97 step 0.05 with{%
+            \node{\pgfornamenthan[color=red, scale=0.2]{41}};
+          }
+        }
+        ]([yshift=3mm]frame.south west)--([yshift=3mm]frame.south east);
+      \fill[ball color=轴心]([xshift=2mm,yshift=3mm]frame.north west)rectangle([xshift=4mm,yshift=-3mm]frame.south west);
+      \fill[ball color=轴心]([xshift=-2mm,yshift=3mm]frame.north east)rectangle([xshift=-4mm,yshift=-3mm]frame.south east);
+      \fill[ball color=大轴](frame.north west)rectangle([xshift=6mm]frame.south west);
+      \fill[ball color=大轴]([xshift=-6mm]frame.north east)rectangle(frame.south east);
+      \fill[ball color=轴心]([xshift=3mm,yshift=3mm]frame.north west)circle(2mm);
+      \fill[ball color=轴心]([xshift=3mm,yshift=-3mm]frame.south west)circle(2mm);
+      \fill[ball color=轴心]([xshift=-3mm,yshift=3mm]frame.north east)circle(2mm);
+      \fill[ball color=轴心]([xshift=-3mm,yshift=-3mm]frame.south east)circle(2mm);
+    },
+  },
+}
+
+% 定义诗词排版环境poem，共7个参数
+% 参数1：可选参数，为*时，加注拼音
+% 参数2：可选参数，卷轴宽度，取\linewidth的倍数，默认值为0.8
+% 参数3：可选参数，卷轴内左右边距，单位为mm，默认值为10
+% 参数4：必选参数，诗词年代
+% 参数5：必选参数，诗词作者
+% 参数6：必选参数，诗词标题
+% 参数7：可选参数，诗词字号(ctex宏集中\zihao{}命令的取值)，默认值为2
+\DeclareTColorBox{poem}{s O{0.8} O{10} m m m !O{2}}{%
+  poem margin={#2}{#3},%
+  poem style,%
+  IfBooleanTF={#1}{
+    before upper={\begin{pinyinscope}%
+        {\zihao{-2}\heiti 《#6》}%
+        \vskip5pt%
+        {\zihao{-4}\fangsong 【#4】\hspace{0.5\ccwd} #5}%
+        \vskip5pt%
+        \zihao{#7}\linespread{1.6}\kaishu\selectfont%
+        % 调整正文字距离
+        \ziju{0.3}%
+      },
+    after upper={\end{pinyinscope}},
+  }{
+    before upper={%
+        {\zihao{-2}\heiti 《#6》}%
+        \vskip5pt%
+        {\zihao{-4}\fangsong 【#4】\hspace{0.5\ccwd} #5}%
+        \vskip5pt%
+        \zihao{#7}\linespread{1.6}\kaishu\selectfont%
+        % 调整正文字距离
+        \ziju{0.3}%
+      },    
+  },  
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\centering
+
+\begin{poem}[1.0][2]{唐}{李白}{将进酒·君不见黄河之水天上来}[-4]
+君不见黄河之水天上来，奔流到海不复回。\\
+君不见高堂明镜悲白发，朝如青丝暮成雪。\\
+人生得意须尽欢，莫使金樽空对月。\\
+天生我材必有用，千金散尽还复来。\\
+烹羊宰牛且为乐，会须一饮三百杯。\\
+岑夫子，丹丘生，将进酒，杯莫停。\\
+与君歌一曲，请君为我侧耳听。\\
+钟鼓馔玉不足贵，但愿长醉不复醒。\\
+古来圣贤皆寂寞，惟有饮者留其名。\\
+陈王昔时宴平乐，斗酒十千恣欢谑。\\
+主人何为言少钱，径须沽取对君酌。\\
+五花马，千金裘，呼儿将出换美酒，与尔同销万古愁。
+\end{poem}
+
+\begin{poem}*[1.0][2]{唐}{李白}{将进酒·君不见黄河之水天上来}[-4]
+君不见黄河之水天上来，奔流到海不复回。\\
+君不见高堂明镜悲白发，朝如青丝暮成雪。\\
+人生得意须尽欢，莫使金樽空对月。\\
+天生我材必有用，千金散尽还复来。\\
+烹羊宰牛且为乐，会须一饮三百杯。\\
+岑夫子，丹丘生，将进酒，杯莫停。\\
+与君歌一曲，请君为我侧耳听。\\
+钟鼓馔玉不足贵，但愿长醉不复醒。\\
+古来圣贤皆寂寞，惟有饮者留其名。\\
+陈王昔时宴平乐，斗酒十千恣欢谑。\\
+主人何为言少钱，径须沽取对君酌。\\
+五花马，千金裘，呼儿将出换美酒，与尔同销万古愁。
+\end{poem}
+
+  % 默认不加注拼音
+  \begin{poem}{现代}{\LaTeX{}er}{赞\textbullet{}\LaTeX{}}
+    娟秀轻爽拉泰赫\\
+    所写所想即所得\\
+    排版何须穷思量\\
+    窈窕俊俏尽婀娜
+  \end{poem}
+  
+  % 使用[py]可选参数加注拼音
+  \begin{poem}*{现代}{\LaTeX{}er}{赞\textbullet{}\LaTeX{}}
+    娟秀轻爽拉泰赫\\
+    所写所想即所得\\
+    排版何须穷思量\\
+    窈窕俊俏尽婀娜
+  \end{poem}
+
+  
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
