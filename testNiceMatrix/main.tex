@@ -1,0 +1,85 @@
+\documentclass[margin=40pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+% 支持中文
+\usepackage{ctex}
+
+\usepackage{makecell}
+
+\usepackage{nicematrix}
+
+\usetikzlibrary{
+%  arrows.meta,      % 箭头形状
+%  shapes.geometric, % 几何形状
+  chains,           % 链式布局
+%  calc,             % 坐标计算
+}
+
+
+\begin{document}
+
+$\begin{pNiceMatrix}[last-row=10, last-col=10]
+1 &         &   &        &        &        &   &        &   &           \\  
+  & \Ddots  &   &        &        &        &   &        &   &           \\
+  &         & 1 &        &        &        &   &        &   &           \\
+  &         &   &    0   & \Cdots &    1   &   &        &   & \cdots{}i \\
+  &         &   & \Vdots & \Ddots & \Vdots &   &        &   &           \\
+  &         &   &    1   & \Cdots &    0   &   &        &   & \cdots{}j \\
+  &         &   &        &        &        & 1 &        &   &           \\
+  &         &   &        &        &        &   & \Ddots &   &           \\  
+  &         &   &        &        &        &   &        & 1 & n\times{}n \\
+  & & & \makecell{\vdots\\i} & & \makecell{\vdots\\j} & & & & 
+\end{pNiceMatrix}$
+
+$\begin{pNiceMatrix}[name=mymatrix, last-col=10]
+1 &         &   &        &        &        &   &        &   &           \\  
+  & \Ddots  &   &        &        &        &   &        &   &           \\
+  &         & 1 &        &        &        &   &        &   &           \\
+  &         &   &    0   & \Cdots &    1   &   &        &   &          \\
+  &         &   & \Vdots & \Ddots & \Vdots &   &        &   &           \\
+  &         &   &    1   & \Cdots &    0   &   &        &   &         \\
+  &         &   &        &        &        & 1 &        &   &           \\
+  &         &   &        &        &        &   & \Ddots &   &           \\  
+  &         &   &        &        &        &   &        & 1 & n\times{}n \\
+%  &         &   &   i    &        &    j   &   &        &   & 
+\end{pNiceMatrix}$
+
+\tikzset{
+  myoptions/.style={
+    baseline,
+    remember picture,
+    overlay,
+    name prefix = mymatrix-,
+    every node/.style = {fill = red!15,
+      blend mode = multiply,
+      inner sep = 0pt
+    }
+  }
+}
+
+\begin{tikzpicture}[myoptions]
+\node[base right = of 4-9] (rowi) {$i$};
+\node[base right = of 6-9] (rowj) {$j$};
+\node[left = of rowi] (lrowi) {};
+\node[left = of rowj] (lrowj) {};
+\node[fill = blue!15,below = of 9-4] (coli) {$i$};
+\node[fill = blue!15,below = of 9-6] (colj) {$j$};
+\draw[red!75,->](rowi)--(lrowi);
+\draw[red!75,->](rowj)--(lrowj);
+\draw[blue!75,->](coli)--(9-4);
+\draw[blue!75,->](colj)--(9-6);
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
