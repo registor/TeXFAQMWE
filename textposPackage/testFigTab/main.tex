@@ -1,0 +1,49 @@
+\documentclass{ctexart}
+
+\usepackage{graphicx}
+\usepackage{mwe}
+
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay]{textpos}
+
+\begin{document}
+% 设定尺寸单位
+\setlength{\TPHorizModule}{\textwidth}
+\setlength{\TPVertModule}{\textwidth}
+  
+使用textpos排版表格如表\ref{tab:test}，排版插图如\ref{fig:test}。
+  
+\begin{textblock}{0.5}(.2,0.5) \vspace{0pt}
+  \begin{table}
+    \centering
+    \caption{test table}\label{tab:test}
+    \begin{tabular}{ccc}
+      \hline            
+      距离 (cm) & 离群点 & 合并离群 \\ \hline
+      % \input{HelioProfile.tex}
+      0 & 0 & 0 \\
+      1 & 0 & 0 \\
+      2 & 5 & 5 \\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{textblock}
+ 
+\begin{textblock}{0.4}(1.0,0.55)
+  \begin{figure}
+    \centering \includegraphics[width=0.6\textwidth]{example-image}
+    \caption{test figure}\label{fig:test}
+  \end{figure}
+\end{textblock}
+
+ % 排版文本框
+ \begin{textblock}{1.5}(0.3,0.30)
+   这是一个测试文本框
+ \end{textblock}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

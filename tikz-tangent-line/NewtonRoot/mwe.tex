@@ -1,0 +1,21 @@
+\documentclass[tikz,border=3mm]{standalone}
+\usetikzlibrary{intersections}
+\begin{document}
+\begin{tikzpicture}[
+  domain=1.5:4.1,
+  samples=101,
+  ]
+  % 绘制命名曲线
+  \draw[blue,thick,name path=graph] plot (\x,{\x^3-7.7*\x^2+19.2*\x-15.5}) node[right] {$f(\mathrm{x})$};
+  %绘制坐标轴
+  \draw[->, name path=x] (0,0) -- (5,0) node[right] {$\mathrm{x}$};
+  \draw[->] (0,-0.5) -- (0,3.5) node[left] {$\mathrm{y}$};
+  %绘制??直线, 0|-current bounding box.south的语法是什么意思？
+  \path[draw, black](4, 0|-current bounding box.south) -- (4,0|-current bounding box.north); 
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

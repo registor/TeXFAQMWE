@@ -1,0 +1,70 @@
+% 摘录自https://tex.stackexchange.com/questions/197704/aligning-tangents-of-graphs/198046#198046
+\documentclass[border=5mm]{standalone}  
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.10}
+\usetikzlibrary{intersections}
+
+\makeatletter
+\def\parsenode[#1]#2\pgf@nil{%
+    \tikzset{label node/.style={#1}}
+    \def\nodetext{#2}
+}
+
+\tikzset{
+    add node at x/.style 2 args={
+        name path global=plot line,
+        /pgfplots/execute at end plot visualization/.append={
+                \begingroup
+                \@ifnextchar[{\parsenode}{\parsenode[]}#2\pgf@nil
+            \path [draw,name path global = position line #1-1]
+                ({axis cs:#1,0}|-{rel axis cs:0,0}) --
+                ({axis cs:#1,0}|-{rel axis cs:0,1});
+            \path [draw,xshift=1pt, name path global = position line #1-2]
+                ({axis cs:#1,0}|-{rel axis cs:0,0}) --
+                ({axis cs:#1,0}|-{rel axis cs:0,1});
+            \path [
+                name intersections={
+                    of={plot line and position line #1-1},
+                    name=left intersection
+                },
+                name intersections={
+                    of={plot line and position line #1-2},
+                    name=right intersection
+                },
+                label node/.append style={pos=1}
+            ] (left intersection-1) -- (right intersection-1)
+            node [label node]{\nodetext};
+            \endgroup
+        }
+    }
+}
+\makeatother
+
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}[%
+      xmin = 0, xmax = 3.25,
+      ymin = 0,
+      domain=0:3,
+      samples=50,
+      tangent/.style={
+            add node at x={#1}{
+                [
+                    sloped, 
+                    append after command={(\tikzlastnode.west) edge [thick, red!75!black] (\tikzlastnode.east)},
+                    minimum width=4cm
+                ]
+            }      
+      }
+      ]%
+    \addplot [gray, tangent=1, tangent=2] {ln(3*(3-x)+1)};
+    %\addplot [gray, tangent=1] {ln(9*x^2+6*x+1)};
+    %\addplot [gray, tangent=1] {ln(9*x^2+6*x+1)+ln(3*(3-x)+1)};
+  \end{axis}%
+\end{tikzpicture}%
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

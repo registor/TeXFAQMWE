@@ -1,0 +1,98 @@
+\documentclass[margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, calc}
+
+% 求两个路径交点
+% #1 第1路径名称
+% #2 第2路径名称
+% #3 交点名称，同时定义了一个全局宏\InterNb记录了交点总数
+\newcommand{\intersec}[3]{%
+  \path[name intersections={of=#1 and #2, by=#3, sort by=#1,total=\t}]
+  \pgfextra{\xdef\internb{\t}};
+}
+
+% 求路径上指定点的切线的两个端点
+% #1 路径名称
+% #2 路径上指定点名称
+% #3 端点1名称
+% #4 端点2名称
+% 原理，用#2点附件(1pt)的一段直线微元表示切线
+\newcommand{\tanterms}[4]{
+  % 过#2点的垂线
+  \path[name path = l](#2|-current bounding box.south) -- (#2|-current bounding box.north);  
+  % 将过#2点的垂线水平偏移1pt
+  \coordinate (rd) at ($(#2) + (1pt, 0)$);% 可以考虑使用sp为单位，精度更高
+  \path[name path = r](rd|-current bounding box.south) -- (rd|-current bounding box.north);
+  % 求路径#1与路径l的交战，并记为#3
+  \intersec{#1}{l}{#3}
+  % 求路径#1与路径r的交战，并记为#4
+  \intersec{#1}{r}{#4}
+}
+
+  
+
+
+\begin{document}
+\begin{tikzpicture}[
+  domain=1.5:4.1,
+  samples=101,
+  ]
+  % 绘制命名曲线
+  \draw[blue,thick, name path=graph] plot (\x,{\x^3-7.7*\x^2+19.2*\x-15.5}) node[right] {$f(x)$};
+  % 绘制x轴和y轴
+  \draw[->, name path=x] (0,0) -- (5,0) node[right] {$x$};
+  \draw[->] (0,-0.5) -- (0,3.5) node[left] {$y$};
+
+  % 绘制根的真值点
+  \fill[fill=black, name intersections={of=graph and x}]
+  (intersection-3) circle[radius = 0.02cm] node[red, scale = 0.6,
+  left, shift={(4pt, 3pt)}, font=\tiny]{$x^*$};
+
+  % 绘制起始点
+  \fill[fill = black] (4, 0) coordinate (xs) circle[radius = 0.02cm] node[scale = 0.5, shift={(2pt, 0)},below, font = \tiny] {$x_{0}$};
+
+  % 通过循环绘制3次迭代结果
+  \foreach \X/\clr in {1/red, 2/green, 3/violet}
+  {
+    % 调整x轴点标记y方向偏移
+    \ifodd\X
+      \xdef\yoff{-3pt}
+    \else
+      \xdef\yoff{0pt}
+    \fi
+    
+    % 过xs的垂线与曲线graph的交点
+    \path[name path=v](xs|-current bounding box.south) -- (xs|-current bounding box.north);
+    \intersec{graph}{v}{fx}
+    \pgfmathsetmacro{\fxn}{int(\X-1)}
+    \fill[fill = black] (fx) circle[radius = 0.02cm] node[scale = 0.6, left, shift={(2pt,3pt)}, font = \tiny] {$f(x_{\fxn})$};
+
+    % 求切线端点
+    \tanterms{graph}{fx}{li}{ri}
+    % 定义切线路径，对得到的切线微元进行延长
+    % 延长倍数和方向需要手动调整(需要改进)
+    \path[name path=t](ri)--($(ri)!12!(li)$);
+    \intersec{t}{x}{tx}
+    \fill[fill = black] (tx) circle[radius = 0.02cm] node[scale = 0.5, shift={(2pt, \yoff)}, below, font = \tiny] {$x_{\X}$};
+    % 绘制切线和垂线
+    \draw[\clr, dashed] (fx)--(tx) (fx)--(xs);
+
+    % 下一次迭代
+    \coordinate (xs) at (tx);
+  }
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

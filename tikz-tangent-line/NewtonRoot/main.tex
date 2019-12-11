@@ -1,0 +1,85 @@
+% 摘录自https://tex.stackexchange.com/questions/515625/draw-derivative-tangent-at-specific-point-in-tikz
+\documentclass[tikz,border=3mm]{standalone}
+
+\usepackage{ctex}% 支持中文
+
+\usetikzlibrary{intersections, calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  domain=1.5:4.1,
+  samples=101,
+  pics/tangent at/.style={
+    code={
+      \path[name path=l] (#1 - 1pt,0|-current bounding box.south) -- (#1 - 1pt,0|-current bounding box.north);
+      \path[name path=r] (#1 + 1pt,0|-current bounding box.south) -- (#1 + 1pt,0|-current bounding box.north);
+      \path[pic actions,
+        %name path=t,
+        name intersections={of=\pgfkeysvalueof{/tikz/tangent pic/graph name} and l,by=li},
+        name intersections={of=\pgfkeysvalueof{/tikz/tangent pic/graph name} and r,by=ri}
+        ] (li) -- (ri);
+    }
+  },  
+  tangent pic/.cd,
+  graph name/.initial=graph
+  ]
+
+  % 绘制命名曲线
+  \draw[blue,thick,name path=graph] plot (\x,{\x^3-7.7*\x^2+19.2*\x-15.5}) node[right] {$f(\mathrm{x})$};
+
+  % 绘制辅助网格线
+  % \draw[very thin,gray] (-1,-3) grid (10,10);
+  % 绘制x轴和y轴
+  \draw[->, name path=x] (0,0) -- (5,0) node[right] {$\mathrm{x}$};
+  \draw[->] (0,-0.5) -- (0,3.5) node[left] {$\mathrm{y}$};
+
+  % 绘制真值点
+  \fill[fill=black, name intersections={of=graph and x}]
+  (intersection-3) circle[radius = 0.015cm] node[above, font=\tiny,xshift=-0.2cm]{$x^*$};
+
+  % 绘制切线
+  \newdimen\dx
+  
+  \fill[fill = black] (4, 0) coordinate (xs) circle[radius = 0.015cm] node[below, font = \tiny] {$x_{1}F$};  
+  \pgfpointanchor{xs}{center}
+  \pgfextractx{\dx}{xs}
+  \path pic{tangent at=\dx};
+  \path[name path=t](ri)--($(ri)!10!(li)$);
+  \path[name path=v] (\dx, 0|-current bounding box.south) -- (\dx, 0|-current bounding box.north);
+  
+  \fill[fill = black,name intersections={of=t and x, by=tx}] (tx) circle[radius = 0.015cm] node[below,
+  font = \tiny] {$x_{2}$};
+  \fill[fill = black,name intersections={of=v and graph, by=fx}] (fx) circle[radius = 0.015cm] node[left,
+  font = \tiny] {$f(x_{1})$};
+  \draw[red, dashed] (fx)--(tx) (fx)--(xs);
+
+  \pgfpointanchor{tx}{center}
+  \pgfextractx{\dx}{tx}
+
+  % \path[draw,green,name path=l] (\dx - 1pt,0|-current bounding
+  % box.south) -- (\dx - 1pt,0|-current bounding box.north);
+  % \path[draw,green,name path=r] (\dx + 1pt,0|-current bounding
+  % box.south) -- (\dx + 1pt,0|-current bounding box.north);
+ 
+  \path pic{ tangent at=\dx};
+  \path[name path=t](ri)--($(ri)!10!(li)$);
+  \path[name path=v] (\dx, 0|-current bounding box.south) -- (\dx, 0|-current bounding box.north);
+  
+  %\fill[fill = black] (\dx, 0) coordinate (xs) circle[radius = 0.015cm] node[below, font = \tiny] {$x_{3}$}; 
+  \fill[fill = black, name intersections={of=t and x, by=tx}] (tx) circle[radius = 0.015cm] node[below,
+  font = \tiny] {$x_{3}$};
+  \fill[fill = black, name intersections={of=v and graph, by=fx}] (fx) circle[radius = 0.015cm] node[left,
+  font = \tiny] {$f(x_{2})$};
+
+  \draw[green, dashed] (fx)--(tx) (fx)--(\dx, 0);
+
+  \path[draw, black] (4, 0|-current bounding box.south) -- (4,0|-current bounding box.north);
+  
+
+  
+\end{tikzpicture}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

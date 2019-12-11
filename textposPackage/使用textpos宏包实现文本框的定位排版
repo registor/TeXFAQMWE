@@ -1,0 +1,122 @@
+使用textpos宏包实现文本框的定位排版
+
+在LaTeX的实际使用中，有时需要将指定大小的文本框定位于页面的指定位置进行排版，如编排学术海报、填写由其它工具转换后的PDF格式的表格、为已有PDF文件添加文本、在Beamer演示文稿中点缀帧页面等。此时，可以使用`textpos`宏包实现这一需求。
+
+## textpos宏包
+`textpos`宏包是一个用于在LaTeX页面中指定的绝对位置排版文本框，该宏包仅提供了一个`textblock`环境用于在指定位置排版由文本、插图、表格或其它任何排版内容构成的文本框。
+
+```tex
+\begin{textblock}{<hsize>}(<hpos>, <vpos>)
+text...
+\end{textblock}
+```
+其中，`<hsize>`表示文本框宽度，`<hpos>`和`<vpos>`表示文本框坐标，注意此处用的是`()`小括号。
+
+`textpos`宏包既可以工作于相对坐标模式，也可以工作于绝对坐标模式。相对坐标模式是默认的工作模式，在该模式中，`textblock`环境的位置坐标参数相对于当前页面的当前“锚点”位置进行排版。在绝对坐标模式中，`textblock`环境的位置坐标参数相对于当前页面的“左上角”位置进行排版。
+
+## textpos宏包排版样例
+### 在普通页面中插入文本框
+```tex
+\documentclass{ctexart}
+
+\usepackage{zhlipsum}
+\usepackage{xcolor}
+
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay]{textpos}
+
+\begin{document}
+\zhlipsum[1]
+ 
+% 设定尺寸单位
+\setlength{\TPHorizModule}{\textwidth}
+\setlength{\TPVertModule}{\textwidth}
+ 
+% 排版文本框
+\begin{textblock}{1.0}(0.3,0.30)
+  \textblockcolour{red!30}% 设置背景颜色
+  这是一个测试文本框
+\end{textblock}
+
+\end{document}
+```
+
+### 在textpos文本框中使用浮动体
+```tex
+\documentclass{ctexart}
+
+\usepackage{graphicx}
+\usepackage{mwe}
+
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay]{textpos}
+
+\begin{document}
+% 设定尺寸单位
+\setlength{\TPHorizModule}{\textwidth}
+\setlength{\TPVertModule}{\textwidth}
+  
+使用textpos排版表格如表\ref{tab:test}，排版插图如\ref{fig:test}。
+  
+\begin{textblock}{0.5}(.2,0.5) \vspace{0pt}
+  \begin{table}
+    \centering
+    \caption{test table}\label{tab:test}
+    \begin{tabular}{ccc}
+      \hline            
+      距离 (cm) & 离群点 & 合并离群 \\ \hline
+      % \input{HelioProfile.tex}
+      0 & 0 & 0 \\
+      1 & 0 & 0 \\
+      2 & 5 & 5 \\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{textblock}
+ 
+\begin{textblock}{0.4}(1.0,0.55)
+  \begin{figure}
+    \centering \includegraphics[width=0.6\textwidth]{example-image}
+    \caption{test figure}\label{fig:test}
+  \end{figure}
+\end{textblock}
+
+ % 排版文本框
+ \begin{textblock}{1.5}(0.3,0.30)
+   这是一个测试文本框
+ \end{textblock}
+
+\end{document}
+```
+
+### 在Beamer的frame中插入文本框
+```tex
+\documentclass{ctexbeamer}
+
+\usepackage{graphicx}
+\usepackage{mwe}
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay, showboxes]{textpos}
+
+\begin{document}
+\begin{frame}{TextPos宏包}{测试样例}
+
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{example-image}
+ \end{center}
+ 
+ % 设定尺寸单位
+ \setlength{\TPHorizModule}{\textwidth}
+ \setlength{\TPVertModule}{\textwidth}
+ 
+ % 排版文本框
+ \begin{textblock}{0.33}(0.8,0.05)
+   这是一个测试文本框
+ \end{textblock}
+\end{frame}
+\end{document}
+```
+
+有关`textpos`宏包的使用细节，请在命令行输入`texdoc textpos`查阅其使用说明书。
+
+Happy LaTeXing!

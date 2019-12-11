@@ -1,0 +1,27 @@
+\documentclass{ctexart}
+
+\usepackage{zhlipsum}
+\usepackage{xcolor}
+
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay]{textpos}
+
+\begin{document}
+\zhlipsum[1]
+ 
+% 设定尺寸单位
+\setlength{\TPHorizModule}{\textwidth}
+\setlength{\TPVertModule}{\textwidth}
+ 
+% 排版文本框
+\begin{textblock}{1.0}(0.3,0.30)
+  \textblockcolour{red!30}% 设置背景颜色
+  这是一个测试文本框
+\end{textblock}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,29 @@
+\documentclass{ctexbeamer}
+
+\usepackage{graphicx}
+\usepackage{mwe}
+% 注意需要使用overlay参数
+\usepackage[absolute,overlay, showboxes]{textpos}
+
+\begin{document}
+\begin{frame}{TextPos宏包}{测试样例}
+
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{example-image}
+ \end{center}
+ 
+ % 设定尺寸单位
+ \setlength{\TPHorizModule}{\textwidth}
+ \setlength{\TPVertModule}{\textwidth}
+ 
+ % 排版文本框
+ \begin{textblock}{0.33}(0.8,0.05)
+   这是一个测试文本框
+ \end{textblock}
+\end{frame}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
