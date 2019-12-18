@@ -1,0 +1,23 @@
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+  \draw plot[smooth,samples=200,domain=-3:3] (\x,{pow(abs(\x), 2/3)})node[right, black] {$y=x^{\frac{2}{3}}$};
+  \draw[-latex] (-3.25,0)--(4.25,0) node[below] {$x$};
+  \draw[-latex] (0,-0.2)--(0,3.5) node[left] {$y$};  
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

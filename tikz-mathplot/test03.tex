@@ -1,0 +1,27 @@
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}
+  \draw[scale=0.5,domain=-3:3, smooth, variable=\x,blue] plot ({\x}, {\x*\x});
+  \draw[scale=0.5,domain=-3:3, smooth, variable=\y,red] plot ({\y*\y}, {\y});
+  \draw[->] (-3,0) -- (4.2,0) node[right] {$x$};
+  \draw[->] (0,-3) -- (0,4.2) node[above] {$y$};
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

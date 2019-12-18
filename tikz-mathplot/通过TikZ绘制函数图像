@@ -1,0 +1,185 @@
+通过TikZ绘制函数图像
+
+实际工作中，往往需要绘制指定函数的图像，在LaTeX中，这一需求可以通过TikZ实现。本文将以“LaTeX技术交流2群(478023327)”中的一个x^(2/3)函数图像绘制问题为例，简要说明如何通过TikZ绘制函数图像的方法。
+
+## 使用pgfplots宏包绘制
+pgfplots宏包是一个基于TiKZ开发的，擅长绘制数据生成的图和函数图像的宏包。可以参考[PGFPlots绘图简易教程](https://www.latexstudio.net/archives/9400.html "PGFPlots绘图简易教程")了解其基本使用方法，也可以在命令行通过`texdoc pgfplots`查看其使用说明书，以掌握其使用细节。
+
+x^(2/3)函数图像绘制实例如下：
+
+```tex
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}[
+    xlabel={$x$},
+    ylabel={$y$},
+    axis lines=middle,
+    samples=200,
+    grid,
+    thick,
+    domain=-4:4,
+    legend pos=outer north east,
+    smooth,
+    ]
+    \addplot+[no marks]{abs(x)^(2/3)};
+    \addlegendentry{$f(x^{\frac{2}{3}})$}
+  \end{axis}
+\end{tikzpicture}
+\end{document}
+```
+
+该代码的绘制结果：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201912/21a776e36f18044.png" width=80% />
+</center>
+
+## 使用TikZ的`\draw[...]plot(...)`命令绘制
+`\draw[...]plot(...)`是TikZ中函数绘制的原生命令，使用中需要注意：默认的TikZ使用的是度数，而不是弧度，如果需要使用弧度作图。可以通过在命令行输入`texdoc tikz`查看其使用说明书第22节“22 Plots of Functions”，以了解其使用细节。
+
+x^(2/3)函数图像绘制实例如下：
+
+```tex
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+  \draw plot[smooth,samples=200,domain=-3:3] (\x,{pow(abs(\x), 2/3)})node[right, black] {$y=x^{\frac{2}{3}}$};
+  \draw[-latex] (-3.25,0)--(4.25,0) node[below] {$x$};
+  \draw[-latex] (0,-0.2)--(0,3.5) node[left] {$y$};  
+\end{tikzpicture}
+\end{document}
+```
+
+该代码的绘制结果：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201912/3d1fbb4036b3a9c.png" width=80% />
+</center>
+
+另外，使用该方式，也可以通过`\draw`命令的`variable`可选参数指定自变量，如：
+```tex
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+  \draw[scale=0.5,domain=-3:3, smooth, variable=\x,blue] plot ({\x}, {\x*\x});
+  \draw[scale=0.5,domain=-3:3, smooth, variable=\y,red] plot ({\y*\y}, {\y});
+  \draw[->] (-3,0) -- (4.2,0) node[right] {$x$};
+  \draw[->] (0,-3) -- (0,4.2) node[above] {$y$};
+\end{tikzpicture}
+\end{document}
+```
+
+该代码的绘制结果：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201912/91b4dd9a49fd547.png" width=80% />
+</center>
+
+## 使用tikzpicture环境的`declare function`可选参数定义函数
+为简化`\draw`命令中的代码或是构造更为复杂的函数关系，可以使用tikzpicture环境的`declare function`可选参数，通过定义函数来实现。
+
+x^(2/3)函数图像绘制实例如下：
+
+```tex
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\begin{document}
+\begin{tikzpicture}[declare function={f(\x)=pow(abs(\x), 2/3);}]
+  \draw plot[smooth,samples=200,domain=-3:3] (\x,{f(\x)})node[right,black] {$y=x^{\frac{2}{3}}$};
+  \draw[-latex] (-3.25,0)--(4.25,0) node[below] {$x$};
+  \draw[-latex] (0,-0.2)--(0,3.5) node[left] {$y$};  
+\end{tikzpicture}
+\end{document}
+```
+
+该代码的绘制结果：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201912/e4b1cd57f5ff265.png" width=80% />
+</center>
+
+## 结合`pgfplots`宏包和`declare function`绘制3D复杂函数图像
+
+也可以通过结合`pgfplots`宏包和`declare function`自定义函数，通过`\addplot3[surf]`命令绘制3D复杂函数图像，如：
+
+```tex
+\documentclass[tikz,
+  margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\begin{document}
+% 代码摘录于：https://tex.stackexchange.com/questions/124878/declare-function-for-tikzpicture
+\begin{tikzpicture}[
+  declare function={
+    Nprime(\x)                 = 1/(sqrt(2*pi))*exp(-0.5*(pow(\x,2))); 
+    d2(\x,\y,\KK,\RR,\SIG)     = (ln(\x/\KK)+(\RR-(pow(\SIG,2)/2)*\y))/(\SIG*(sqrt(\y)));
+    myfun(\x,\y,\KK,\RR,\SIG)  = exp(-\RR*\y)*Nprime(d2(\x,\y,\KK,\RR,\SIG))/(\x*\SIG*sqrt(\y));
+  },
+  ]
+  \begin{axis}[
+    y domain=0.01:0.3,
+    domain=95:105,
+    view={150}{20}
+    ]
+    \addplot3[surf] {myfun(x,y,100,0,0.09)};
+  \end{axis}
+\end{tikzpicture}
+\end{document}
+```
+
+该代码的绘制结果：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/201912/a8e295b6765f72a.png" width=80% />
+</center>
+
+综上所述，可见使用TikZ可以较为方便地实现各类函数图像的绘制。
+
+在实际应用中，由于TikZ函数作图当作图范围变大的时候(比如成百上千)，经常会遇到范围过大的提示，需手动修改缩放(X与Y轴缩放)，较为不便。如果结合pgfplots宏包提供的各项功能，则可以较为方便的实现各类函数图像的绘制。
+
+Happy LaTeXing!
