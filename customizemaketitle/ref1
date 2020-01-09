@@ -1,0 +1,32 @@
+https://tex.stackexchange.com/questions/487688/custom-maketitle-definition-in-report
+
+\maketitle is not a core command; it is defined in each classes. In article, it is defined differently from in report or book.
+
+So why don't you redefine \maketitle directly? No need of redefining \@maketitle.
+
+Btw to keep the formatting, i.e. apply \raggedright for only the title, you need to place the whole thing inside a group.
+
+\documentclass[a4paper,12pt]{report} % Not a4paper12pt
+\usepackage{geometry}
+
+\makeatletter         
+\renewcommand\maketitle{
+{\raggedright % Note the extra {
+\begin{center}
+{\Huge \bfseries \sffamily \@title }\\[4ex] 
+{\Large  \@author}\\[4ex] 
+\@date\\[8ex]
+\end{center}}} % Note the extra }
+\makeatother
+
+\usepackage{lipsum}
+\begin{document}
+
+\title{Report}
+\author{Author}
+\date{Septembre 2013}
+
+\maketitle
+
+\lipsum[1]
+\end{document}

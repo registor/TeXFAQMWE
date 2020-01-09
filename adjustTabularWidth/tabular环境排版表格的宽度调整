@@ -1,0 +1,296 @@
+tabular表格的宽度调整
+
+在使用tabular环境排版表格时，有时可能会由于表格列数过多，或是列宽过宽，从而造成整个表格会超出页面的现象。此时，可以采用列间距调整、表格缩放、字号调整、表格拆分等方法对表格进行调整，以适应页面宽度。
+
+## 表格列间距调整
+可以采用类似`\setlength\tabcolsep{1pt}`或`\addtolength{\tabcolsep}{-5pt}`的命令，通过调整`\tabcolsep`长度值统一调整一个表格的列间距，如：
+```tex
+\documentclass{ctexart}
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \setlength\tabcolsep{1pt}% 调整列间距
+  %\addtolength{\tabcolsep}{-5pt}% 调整列间距
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}
+```
+长度`\tabcolsep`的默认值是6pt，可以根据需要调整为合适的大小，采用这一方法将一次性调整所有列的列间距。
+
+如果需要单 独调整某一列的列间距，则可使用`@{\hspace{<desired separation>}`在列前或列后插入合适的间距值，如：
+
+```tex
+\documentclass{ctexart}
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \begin{tabular}{*{5}{|@{\hspace{1pt}}c@{\hspace{1pt}}}*{4}{@{}c@{}|}}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}
+```
+
+其中，前5列的前后间距分别为1pt，后4列的前后间距分别为0pt。
+
+## 表格缩放
+可以使用`\scalebox`命令，对表格进行缩放，以满足页面宽度需求，如：
+```tex
+\documentclass{ctexart}
+
+\usepackage{graphicx}% 提供scalebox、resizebox命令
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \scalebox{0.75}{
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+  }
+\end{table}
+
+\end{document}
+```
+使用`\scalebox`命令，可能需要不断调整缩放参数，以得到合适的大小。
+
+也可以使用`\resizebox`命令，对表格进行缩放，如：
+```tex
+\documentclass{ctexart}
+
+\usepackage{graphicx}% 提供scalebox、resizebox命令
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \resizebox{\textwidth}{!}{%	
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+  }
+\end{table}
+
+\end{document}
+```
+使用`\resizebox`命令，可直接将表格缩放为页面文字宽度大小。
+
+采用缩放的方式调整表格大小，可能会带来表格文字与其它表格及正文文字**字号的不协调**。
+
+## 字号调整
+
+可以通过在局部调整表格字号，以减小表格的宽度，如：
+```tex
+\documentclass{ctexart}
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \scriptsize% 调整表格字号(不建议使用类似\zihao{5}这样的绝对字号大小命令)
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}
+```
+
+需要注意的是，如果没有table环境，在完成表格字号调整后，为了不影响其它文本的字号，应该使用`\normalsize`命令将字号设置回正常值。当然，也可以将类似`\scriptsize`字号命令及表格整体置于center等环境中，或是用`\begingroup`和`\endgroup`限定字号命令的作用范围。
+
+当然，也可以使用`array`宏包提供的`>{}`列格式控制命令直接指定列字号，如：
+
+```tex
+\documentclass{ctexart}
+
+\usepackage{array}% 提供列格式控制命令
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{*{9}{|>{\scriptsize}c|}}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}
+```
+显然，采用`array`宏包的列格式控制命令，可以更加灵活地控制各列的格式。
+
+不过，这样的局部表格字号更改也会造成与其它字号大小的不一致，为此，可以对文章中所有表格设置为统一字号，可以参考[LaTeX 技巧 957：一个命令改变全文表格字号](https://www.latexstudio.net/archives/51701.html "LaTeX 技巧 957：一个命令改变全文表格字号")中给出的方法，通过`etoolbox`宏包提供的对LaTeX命令及环境打补丁的方式，实现所有表格字号的统一修改，如：
+```tex
+\documentclass{ctexart}
+
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{tabular}{\scriptsize}% 调整表格字号(建议用相对字号)
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \caption{激光器规格}\label{tab:Laser_Specs}
+  \begin{tabular}{*{9}{|c}|}
+    \hline
+    Wave-&        &           & Emmitter & Manu- & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer & (mW) & (mA) &  (mA) & (V)\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo & 50--70 & 70 & 35 & 4.8\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram & 50--90 & 120 & 30 & 5.5\\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi & 90--100 & 150 & 50 & 2.7\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo & 30--50 & 80 & 40 & 3.8\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\end{document}
+```
+
+## 表格拆分
+
+显然，前述调整列间距的方法会造成表格的拥挤，而采用缩放和字号调整，都会造成字号与全文的不一致。
+
+另外，从方便读者的角度来讲，也不应该让表格过于冗长和复杂，因此，将大的表格进行简单化拆分，也是一个不错的选择，比如前例中的表格，可以拆分成两个表格：
+```tex
+\documentclass{ctexart}
+ 
+\begin{document} 
+\noindent 左边界 \hfill 右边界 % 边界参照
+
+\begin{table}[!htbp]
+  \centering
+  \caption{激光器型号及厂家}\label{tab:Laser_Specs1}
+  \begin{tabular}{*{5}{|c}|}
+    \hline
+    Wave-&        &           & Emmitter & Manu-\\[-3pt]% 压缩行高
+    length& Model &    Package & type &  facturer\\
+    \hline
+    405 & DL-7386-101HG & TO-56 & single & sanyo\\
+    \hline
+    450 & PL 450 & TO-38 & single & osram \\
+    \hline
+    638 & ML520G54 & TO-56 & single & mitsubishi\\
+    \hline
+    655 &  DL-5147-242 & TO-56 & single & sanyo\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+	\centering
+	\caption{激光器电气参数}\label{tab:Laser_Specs2}
+	\begin{tabular}{*{6}{|c}|}
+		\hline
+		Wave-&        & Power & Iop & Ith  & Vop \\[-3pt]% 压缩行高
+		length& Model & (mW) & (mA) &  (mA) & (V)\\
+		\hline
+		405 & DL-7386-101HG & 50--70 & 70 & 35 & 4.8\\
+		\hline
+		450 & PL 450 & 50--90 & 120 & 30 & 5.5\\
+		\hline
+		638 & ML520G54 & 90--100 & 150 & 50 & 2.7\\
+		\hline
+		655 &  DL-5147-242 & 30--50 & 80 & 40 & 3.8\\
+		\hline
+	\end{tabular}
+\end{table}
+
+\end{document}
+```
+
+以上是几种不同的表格宽度处理方式，如有不妥之处，还望各位网友及时批评指正。
+
+当然，除了以上这几个方法外，还可以使用`tabularx`、`landscape`等宏包对表格进行处理。
+
+
+Happy LaTeXing!

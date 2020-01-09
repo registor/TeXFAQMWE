@@ -1,0 +1,142 @@
+https://tex.stackexchange.com/questions/216098/redefine-maketitle
+
+redefine \maketitle
+
+As you indicated you have no clue where your \maketitle is defined. Lets take TeX to find out the definition:
+
+Replace
+
+\maketitle          % Use the \author, \title and \date info
+with
+
+\meaning\maketitle
+This line will give you the definition of \maketitle currently in effect. Chances are high that this will result in some bookkeeping operations and then calling another macro, often called \@maketitle or similar as in WChargin's answer. We thus have to find out what \@maketitle (or however it is called) does. So add
+
+\makeatletter\meaning\@maketitle\makeatother
+The \makeatletter ... \makeatother-pair is necessary to make LaTeX cope with the @ in \@maketitle.
+
+With this information you can proceed as described win WChargin's answer. Lets assume you get the definition WChargin posted you could alter it as below (adding \makeatletter ... \makeatother again because of the @)
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    %{\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+You will observe that this is exactly equivalent to what WChargin wrote.
+
+Well, the simplest way to do this is
+
+\date{}
+which will use an empty date. But there will be an extra space.
+
+I don't have your style file, so I'll use article as an example. To find the definition of \maketitle, you could either execute \show\maketitle from an interactive TeX run, or you could look it up in the style file. (The latter is probably better because you get nicer formatting.) From article.cls (line 213):
+
+\newcommand\maketitle{\par
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@maketitle
+      \else
+        \twocolumn[\@maketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    \fi
+    \thispagestyle{plain}\@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+From this, we can see that it's the \@maketitle command that does the actual typesetting. That's defined on the next line.
+
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\fi
+So you can just redefine it, remove the line you don't want, and you're done.
+
+MWE
+\documentclass{article}
+
+\makeatletter
+    \def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    %\vskip 1em%
+    %{\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\fi
+\makeatother
+
+\title{MWE}
+\author{You}
+\date{Today}
+
+\begin{document}
+\maketitle
+Hello, world!
+\end{document}
+
+
+btw是by the way的缩写，意思是：顺便说一下；ps是postscript的缩写，意思是：备注一下，额外说一点。
+
+
