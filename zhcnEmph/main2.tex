@@ -1,0 +1,74 @@
+\documentclass{ctexart}
+
+\usepackage{expl3}
+\usepackage{etoolbox}
+
+% 声中文明强调字体及强调方式
+% 用\bfseries表示强调
+\makeatletter
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CJKunderline{#1}}}% 用下划线表示强调中的强调
+    {\@textemph{#1}}%
+}
+\makeatother
+
+% 重新定义\emph强调命令
+% 参考：https://tex.stackexchange.com/questions/13048/upright-parentheses-in-italic-text?rq=1
+\ExplSyntaxOn
+\cs_new_eq:Nc \emph_old:n { emph~ } % 备份`\emph`命令
+\cs_new_protected:Npn \emph_braces:n #1 % 排版括号为直立符号
+{ \mode_if_math:TF {#1} { \textup{#1} } }
+
+\cs_new:Npn \emph_new:n #1 {
+  \tl_set:Nn \l_emph_tl {\textem{#1}}% 中文强调时用黑体
+  \tl_replace_all:Nnn \l_emph_tl {(}{\emph_braces:n{(}}% 替换(为直立
+  \tl_replace_all:Nnn \l_emph_tl {)}{\emph_braces:n{)}}% 替换)为直立
+  \tl_replace_all:Nnn \l_emph_tl {[}{\emph_braces:n{[}}% 替换[为直立
+  \tl_replace_all:Nnn \l_emph_tl {]}{\emph_braces:n{]}}% 替换]为直立
+  \exp_args:NV \emph_old:n \l_emph_tl
+}
+\RenewDocumentCommand {\emph} {sm} {% \emph*是原命令，\emph为重新定义的命令
+  \IfBooleanTF {#1} {\emph_old:n {#2}} {\emph_new:n {#2}}
+}
+\ExplSyntaxOff
+
+\begin{document}
+采用\verb|\bfseries|粗体表示强调，而不是采用\emph*{italic}字形表示强调。
+
+
+用下划线表示强调中的强调。
+
+在强调内容中，如果存在\verb|(、)、[、]|，则不使用\emph*{italic}体。
+
+如：
+
+\emph{欢迎}来到\LaTeX 世界！
+
+\emph{Welcome} to \LaTeX World！
+
+\emph{\emph{欢迎}来到\LaTeX 世界！}
+
+\emph{\emph{Welcome} to \LaTeX (World)！}
+
+如果需要使用原始强调命令，则使用\verb|\emph*|命令，如
+
+\emph*{欢迎}来到\LaTeX 世界！
+
+\emph*{Welcome} to \LaTeX World！
+
+\emph*{\emph*{欢迎}来到\LaTeX 世界！}
+
+\emph*{\emph*{Welcome} to \LaTeX (World)！}
+
+对数学公式，则没有影响，如：
+
+some math \emph{\((x+y)^2\) and text (again)}.
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

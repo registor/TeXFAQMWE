@@ -1,0 +1,54 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+\usepackage{expl3}
+
+\ExplSyntaxOn
+\cs_new_eq:Nc \emph_old:n { emph~ } % Copying the old definition of
+% `\emph`
+\NewDocumentCommand{\emphold} {m} {
+  \emph_old:n {#1}
+}
+\ExplSyntaxOff
+
+% 导言区，可以在此引入必要的宏包
+\usepackage{etoolbox}
+% 重定义强调字体的代码，解决默认强调字体是italic，此时中文会用楷体代替
+% 的问题，在此设置为加粗，注意需要使用etoolbox宏包
+\makeatletter
+\let\origemph\emph
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CJKunderline{#1}}}
+    {\@textemph{#1}}%
+  }
+  
+\RenewDocumentCommand\emph{s o m}{%
+  \IfBooleanTF{#1}
+    {\textem{#3}}
+    {\IfNoValueTF{#2}
+      {\textem{#3}\index{#3}}
+      {\textem{#3}\index{#2}}%
+    }%
+    
+  }   
+}
+\makeatother  
+
+\begin{document} %在document环境中撰写文档
+%\emph{你说这是什么\emph{欢迎}来到\LaTeX 世界！}
+
+\emph{欢迎}%来到\LaTeX 世界！
+
+我是一个\emph*{说}故事的人
+
+\emph{你说这是什么\emph{欢迎}来到\LaTeX 世界！}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

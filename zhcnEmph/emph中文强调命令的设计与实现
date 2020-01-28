@@ -1,0 +1,148 @@
+`\emph`中文强调命令的设计与实现
+
+在LaTeX中，使用`\emph`命令将参数中的文字变为意大利字形(italic)表示强调，如果在本身已经用`\emph`命令强调的文字内部嵌套使用`\emph`命令，则在内部使用直立字形表示强调。对于英文等西方文本，这种强调方式是比较直观的。但是，由于中文没有意大利字形(italic)，往往会用楷体(伪斜体)替换意大利字形(italic)，而中文排版中，正文常常使用宋体，这往往会造成强调不够突出的现象。
+
+为此，可以重新定义新的`\emph`命令，用`\bfseries`粗体表示强调，用下划线表示强调中的强调。这样，对于有粗体的中文字体则使用加粗字体，对于无粗体的字体，则会用黑体进行代替。从而使中文排版中的强调内容更为突出，以符合中文排版的基本要求。
+
+## `\emph`命令重定义
+采用如下代码重定义`\emph`命令，则能够使用`\bfseries`粗体表示强调。
+
+```tex
+\usepackage{etoolbox}
+% 重定义强调字体的代码，解决默认强调字形是italic，此时中文会用楷体代替
+% 的问题，在此设置为加粗，注意需要使用etoolbox宏包
+\makeatletter
+\let\origemph\emph
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CJKunderline{#1}}}
+    {\@textemph{#1}}%
+  }
+  
+\RenewDocumentCommand\emph{s o m}{%
+  \IfBooleanTF{#1}
+    {\textem{#3}}
+    {\IfNoValueTF{#2}
+      {\textem{#3}\index{#3}}
+      {\textem{#3}\index{#2}}%
+    }%
+    
+  }   
+}
+\makeatother 
+```
+由于工作疏忽没有及时记录，经多次检索，也没有找到这段代码的出处。在此，对源码作者表示深深的歉意，如有不妥，望及时告之。
+
+经测试，该代码无法正确使用备份的`\origemph`命令恢复使用`\emph`命令原有的强调含义。
+
+## `\emph`命令重定义的改进
+
+在原始的强调`\emph`命令中，如果被强调的内容中有“(、)、[、]”等字符，则也会使用italic字形进行处理，有时，这种处理不符合需求，在[Upright parentheses in italic text](https://tex.stackexchange.com/questions/13048/upright-parentheses-in-italic-text?rq=1 "Upright parentheses in italic text")中，给出了解决这一问题的几个方案。结合前述中文强调字体的设置，于是，可以用如下代码实现中文排版中的特殊强调需求。
+
+```tex
+\usepackage{expl3}
+\usepackage{etoolbox}
+
+% 声中文明强调字体及强调方式
+% 用\bfseries表示强调
+\makeatletter
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CJKunderline{#1}}}% 用下划线表示强调中的强调
+    {\@textemph{#1}}%
+}
+\makeatother
+
+% 重新定义\emph强调命令
+% 参考：https://tex.stackexchange.com/questions/13048/upright-parentheses-in-italic-text?rq=1
+\ExplSyntaxOn
+\cs_new_eq:Nc \emph_old:n { emph~ } % 备份`\emph`命令
+\cs_new_protected:Npn \emph_braces:n #1 % 排版括号为直立符号
+{ \mode_if_math:TF {#1} { \textup{#1} } }
+
+\cs_new:Npn \emph_new:n #1 {
+  \tl_set:Nn \l_emph_tl {\textem{#1}}% 中文强调时用黑体
+  \tl_replace_all:Nnn \l_emph_tl {(}{\emph_braces:n{(}}% 替换(为直立
+  \tl_replace_all:Nnn \l_emph_tl {)}{\emph_braces:n{)}}% 替换)为直立
+  \tl_replace_all:Nnn \l_emph_tl {[}{\emph_braces:n{[}}% 替换[为直立
+  \tl_replace_all:Nnn \l_emph_tl {]}{\emph_braces:n{]}}% 替换]为直立
+  \exp_args:NV \emph_old:n \l_emph_tl
+}
+\RenewDocumentCommand {\emph} {sm} {% \emph*是原命令，\emph为重新定义的命令
+  \IfBooleanTF {#1} {\emph_old:n {#2}} {\emph_new:n {#2}}
+}
+\ExplSyntaxOff
+```
+
+由于对LaTeX3语法还不是非常熟练，如何用LaTeX3实现`\textem`，还望各位网友给于指点。
+
+## 重定义`\emph`命令的排版示例
+如下代码是使用重定义`\emph`排版示例，使用`\emph*`命令则可以实现原义强调命令。
+```tex
+\documentclass{ctexart}
+
+\usepackage{expl3}
+\usepackage{etoolbox}
+
+% 声中文明强调字体及强调方式
+% 用\bfseries表示强调
+\makeatletter
+\newcommand*\emphfont{\normalfont\bfseries}
+\DeclareTextFontCommand\@textemph{\emphfont}
+\newcommand\textem[1]{%
+  \ifdefstrequal{\f@series}{\bfdefault}
+    {\@textemph{\CJKunderline{#1}}}% 用下划线表示强调中的强调
+    {\@textemph{#1}}%
+}
+\makeatother
+
+% 重新定义\emph强调命令
+% 参考：https://tex.stackexchange.com/questions/13048/upright-parentheses-in-italic-text?rq=1
+\ExplSyntaxOn
+\cs_new_eq:Nc \emph_old:n { emph~ } % 备份`\emph`命令
+\cs_new_protected:Npn \emph_braces:n #1 % 排版括号为直立符号
+{ \mode_if_math:TF {#1} { \textup{#1} } }
+
+\cs_new:Npn \emph_new:n #1 {
+  \tl_set:Nn \l_emph_tl {\textem{#1}}% 中文强调时用黑体
+  \tl_replace_all:Nnn \l_emph_tl {(}{\emph_braces:n{(}}% 替换(为直立
+  \tl_replace_all:Nnn \l_emph_tl {)}{\emph_braces:n{)}}% 替换)为直立
+  \tl_replace_all:Nnn \l_emph_tl {[}{\emph_braces:n{[}}% 替换[为直立
+  \tl_replace_all:Nnn \l_emph_tl {]}{\emph_braces:n{]}}% 替换]为直立
+  \exp_args:NV \emph_old:n \l_emph_tl
+}
+\RenewDocumentCommand {\emph} {sm} {% \emph*是原命令，\emph为重新定义的命令
+  \IfBooleanTF {#1} {\emph_old:n {#2}} {\emph_new:n {#2}}
+}
+\ExplSyntaxOff
+
+\begin{document}
+\emph{欢迎}来到\LaTeX 世界！
+
+\emph{Welcome} to \LaTeX World！
+
+\emph{\emph{欢迎}来到\LaTeX 世界！}
+
+\emph{\emph{Welcome} to \LaTeX (World)！}
+
+如果需要使用原义强调命令，则可使用\verb|\emph*|命令，如：
+
+\emph*{欢迎}来到\LaTeX 世界！
+
+\emph*{Welcome} to \LaTeX World！
+
+\emph*{\emph*{欢迎}来到\LaTeX 世界！}
+
+\emph*{\emph*{Welcome} to \LaTeX (World)！}
+\end{document}
+```
+其排版结果为：
+<center>
+<img  src="https://pics.latexstudio.net/data/images/202001/c3085c1990e8c74.png" width=80% />
+</center>
+
+Happy LaTeXing!
