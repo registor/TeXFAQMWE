@@ -1,0 +1,89 @@
+用tkz-euclide宏包绘制平面几何图形
+
+在平面几何中，需要绘制大量欧几里得平面图形。对于这些图形，可以使用几何画板、Visio等软件绘制后通过插图的方式插入到LaTeX文档中，但这会带来如下问题：
+- 需要额外的软件支持，降低了LaTeX文档的独立性。
+- 字体、字号往往无法与正文匹配，整体效果缺乏协调性。
+- 如果未导出为成矢量图(截图)，则缩放会发生失真。
+- 不便后期修改、编辑和维护。
+另外，也可以使用LaTeX的TikZ绘制这些图形，此时则不存在上述这些问题。但是，直接用TikZ绘图，其命令和语法较为复杂，并且多数命令缺少数学含义，TikZ绘制往往比较抽象。
+
+为此，Alain Matthes基于TikZ开发了一个专门用于绘制欧几里得平面图形的宏包`tkz-euclide`，该宏包已收录于texlive发行版中，目前其最新版本是3.01c[tkz-euclide – Tools for drawing Euclidean geometry](https://www.ctan.org/pkg/tkz-euclide "tkz-euclide – Tools for drawing Euclidean geometry")。该宏包能够非常方便的实现欧几里得平面图形的绘制，并且其命令和绘制方式更加符合数学思维模式。
+
+## `tkz-euclide`宏包的绘图步骤
+一般可以使用六步绘制欧几里得平面图形：
+1. 初始化(坐标范围、裁剪区域、坐标单位等)
+2. 通过坐标直接定义或通过坐标计算定义图形中需要的点
+3. 使用求交点、坐标变换等方法定义其它需要的点
+4. 根据顺序绘制点、线、多边形、圆等需要的对象
+5. 绘制各类图形标记
+6. 绘制各类图形标签
+
+## `tkz-euclide`宏包的绘图实例
+在此，以hnkznhb@126.com制作的《几何原本V1.0》中“1.4.2 命题 I.2 作线段”中的插图为例展示其绘图的基本功能，示例代码如下：
+```tex
+\documentclass[margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{tkz-euclide}
+
+\begin{document}
+        
+\begin{tikzpicture}[scale=1.00]
+  \tkzInit
+  \tkzDefPoint(0,0){A}% 定义A点
+  \tkzDefShiftPoint[A](30:1){B}% 采用坐标平移定义B点
+  \tkzDefShiftPoint[B](60:1.5){C}% 采用坐标平移定义C点
+  % 用A为圆心AB为半径的圆与用B为圆心BA为半径的圆的交点
+  % 定义等腰三角形的顶点D  
+  \tkzInterCC(A,B)(B,A) \tkzGetPoints{D}{D'} 
+  \tkzDrawPolygon(A,B,D)% 绘制等腰三角形
+  \tkzMarkSegments[mark=|](A,D B,D)% 绘制等腰三角形标记
+  % 绘制A、B、C、D点标签
+  \tkzLabelPoints[](A)
+  \tkzLabelPoint[below](B){$B$}
+  \tkzLabelPoint[above right](C){$C$}
+  \tkzLabelPoint[above](D){$D$}
+  % 采用坐标平移及比例法定义E、F点
+  \begin{scope}[shift=(D)]
+    \tkzDefBarycentricPoint(D=-2.5,A=3.5)
+    \tkzGetPoint{E}
+    \tkzDefBarycentricPoint(D=-2.5,B=3.5)
+    \tkzGetPoint{F}    
+  \end{scope}
+  % 绘制辅助线段及E、F点标记
+  \tkzDrawSegment[dashed](A,E)
+  \tkzLabelPoint[left](E){$E$}
+  \tkzDrawSegment[dashed](B,F)
+  \tkzLabelPoint[below left](F){$F$}
+  % 绘制圆心为B，半径为BC的圆
+  \tkzDrawCircle[blue!50,dashed](B,C)
+  % 求圆与直线DB的交点G
+  \tkzInterLC(B,D)(B,C) \tkzGetPoints{G}{G'}
+  % 绘制G、H标签
+  \tkzLabelPoint[below](G){$G$}
+  \tkzLabelPoint[above,shift={(0.5,0.55)}](G'){$H$}
+  % 绘制圆心为D，半径为DG的圆
+  \tkzDrawCircle[blue!20,dashed](D,G)
+  % 求圆与直线DA的交点L
+  \tkzInterLC(A,D)(D,G) \tkzGetPoints{L}{L'}
+  % 绘制L、K标签
+  \tkzLabelPoint[above,shift={(-1.8,-0.7)}](L'){$K$}
+  \tkzLabelPoint[below left](L){$L$}
+  % 绘制求得的线段AL、BG、BC
+  \tkzDrawSegments[red](A,L B,G B,C)
+  % 绘制线段相等标记
+  \tkzMarkSegments[mark=||](A,L B,G B,C)  
+\end{tikzpicture}
+\end{document}
+```
+
+关于`tkz-euclide`宏包的使用细节，请在命令行使用`texdoc tkz-euclide`查阅其使用说明书。目前，该说明书是法文的，通过于作者联系得知，该宏包将在2周左右升级为3.02，并且其说明书将有英文版本。不过，该说明书提供了大量实例，结合google翻译等，阅读起来不是很难。
+
+Happy LaTeXing!

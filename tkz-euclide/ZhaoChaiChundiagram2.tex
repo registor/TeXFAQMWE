@@ -1,0 +1,82 @@
+\documentclass[margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{ctex}
+
+\usepackage{tkz-euclide}
+
+\begin{document}
+% 绘制赵爽弦图
+% 1、作Rt△ABC；
+% 2、以点C为圆心，较长直角边交AC与短直角边BC的差为半径作圆，交AC于点D；
+% 3、以CD为边作正方形；
+% 4、连接各个线段。
+\begin{tikzpicture}
+  % 用坐标直接定义B、C点
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){A'}
+  % 定义三角形第3个顶点
+  %\tkzDefTriangle[pythagore](A,D')\tkzGetPoint{D}
+  % 以A点为圆心半径为5和以D'点为圆心半径为4的两个圆的交点为D点
+  \tkzInterCC[R](A, 5 cm)(A', 3 cm)\tkzGetSecondPoint{B}
+  % 定义矩形
+  \tkzDefSquare(A,B)\tkzGetPoints{C}{D}
+  % 计算长度
+  \tkzCalcLength[cm](A,A') \tkzGetLength{lA}
+  \tkzCalcLength[cm](A',B) \tkzGetLength{lB}
+  \pgfmathparse{\lA-\lB}
+  % 求直线AA'与以A'为圆心\pgfmathresult(长直角边减短直角边)
+  % 为半径的圆的交点
+  \tkzInterLC[R](A,A')(A',\pgfmathresult cm)\tkzGetFirstPoint{D'}
+  % 定义矩形
+  \tkzDefSquare(D',A')\tkzGetPoints{B'}{C'}
+  % 定义过D的水平线
+  \tkzDefLine[orthogonal=through D](D,D') \tkzGetPoint{d}
+  % 定义过C的垂线
+  \tkzDefLine[orthogonal=through A](A,A') \tkzGetPoint{a}
+  % 定义过C的垂线
+  \tkzDefLine[orthogonal=through C](C,C') \tkzGetPoint{c}  
+  % 定义弦图外接矩形的E、F顶点
+  \tkzInterLL(D,d)(C,c) \tkzGetPoint{E}
+  \tkzInterLL(D,d)(A,a) \tkzGetPoint{F}
+  % 定义弦图外接矩形
+  \tkzDefSquare(E,F)\tkzGetPoints{G}{H}
+  % 绘制三角形
+  \tkzDrawPolygon[fill=red!20](A,B,A')  
+  \tkzDrawPolygon[fill=red!20](B,C,B')
+  \tkzDrawPolygon[fill=red!20](C,D,C')
+  \tkzDrawPolygon[fill=red!20](A,D',D)
+  % 绘制正方形
+  \tkzDrawPolygon(A,B,C,D)
+  \tkzDrawPolygon[fill=yellow!20](A',B',C',D')
+  \tkzDrawPolygon(E,F,G,H)%[blue,dashed]
+  % 绘制指定线段
+  \tkzDrawSegment[dim={勾$a$,-10pt,}](D,C')
+  \tkzDrawSegment[dim={股$b$,-10pt,}](C,C')
+  \tkzDrawSegment[dim={弦$c$,-10pt,}](C,D)
+  % 绘制各点标记
+  \tkzDrawPoints[size=2](A,B,C,D,A',B',C',D')
+  % 绘制各点标记
+  \tkzLabelPoints[left,font=\scriptsize](A)
+  \tkzLabelPoints[below,font=\scriptsize](B)
+  \tkzLabelPoints[right,font=\scriptsize](C)
+  \tkzLabelPoints[above,font=\scriptsize](D)
+  \tkzLabelPoints[right,font=\scriptsize](A')
+  \tkzLabelPoints[below right,font=\scriptsize](B')
+  \tkzLabelPoints[below left,font=\scriptsize](C') 
+  \tkzLabelPoints[below,font=\scriptsize](D')
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

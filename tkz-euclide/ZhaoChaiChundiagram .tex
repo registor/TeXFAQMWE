@@ -1,0 +1,73 @@
+\documentclass[margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{ctex}
+
+\usepackage{tkz-euclide}
+
+\begin{document}
+% 绘制赵爽弦图
+\begin{tikzpicture}
+  % 用坐标直接定义B、C点
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,0){D'}
+  % 定义三角形第3个顶点
+  %\tkzDefTriangle[pythagore](A,D')\tkzGetPoint{D}
+  % 以A点为圆心半径为5和以D'点为圆心半径为4的两个圆的交点为D点
+  \tkzInterCC[R](A, 5 cm)(D', 4 cm)\tkzGetPoints{D}{E}
+  % 定义矩形
+  \tkzDefSquare(D,A)\tkzGetPoints{B}{C}
+  % 定义过矩形B、C、D顶点到对应三角形边垂线的交点
+  \tkzDefPointBy[projection = onto A--D'](B) \tkzGetPoint{A'}
+  \tkzDefPointBy[projection = onto B--A'](C) \tkzGetPoint{B'}
+  \tkzDefPointBy[projection = onto C--B'](D) \tkzGetPoint{C'}
+  % 定义过D的水平线
+  \tkzDefLine[orthogonal=through D](D,D') \tkzGetPoint{d}
+  % 定义过C的垂线
+  \tkzDefLine[orthogonal=through A](A,A') \tkzGetPoint{a}
+  % 定义过C的垂线
+  \tkzDefLine[orthogonal=through C](C,C') \tkzGetPoint{c}  
+  % 定义弦图外接矩形的E、F顶点
+  \tkzInterLL(D,d)(C,c) \tkzGetPoint{E}
+  \tkzInterLL(D,d)(A,a) \tkzGetPoint{F}
+  % 定义弦图外接矩形
+  \tkzDefSquare(E,F)\tkzGetPoints{G}{H}
+  % 绘制三角形
+  \tkzDrawPolygon[fill=red!20](A,D',D)
+  \tkzDrawPolygon[fill=red!20](A,B,A')
+  \tkzDrawPolygon[fill=red!20](B,C,B')
+  \tkzDrawPolygon[fill=red!20](C,D,C')
+  \tkzDrawPolygon(A,B,C,D)
+  % 绘制正方形
+  \tkzDrawPolygon[fill=yellow!20](A',B',C',D')
+  \tkzDrawPolygon(E,F,G,H)%[blue,dashed]
+  % 绘制指定线段
+  \tkzDrawSegment[dim={勾$a$,-10pt,}](D,C')
+  \tkzDrawSegment[dim={股$b$,-10pt,}](C,C')
+  \tkzDrawSegment[dim={弦$c$,-10pt,}](C,D)
+  % 绘制各点标记
+  \tkzDrawPoints[size=2](A,B,C,D,A',B',C',D')
+  % 绘制各点标记
+  \tkzLabelPoints[left,font=\scriptsize](A)
+  \tkzLabelPoints[below,font=\scriptsize](B)
+  \tkzLabelPoints[right,font=\scriptsize](C)
+  \tkzLabelPoints[above,font=\scriptsize](D)
+  \tkzLabelPoints[right,font=\scriptsize](A')
+  \tkzLabelPoints[below right,font=\scriptsize](B')
+  \tkzLabelPoints[below left,font=\scriptsize](C') 
+  \tkzLabelPoints[below,font=\scriptsize](D')
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

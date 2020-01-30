@@ -1,0 +1,66 @@
+\documentclass[margin=3pt,
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+\usepackage{tkz-euclide}
+
+\begin{document}
+        
+\begin{tikzpicture}[scale=1.00]
+  \tkzInit
+  \tkzDefPoint(0,0){A}% 定义A点
+  \tkzDefShiftPoint[A](30:1){B}% 采用坐标平移定义B点
+  \tkzDefShiftPoint[B](60:1.5){C}% 采用坐标平移定义C点
+  % 用A为圆心AB为半径的圆与用B为圆心BA为半径的圆的交点
+  % 定义等腰三角形的顶点D  
+  \tkzInterCC(A,B)(B,A) \tkzGetPoints{D}{D'} 
+  \tkzDrawPolygon(A,B,D)% 绘制等腰三角形
+  \tkzMarkSegments[mark=|](A,D B,D)% 绘制等腰三角形标记
+  % 绘制A、B、C、D点标签
+  \tkzLabelPoints[](A)
+  \tkzLabelPoint[below](B){$B$}
+  \tkzLabelPoint[above right](C){$C$}
+  \tkzLabelPoint[above](D){$D$}
+  % 采用坐标平移及比例法定义E、F点
+  \begin{scope}[shift=(D)]
+    \tkzDefBarycentricPoint(D=-2.5,A=3.5)
+    \tkzGetPoint{E}
+    \tkzDefBarycentricPoint(D=-2.5,B=3.5)
+    \tkzGetPoint{F}    
+  \end{scope}
+  % 绘制辅助线段及E、F点标记
+  \tkzDrawSegment[dashed](A,E)
+  \tkzLabelPoint[left](E){$E$}
+  \tkzDrawSegment[dashed](B,F)
+  \tkzLabelPoint[below left](F){$F$}
+  % 绘制圆心为B，半径为BC的圆
+  \tkzDrawCircle[blue!50,dashed](B,C)
+  % 求圆与直线DB的交点G
+  \tkzInterLC(B,D)(B,C) \tkzGetPoints{G}{G'}
+  % 绘制G、H标签
+  \tkzLabelPoint[below](G){$G$}
+  \tkzLabelPoint[above,shift={(0.5,0.55)}](G'){$H$}
+  % 绘制圆心为D，半径为DG的圆
+  \tkzDrawCircle[blue!20,dashed](D,G)
+  % 求圆与直线DA的交点L
+  \tkzInterLC(A,D)(D,G) \tkzGetPoints{L}{L'}
+  % 绘制L、K标签
+  \tkzLabelPoint[above,shift={(-1.8,-0.7)}](L'){$K$}
+  \tkzLabelPoint[below left](L){$L$}
+  % 绘制求得的线段AL、BG、BC
+  \tkzDrawSegments[red](A,L B,G B,C)
+  % 绘制线段相等标记
+  \tkzMarkSegments[mark=||](A,L B,G B,C)  
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
