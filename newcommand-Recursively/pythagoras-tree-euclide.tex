@@ -1,0 +1,136 @@
+% 使用递归结合tkz-euclide宏包绘制毕达哥拉斯树
+% 作者: 耿楠<nangeng@qq.com>, 2020-01-31
+\documentclass[margin=3pt,
+  % convert,
+  % convert={
+  %   outext=.png,
+  %   command=\unexpanded{
+  %     pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+  %   }
+  % }
+  ]{standalone}
+
+\usepackage{tkz-euclide}
+
+% 代码主体摘录自https://panthema.net/2013/0627-TikZ-Pythagoras-Tree/
+% 采用递归绘制毕达哥拉斯分形树
+% 使用方法：\PythagorasTree{levels}{angle}
+\newcommand{\PythagorasTree}[2]{%
+  \ifnum#1=0\else
+    % 随机生成颜色
+    \pgfmathsetmacro{\r}{0.6*rnd}
+    \pgfmathsetmacro{\g}{0.9*rnd}
+    \pgfmathsetmacro{\b}{0.7*rnd}
+    \definecolor{MyColor}{rgb}{\r,\g,\b}
+
+    % 绘制当前级别矩形
+    % 采用TikZ绘制矩形
+    \draw[MyColor] (0,0) rectangle (1,1);
+    
+    % % 采用tkz-euclide宏包绘制矩形
+    % % 定义A、B点
+    % \tkzDefPoint(0,0){A}
+    % \tkzDefPoint(1,0){B}
+    % \tkzDefPoint(1,1){C}
+    % \tkzDefPoint(0,1){D}
+    % % 定义矩形
+    % %\tkzDefSquare(A,B)\tkzGetPoints{C}{D}
+    % % 绘制矩形
+    % % \tkzDrawPolygon[MyColor](A,B,C,D)
+    % \tkzDrawSegments[MyColor](A,B B,C C,D D,A)    
+
+    % 减少规模，准备递归
+    \pgfmathtruncatemacro{\next}{#1-1}
+
+    % 左分支递归：
+    % 1、原点平移到(1cm,0cm)
+    % 2、旋转#2度
+    % 3、按直角三角形左直角边长度行缩小
+    \begin{scope}[
+      yshift=1cm,
+      xshift=0cm,
+      rotate=#2,
+      scale={cos(#2)}
+      ]
+      % 递归调用
+      \PythagorasTree{\next}{#2}
+    \end{scope}
+
+    % 右分支递归：
+    % 1、原点平移到直角三形顶点
+    % 2、旋转#2-90度
+    % 3、按直角三角形右直角边长度行缩小
+    \begin{scope}[
+      yshift={1cm * (1 + sin(#2)*cos(#2))},
+      xshift={1cm * (cos(#2)*cos(#2))},
+      rotate={#2-90)},scale={sin(#2)}
+      ]
+      \PythagorasTree{\next}{#2}
+    \end{scope}
+  \fi
+}
+
+% macro to draw and annotate a Pythagoras Tree
+\newcommand{\MakeTree}[3]{%
+  % minipage to keep things together
+  \begin{minipage}{\linewidth}
+    \textbf{Pythagoras Tree, order #1, angle #2:}
+    \bigskip
+
+    \begin{center}
+      \begin{tikzpicture}[scale=1.5]
+        % recursively draw tree
+        \PythagorasTree{#1}{#2}
+        #3 % add some extra tikz code
+      \end{tikzpicture}
+    \end{center}
+    \bigskip
+
+  \end{minipage}
+}
+
+\begin{document}
+
+% % 绘制一个Pythagoras树
+% \begin{tikzpicture}[scale=1.0]
+%   % 递归绘制
+%   \PythagorasTree{13}{38}
+% \end{tikzpicture}
+
+% 绘制一个Pythagoras树
+% \begin{tikzpicture}[scale=1.0]
+%   % 递归绘制
+%   \PythagorasTree{11}{45}
+% \end{tikzpicture}
+
+% % 绘制一个Pythagoras树
+% \begin{tikzpicture}[scale=1.0]
+%   % 递归绘制
+%   \PythagorasTree{11}{30}
+% \end{tikzpicture}
+
+% % 绘制一个Pythagoras树
+% \begin{tikzpicture}[scale=1.0]
+%   % 递归绘制
+%   \PythagorasTree{11}{65}
+% \end{tikzpicture}
+
+% % 绘制一个Pythagoras树
+% \begin{tikzpicture}[scale=1.0]
+%   % 递归绘制
+%   \PythagorasTree{11}{0}
+% \end{tikzpicture}
+
+%   \MakeTree{13}{38}{}
+\MakeTree{8}{45}{}\\
+
+\MakeTree{8}{30}{}\\
+
+\MakeTree{8}{65}{}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
