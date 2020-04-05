@@ -1,0 +1,79 @@
+\documentclass[varwidth,convert]{standalone}
+
+\usepackage{ctex}
+
+% 计算文字宽度(\widthof命令)
+\usepackage{calc}
+
+% 使用\foreach命令
+\usepackage{tikz}
+
+% 记录字符串长度的变量
+\newlength{\textlen}
+\newlength{\lablen}
+\setlength{\lablen}{0pt}
+
+\newcommand\college{学院}
+\newcommand\majorID{专业班级}
+\newcommand\thesisauthor{学生姓名}
+\newcommand\adviser{指导教师}
+\newcommand\coadviser{协助指导教师}
+\newcommand\applydate{完成日期}
+
+\begin{document} %在document环境中撰写文档
+
+% 找到最长的字符串(用\settowidth命令实现)
+\settowidth{\lablen}{\coadviser} % 不需要calc宏包
+% 用\makebox生成分散对齐的定宽盒子
+\begin{tabular} {cc}%
+  \makebox[\the\lablen][s]{\college} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}%
+  \makebox[\the\lablen][s]{\majorID} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\thesisauthor} ：& \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\adviser} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\coadviser} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\applydate} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+\end{tabular}
+
+\vspace{4ex}
+
+% 找到最长的字符串(用\widthof命令实现)
+\setlength{\lablen}{\widthof{\coadviser}} % 需要calc宏包
+% 用\makebox生成分散对齐的定宽盒子
+\begin{tabular} {cc}%
+  \makebox[\the\lablen][s]{\college} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}%
+  \makebox[\the\lablen][s]{\majorID} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\thesisauthor} ：& \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\adviser} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\coadviser} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\applydate} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+\end{tabular}
+
+\vspace{4ex}
+
+% 找到最长的字符串(用循环实现，需要TikZ宏包)
+\foreach \x in {\college, \majorID, \thesisauthor, \adviser, \coadviser, \applydate}
+{
+  \settowidth{\textlen}{\x}
+  \ifdim \textlen > \lablen
+    \setlength{\lablen}{\textlen}
+  \else
+    \relax
+  \fi
+}
+% 用\makebox生成分散对齐的定宽盒子
+\begin{tabular} {cc}%
+  \makebox[\the\lablen][s]{\college} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}%
+  \makebox[\the\lablen][s]{\majorID} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\thesisauthor} ：& \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\adviser} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\coadviser} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+  \makebox[\the\lablen][s]{\applydate} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+\end{tabular}
+  
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

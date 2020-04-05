@@ -1,0 +1,93 @@
+\documentclass[varwidth,convert]{standalone}
+
+\usepackage{ctex}
+
+\usepackage{minted}% 排版代码
+% ========mint宏包C语言代码排版参数和自定义命令==========
+\setminted{fontsize=\small, breaklines=true,
+  breakautoindent=false}
+\newmintinline{c}{autogobble,fontsize=\normalsize}
+
+
+\usepackage{tikz}
+% =================TiKz宏包的库====================
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\begin{document} %在document环境中撰写文档
+
+\begin{figure}[htp]
+  \centering
+  \begin{tikzpicture}[
+    x=4.5mm, y=5.0mm,
+    cell/.style={draw,minimum size=4.5mm,inner sep=0pt},
+    cellp/.style={draw,minimum size=5.0mm,inner sep=0pt},
+    >=stealth]
+    
+    % 定义数组
+    \def\planets{{M,e,r,c,u,r,y}, {V,e,n,u,s}, {E,a,r,t,h}, {M,a,r,s}, {J,u,p,i,t,e,r}, 
+                 {S,a,t,u,r,n}, {U,r,a,n,u,s}, {N,e,p,t,u,n,e}, {P,l,u,t,o}}%        
+
+    \foreach \l [count=\i] in \planets %\l 分别是：{M,e,r,c,u,r,y}、{V,e,n,u,s}等
+    {
+      \pgfmathsetmacro{\idx}{int(\i-1)} % 计数是从1开始的，减1让标记从0开始
+      \node[cellp,label=left: \cinline{planets[}\idx \cinline{]}] (p\i) at (0, 1-\i) {};% 绘制竖向指针数组
+
+      \foreach \m [count=\j] in \l % \m是{M,e,r,c,u,r,y}中的每一个字母
+      {
+        \node[cell](str\i\j) at (\j + 1, -\i + 1) {\centering\ttfamily \m};% 绘制横向字符数组
+        \global\let\gj\j % 用全局变量记录\j，目的是记录最后一个j的值            
+      }
+      \pgfmathsetmacro{\inull}{int(\gj + 1)} % 为最后一个空字符框设置编号
+      \node[cell, right=-0.11mm of str\i\gj](str\i\inull) {\centering \cinline{'\0'}};% 绘制结束空字符
+
+      % 绘制指针指向标记
+      \draw[fill] (p\i.center) circle (0.05); % 绘制指针数组元素框中心圆点
+      \draw[-{Stealth[scale=1.0]}, magenta, thick] (p\i.center) -- (str\i1);% 绘制指针数组元素框中心到字符数组的指向线
+    }
+  \end{tikzpicture}     
+  \caption{字符型指针数组指向字符串}
+\end{figure}
+
+\begin{figure}[htp]
+  \centering
+  \begin{tikzpicture}[
+    x=4.5mm, y=5.0mm,
+    cell/.style={draw,minimum size=4.5mm,inner sep=0pt},
+    cellp/.style={draw,minimum size=5.0mm,inner sep=0pt},
+    >=stealth]
+    
+    % 定义数组
+    \def\planets{{M,e,r,c,u,r,y}, {V,e,n,u,s}, {E,a,r,t,h}, {M,a,r,s}, {J,u,p,i,t,e,r}, 
+                 {S,a,t,u,r,n}, {U,r,a,n,u,s}, {N,e,p,t,u,n,e}, {P,l,u,t,o}}%        
+
+    \foreach \l [count=\i] in \planets %\l 分别是：{M,e,r,c,u,r,y}、{V,e,n,u,s}等
+    {
+      \pgfmathsetmacro{\idx}{int(\i-1)} % 计数是从1开始的，减1让标记从0开始
+      \node[cellp,label=left: \cinline{planets[}\idx \cinline{]}] (p\i) at (0, 1-\i) {};% 绘制竖向指针数组
+
+      \foreach \m [count=\j] in \l % \m是{M,e,r,c,u,r,y}中的每一个字母
+      {
+        \node[cell](str\i\j) at (\j + 1, -\i + 1) {\centering\ttfamily \m};% 绘制横向字符数组
+        \global\let\gj\j % 用全局变量记录\j，目的是记录最后一个j的值            
+      }
+      \pgfmathsetmacro{\inull}{int(\gj + 1)} % 为最后一个空字符框设置编号
+      \node[cell, right=-0.11mm of str\i\gj](str\i\inull) {\centering \cinline{'\0'}};% 绘制结束空字符
+    }
+
+    % 绘制排序结果指针指向标记
+    \foreach \i/\j in {1/3, 2/5, 3/4, 4/1, 5/8, 6/9, 7/6, 8/7, 9/2}
+    {
+      \draw[fill] (p\i.center) circle (0.05); % 绘制指针数组元素框中心圆点
+      \draw[-{Stealth[scale=1.0]}, magenta, thick] (p\i.center) -- (str\j1.west);% 绘制指针数组元素框中心到字符数组的指向线
+    }  
+  \end{tikzpicture}     
+  \caption{用字符型指针数组实现字符串排序}
+\end{figure}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
