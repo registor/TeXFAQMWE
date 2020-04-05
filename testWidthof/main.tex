@@ -8,6 +8,9 @@
 % 使用\foreach命令
 \usepackage{tikz}
 
+% 读取数据文件
+\usepackage{datatool}
+
 % 记录字符串长度的变量
 \newlength{\textlen}
 \newlength{\lablen}
@@ -69,8 +72,31 @@
   \makebox[\the\lablen][s]{\coadviser} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
   \makebox[\the\lablen][s]{\applydate} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
 \end{tabular}
-  
 
+% 使用datatool宏包从csv数据文件中读取数据，计算长度后进行排版
+\DTLloaddb{lablist}{lablist.csv} % 打开数据文件
+% 通过循环查找最长字符串的长度
+\DTLforeach{lablist}{
+  % .csv 档里对应每一列的宏
+  \Name=lab%
+}{
+  \settowidth{\textlen}{\Name}
+  \ifdim \textlen > \lablen
+    \setlength{\lablen}{\textlen}
+  \else
+    \relax
+  \fi
+}
+
+% 通过循环将字符串分散对齐
+\begin{center}
+  \DTLforeach{lablist}{
+  % .csv 档里对应每一列的宏
+  \Name=lab%
+  }{
+    \makebox[\the\lablen][s]{\Name}：\uline{\makebox[\the\lablen][c]{}}\\
+  }
+\end{center}
 \end{document}
 
 %%% Local Variables:
