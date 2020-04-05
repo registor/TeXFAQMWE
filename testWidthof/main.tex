@@ -11,6 +11,9 @@
 % 读取数据文件
 \usepackage{datatool}
 
+% 提供docsvlist命令
+\usepackage{etoolbox}
+
 % 记录字符串长度的变量
 \newlength{\textlen}
 \newlength{\lablen}
@@ -71,6 +74,16 @@
   \makebox[\the\lablen][s]{\adviser} ：     & \makebox[\the\lablen][s]{} \\ \cline{2-2}
   \makebox[\the\lablen][s]{\coadviser} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
   \makebox[\the\lablen][s]{\applydate} ：   & \makebox[\the\lablen][s]{} \\ \cline{2-2}
+\end{tabular}
+
+\vspace{4ex}
+
+% 通过循环绘制表格
+% 定义docsvlist的do操作
+\renewcommand{\do}[1]{\makebox[\the\lablen][s]{#1} ：  & \makebox[\the\lablen][s]{} \\ \cline{2-2}}%
+\begin{tabular} {cc}%
+  % 执行docsvlist，遍历逗号分隔的数据表，将遍历到的数据交给do处理
+  \docsvlist{\college, \majorID, \thesisauthor, \adviser, \coadviser, \applydate}
 \end{tabular}
 
 % 使用datatool宏包从csv数据文件中读取数据，计算长度后进行排版
