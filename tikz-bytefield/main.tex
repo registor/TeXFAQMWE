@@ -1,0 +1,152 @@
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+
+% 中文支持
+\usepackage{ctex}
+
+% TikZ
+\usepackage{tikz}
+\usetikzlibrary{calc}% 计算库
+\usetikzlibrary{arrows.meta}% 箭头库
+
+% 提供\IfStrEq
+\usepackage{xstring}
+
+% 字节图绘制
+\usepackage{bytefield}
+
+% =============绘制内存图中一个内存块的自定义命令======================
+% 需要bytefield宏包支持，其开始地址在底部，结束地址在顶部
+% 语法:
+% \memsec{结束地址}{开始地址}{以行为单位的高度}{盒子中的文字}
+\newcommand*\istempaddr[1]{\IfStrEq{}{#1}{}{0X#1}}
+\newcommand{\memsec}[4]{%
+  % 定义memsection的高度
+  \bytefieldsetup{bitheight=#3\baselineskip}%
+  \bitbox[]{8}{%
+    %\vspace{-#3pt}
+    \footnotesize \texttt{\istempaddr{#1}}%0X#1}% 结束地址
+    \\
+    % 留出空白
+    \vspace{#3\baselineskip}
+    \vspace{-1.7\baselineskip}
+    \vspace{-#3pt}
+    \texttt{\istempaddr{#2}}%0X#2}% 开始地址
+  }%
+  \bitbox{8}{\footnotesize #4}% 盒子里的内容
+}
+
+% 自定义垂直省略号
+\makeatletter
+\DeclareRobustCommand{\rvdots}{%
+  \vbox{
+    \baselineskip4\p@\lineskiplimit\z@
+    \kern-\p@
+    \hbox{.}\hbox{.}\hbox{.}
+  }}
+\makeatother
+
+\begin{document} %在document环境中撰写文档
+% 基本内在结构图
+\begin{bytefield}{8}
+  \memsec{}{}{1}{\rvdots}\\
+  \memsec{FFFF E31C}{}{1}{$\cdots$}\\
+  \memsec{FFFF E31B}{}{1}{$\cdots$}\\
+  \memsec{FFFF E31A}{}{1}{$\cdots$}\\
+  \memsec{FFFF E319}{}{1}{$\cdots$}\\
+  \memsec{FFFF E318}{}{1}{$\cdots$}\\
+  \memsec{FFFF E317}{}{1}{$\cdots$}\\
+  \memsec{FFFF E316}{}{1}{$\cdots$}\\
+  \memsec{FFFF E315}{}{1}{$\cdots$}\\
+  \memsec{FFFF E314}{}{1}{$\cdots$}\\
+  \memsec{FFFF E313}{}{1}{$\cdots$}\\
+  \memsec{FFFF E312}{}{1}{$\cdots$}\\
+  \memsec{FFFF E311}{}{1}{$\cdots$}\\
+  \memsec{FFFF E310}{}{1}{$\cdots$}\\
+  \memsec{}{}{1}{\rvdots}
+\end{bytefield}
+% 添加标记
+\begin{bytefield}{24}
+  \memsec{}{}{1}{\rvdots}\\
+  \begin{rightwordgroup}{dfValue}
+    \memsec{FFFF E31F}{FFFF E318}{8}{double}
+  \end{rightwordgroup}\\
+  \begin{rightwordgroup}{iValue}
+    \memsec{FFFF E317}{FFFF E314}{4}{int}
+  \end{rightwordgroup}\\
+  \begin{rightwordgroup}{ch}
+    \memsec{FFFF E313}{}{1}{char}
+  \end{rightwordgroup}\\
+  \memsec{}{}{1}{\rvdots}
+\end{bytefield}
+
+\vspace{4ex}
+% 结合TikZ绘制
+\centering
+\def\scalerate{1.0} %缩放因子
+% 坐标计算中需要的宏定义
+% 内存地址高度和宽度
+\def\addrh{0.45} %高度宏
+\def\addrw{2.25} %宽度宏
+% 内存地址x, y偏移
+\def\addrox{-3.50} %x
+\def\addroy{-2.75} %y
+% 内存单元高度和宽度
+\def\memh{0.475} %高度宏
+\def\memw{2.66} %宽度宏
+% 内存单元x, y偏移
+\def\memox{-1.06} %x
+\def\memoy{-0.95} %y
+\begin{tikzpicture}[
+  thick,
+  scale=\scalerate,
+  every node/.style={scale=\scalerate}
+  ]
+  \node (fig) at (0, 0) {
+    \begin{bytefield}{24}
+      \begin{rightwordgroup}{piValue}
+        \memsec{FFFF E317}{FFFF E310}{8}{0XFFFF E30C}
+      \end{rightwordgroup}\\
+      \begin{rightwordgroup}{iValue}
+        \memsec{FFFF E30F}{FFFF E30C}{4}{0X00 00 00 61}
+      \end{rightwordgroup}
+    \end{bytefield}
+  };
+  % 计算绘图坐标
+  \path let \p1=(fig) in
+  coordinate (org) at (\x1, \y1)
+  coordinate (ovBL1) at ($(org) + (\addrox, \addroy)$)
+  coordinate (ovUR1) at ($(ovBL1) + (\addrw, \addrh)$)
+  coordinate (ovCD1) at ($(ovBL1)!0.5!(ovUR1)$)
+  coordinate (ovML1) at (ovBL1|-ovCD1)            
+  coordinate (ovMLO1) at ($(ovML1) + (-0.20, 0.00)$)
+            
+  coordinate (ovBL2) at ($(org) + (\memox, \memoy)$)%-0.9, -0.82)$)
+  coordinate (ovUR2) at ($(ovBL2) + (\memw, 8 * \memh)$)
+  coordinate (ovCD2) at ($(ovBL2)!0.5!(ovUR2)$)
+  coordinate (ovML2) at (ovBL2|-ovCD2)
+  coordinate (ovMLO2) at (ovMLO1|-ovML2)
+  coordinate (ovVN1) at ($(ovML2) + (\memw + 2.15, 0.00)$)
+  coordinate (ovVN2) at ($(ovVN1) + (-0.30, -2.80)$)
+  coordinate (ovPT) at ($(ovVN1) + (0.00, 1.50)$) ;
+
+  \node[draw] (dat) at (ovPT) {97};
+
+  \draw[red,thick,fill=green!35, fill opacity=0.3](ovBL1) rectangle (ovUR1);      
+  \draw[blue,thick,fill=red!35, fill opacity=0.3](ovBL2) rectangle (ovUR2);
+
+  \draw[-{Stealth[scale=1.0]}, red, thick] (ovML1) --
+  (ovMLO1) -- node[left,align=right,yshift=0.0cm,black]{取\\地\\址}(ovMLO2)--(ovML2);
+      
+  \draw[-{Stealth[scale=1.0]}, blue, thick] (ovVN1) to [out = -45, in = 45]
+  node[right,align=left,yshift=0.0cm,black]{指\\向}(ovVN2);
+
+  \draw[-{Stealth[scale=1.0]}, blue, thick] (dat) to [out = -90, in = 90]
+  node[right,align=left,xshift=0.3cm,yshift=0.2cm,black]{赋\\值}(ovVN1);
+\end{tikzpicture}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
