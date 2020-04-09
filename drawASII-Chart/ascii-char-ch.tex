@@ -1,4 +1,4 @@
-\documentclass[12pt, border = 8pt]{standalone}
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
 %\documentclass{ctexart}
 % 导言区，可以在此引入必要的宏包
 % 中文支持
@@ -8,7 +8,8 @@
 \usepackage{array}
 
 \usepackage{collcell}
-%\usepackage{array}% actually already loaded by `collcell`
+% \usepackage{array}% actually already loaded by `collcell`
+\usepackage{makecell}% 为了处理标题行
 
 \usepackage{minted}
 \usemintedstyle{stata-dark}
@@ -41,7 +42,7 @@
 \newcount\colcount \colcount=0
 \newcount\thenumber
 %% 杂项设置
-\def\\{$\backslash$}
+\def\bks{$\backslash$}
 \def\thinline{\vrule width \thinlinewidth}
 \def\fatline{\vrule width \fatlinewidth}
 \tolerance=10000
@@ -137,101 +138,116 @@
   \global\advance\colcount by 1
 }
 
+\newsavebox{\ascii}
+\sbox{\ascii}{%
+  % =====绘制表格======
+  \vbox{%  
+    \halign{%
+      \fatline\fourbit#\fb&%
+      \fatline\asc#\ii&\thinline\asc#\ii&%
+      \fatline\asc#\ii&\thinline\asc#\ii&%
+      \fatline\asc#\ii&\thinline\asc#\ii&%
+      \fatline\asc#\ii&\thinline\asc#\ii\fatline\cr%
+      \noalign{\vskip3mm \hrule}%
+      \omit\fatline\hfil\threebit{b7}{b6}{b5}&%
+      \omit\fatline\threebit000&\omit\thinline\threebit001&%
+      \omit\fatline\threebit010&\omit\thinline\threebit011&%
+      \omit\fatline\threebit100&\omit\thinline\threebit101&%
+      \omit\fatline\threebit110&\omit\thinline\threebit111\fatline\cr%
+      \noalign{\vskip-.5mm}%
+      \omit\fatline\bithead&%
+      \omit\fatline\comment{控制字符}\span\omit&%
+      \omit\fatline\comment{符号和数据}\span\omit&%
+      \omit\fatline\comment{大写字母}\span\omit&%
+      \omit\fatline\comment{小写字母}\span\omit\hfil\fatline\cr
+      \noalign{\hrule}
+      {} 0 0 0 0&NUL&DLE&SP     &0  &@  &P       &\texttt{`} &p  \cr\noalign{\hrule}
+      {} 0 0 0 1&SOH&DC1&!      &1  &A  &Q       &a &q  \cr\noalign{\hrule}
+      {} 0 0 1 0&STX&DC2&"      &2  &B  &R       &b &r  \cr\noalign{\hrule}
+      {} 0 0 1 1&ETX&DC3&\#     &3  &C  &S       &c &s  \cr\noalign{\hrule}
+      {} 0 1 0 0&EOT&DC4&\$     &4  &D  &T       &d &t  \cr\noalign{\hrule}
+      {} 0 1 0 1&ENQ&NAK&\%     &5  &E  &U       &e &u  \cr\noalign{\hrule}
+      {} 0 1 1 0&ACK&SYN&\&     &6  &F  &V       &f &v  \cr\noalign{\hrule}
+      {} 0 1 1 1&BEL&ETB&'      &7  &G  &W       &g &w  \cr\noalign{\hrule}
+      {} 1 0 0 0&BS &CAN&(      &8  &H  &X       &h &x  \cr\noalign{\hrule}
+      {} 1 0 0 1&HT &EM &)      &9  &I  &Y       &i &y  \cr\noalign{\hrule}
+      {} 1 0 1 0&LF &SUB&*      &:  &J  &Z       &j &z  \cr\noalign{\hrule}
+      {} 1 0 1 1&VT &ESC&+      &;  &K  &[       &k &$\{$\cr  \noalign{\hrule}
+      {} 1 1 0 0&FF &FS &,      &$<$&L  &\bks      &l &| \cr  \noalign{\hrule}
+      {} 1 1 0 1&CR &GS &$-$    &=  &M  &]       &m &$\}$\cr  \noalign{\hrule}
+      {} 1 1 1 0&SO &RS &.      &$>$&N  &\char94 &n &\char126\cr
+      \noalign{\hrule}
+      {} 1 1 1 1&SI &US &/      &?  &O  &\texttt{\_}&o &DEL\cr\noalign{\hrule}
+      \noalign{\vskip2mm}
+      \omit&\omit\namefont \hfil 图例：\hfil \span\omit&%
+      \multispan2\hskip\fatlinewidth
+      \vtop{
+        \vskip-10pt\hbox{
+          \vrule
+          \vbox to \rowheight{
+            \offinterlineskip
+            \hrule\vskip \topwhite
+            \hbox to \colwidth{
+              \codefont\hskip\leftwhite dec\hfil
+            }
+            \vfil
+            \hbox to \colwidth{
+              \namefont\hfil CHAR\hfil
+            }
+            \vfil
+            \hbox to \colwidth{
+              \codefont\hskip\leftwhite hex\hfil oct \hskip\rightwhite
+            }
+            \vskip\botwhite
+            \hrule                               }%
+            \vrule
+          }
+        }
+        \hfil&%
+        \multispan2\tiny \hskip\fatlinewidth
+          \vtop{\vskip-8pt\baselineskip=8.5pt
+          \hbox{汉化:耿楠}
+          \rlap{信息工程学院}
+          \rlap{西北农林科技大学}
+          \rlap{中国·陕西·杨凌}        
+          }
+        \hfil&%                    
+        \multispan2\tiny \hskip-2.5mm%\fatlinewidth
+          \vtop{\vskip-8pt\baselineskip=8.5pt
+          \hbox{原著:Victor Eijkhout}
+          \rlap{Dept. of Comp. Sci.}
+          \rlap{University of Tennessee}
+          \rlap{Knoxville TN 37996, USA}
+          }\hfil\cr
+    }
+  }
+}
+
+% 在表格列中使用带参数的命令
 \newcommand*{\mymacro}[1]{\asc{#1}\ii}% Do anything you like with `#1`
 \newcolumntype{C}{>{\collectcell\mymacro}c<{\endcollectcell}}
 
 
 %=======================================================
 \begin{document} %在document环境中撰写文档
-%\pagestyle{empty}
-%\setlength{\textheight}{28cm}
+% 原始绘制方法
+%\usebox{\ascii}
 
-%\asc{a}\ii
+% \asc{a}\ii
 % \begin{tabular}{CC}
 %  T  & l \\
 %  \empty & n \\
-% \end{tabular}
-% =====绘制表格======
-\vbox{%  
-  \halign{%
-    \fatline\fourbit#\fb&%
-    \fatline\asc#\ii&\thinline\asc#\ii&%
-    \fatline\asc#\ii&\thinline\asc#\ii&%
-    \fatline\asc#\ii&\thinline\asc#\ii&%
-    \fatline\asc#\ii&\thinline\asc#\ii\fatline\cr%
-    \noalign{\vskip3mm \hrule}%
-    \omit\fatline\hfil\threebit{b7}{b6}{b5}&%
-    \omit\fatline\threebit000&\omit\thinline\threebit001&%
-    \omit\fatline\threebit010&\omit\thinline\threebit011&%
-    \omit\fatline\threebit100&\omit\thinline\threebit101&%
-    \omit\fatline\threebit110&\omit\thinline\threebit111\fatline\cr%
-    \noalign{\vskip-.5mm}%
-    \omit\fatline\bithead&%
-    \omit\fatline\comment{控制字符}\span\omit&%
-    \omit\fatline\comment{符号和数据}\span\omit&%
-    \omit\fatline\comment{大写字母}\span\omit&%
-    \omit\fatline\comment{小写字母}\span\omit\hfil\fatline\cr
-    \noalign{\hrule}
-    {} 0 0 0 0&NUL&DLE&SP     &0  &@  &P       &\texttt{`} &p  \cr\noalign{\hrule}
-    {} 0 0 0 1&SOH&DC1&!      &1  &A  &Q       &a &q  \cr\noalign{\hrule}
-    {} 0 0 1 0&STX&DC2&"      &2  &B  &R       &b &r  \cr\noalign{\hrule}
-    {} 0 0 1 1&ETX&DC3&\#     &3  &C  &S       &c &s  \cr\noalign{\hrule}
-    {} 0 1 0 0&EOT&DC4&\$     &4  &D  &T       &d &t  \cr\noalign{\hrule}
-    {} 0 1 0 1&ENQ&NAK&\%     &5  &E  &U       &e &u  \cr\noalign{\hrule}
-    {} 0 1 1 0&ACK&SYN&\&     &6  &F  &V       &f &v  \cr\noalign{\hrule}
-    {} 0 1 1 1&BEL&ETB&'      &7  &G  &W       &g &w  \cr\noalign{\hrule}
-    {} 1 0 0 0&BS &CAN&(      &8  &H  &X       &h &x  \cr\noalign{\hrule}
-    {} 1 0 0 1&HT &EM &)      &9  &I  &Y       &i &y  \cr\noalign{\hrule}
-    {} 1 0 1 0&LF &SUB&*      &:  &J  &Z       &j &z  \cr\noalign{\hrule}
-    {} 1 0 1 1&VT &ESC&+      &;  &K  &[       &k &$\{$\cr  \noalign{\hrule}
-    {} 1 1 0 0&FF &FS &,      &$<$&L  &\\      &l &| \cr  \noalign{\hrule}
-    {} 1 1 0 1&CR &GS &$-$    &=  &M  &]       &m &$\}$\cr  \noalign{\hrule}
-    {} 1 1 1 0&SO &RS &.      &$>$&N  &\char94 &n &\char126\cr
-    \noalign{\hrule}
-    {} 1 1 1 1&SI &US &/      &?  &O  &\texttt{\_}&o &DEL\cr\noalign{\hrule}
-    \noalign{\vskip2mm}
-    \omit&\omit\namefont \hfil 图例：\hfil \span\omit&%
-    \multispan2\hskip\fatlinewidth
-    \vtop{
-      \vskip-10pt\hbox{
-        \vrule
-        \vbox to \rowheight{
-          \offinterlineskip
-          \hrule\vskip \topwhite
-          \hbox to \colwidth{
-            \codefont\hskip\leftwhite dec\hfil
-          }
-          \vfil
-          \hbox to \colwidth{
-            \namefont\hfil CHAR\hfil
-          }
-          \vfil
-          \hbox to \colwidth{
-            \codefont\hskip\leftwhite hex\hfil oct \hskip\rightwhite
-          }
-          \vskip\botwhite
-          \hrule                               }%
-          \vrule
-        }
-      }
-      \hfil&%
-      \multispan2\tiny \hskip\fatlinewidth
-        \vtop{\vskip-8pt\baselineskip=8.5pt
-        \hbox{汉化:耿楠}
-        \rlap{信息工程学院}
-        \rlap{西北农林科技大学}
-        \rlap{中国·陕西·杨凌}        
-        }
-      \hfil&%                    
-      \multispan2\tiny \hskip-2.5mm%\fatlinewidth
-        \vtop{\vskip-8pt\baselineskip=8.5pt
-        \hbox{原著:Victor Eijkhout}
-        \rlap{Dept. of Comp. Sci.}
-        \rlap{University of Tennessee}
-        \rlap{Knoxville TN 37996, USA}
-        }\hfil\cr
-  }
-}
+    %   \end{tabular}
+
+\begin{tabular}{|C|C|C|C|C|C|C|C|C|}
+  \hline
+  \multicolumn{1}{|c|}{\threebit{b7}{b6}{b5}}&
+  \multicolumn{1}{c|}{\threebit000}&\multicolumn{1}{c|}{\threebit001}&
+  \multicolumn{1}{c|}{\threebit010}&\multicolumn{1}{c|}{\threebit011}&
+  \multicolumn{1}{c|}{\threebit100}&\multicolumn{1}{c|}{\threebit101}&
+  \multicolumn{1}{c|}{\threebit110}&\multicolumn{1}{c|}{\threebit111}\\\cline{2-9}
+\end{tabular}
+
 
 \end{document}
 

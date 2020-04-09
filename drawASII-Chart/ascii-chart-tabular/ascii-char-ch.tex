@@ -1,0 +1,202 @@
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+
+\usepackage{ctex}
+\usepackage{collcell}
+
+%% ======以下代码修改自：https://www.ctan.org/pkg/ascii-chart==
+%% 字体设置
+\font\bitfont=cmr7 \fontdimen3\bitfont=3mm
+\font\codefont=cmr5
+\font\namefont=cmss10 scaled 1200%ecrm1000
+\font\titlefont=cmss10 scaled 1440
+\font\commentfont=cmss10
+%% 计数器和尺寸定义
+\newdimen\thinlinewidth \thinlinewidth=.25mm
+\newdimen\fatlinewidth \fatlinewidth=.5mm
+\newdimen\rowheight \rowheight=1.0cm
+\newdimen\colwidth  \colwidth=1.2cm
+\newdimen\Colwidth \Colwidth=2\colwidth
+  \advance\Colwidth by \thinlinewidth
+\newdimen\topwhite \topwhite=2pt
+\newdimen\botwhite \botwhite=-3pt%原值是3pt，底边空白较大？
+\newdimen\leftwhite \leftwhite=2pt
+\newdimen\rightwhite \rightwhite=2pt
+% 用于计算ASCII码值的计数器
+\newcount\rowcount \rowcount=-1 %% 要注意设置为-1
+\newcount\colcount \colcount=0
+\newcount\thenumber
+%% 杂项设置
+\def\bks{$\backslash$}
+\def\thinline{\vrule width \thinlinewidth}
+\def\fatline{\vrule width \fatlinewidth}
+\tolerance=10000
+\vbadness=10000
+%% 进制转换(以下命令开始的大括号后不能为空否则会造成多余的空白)
+% 计算当前行列对应的ASCII码值
+\def\calcnumber{{\multiply\colcount by 16
+  \advance\colcount by \rowcount
+  \global\thenumber=\colcount}}
+% 十进制
+\def\deccode{\number\thenumber}
+% 八进制
+\def\octcode{{\ifnum\thenumber>63
+  \advance\thenumber by -64
+  \count0=\thenumber \divide\count0 by 8
+  1\number\count0
+  \else \count0=\thenumber \divide\count0 by 8
+  \ifnum\count0>0 \number\count0 \fi\fi
+  \multiply\count0 by 8
+  \advance\thenumber by -\count0
+  \number\thenumber}}
+% 十六进制
+\def\hexdigit#1{\ifcase#1 0\or 1\or 2\or 3\or 4\or 5\or 6\or 7\or
+  8\or 9\or A\or B\or C\or D\or E\or F\or
+  \edef\tmp{\message{illegal hex digit
+  \number#1}}\tmp
+  \fi}
+\def\hexcode{{\count0=\thenumber \divide\count0 by 16
+  \ifnum\count0>0 \hexdigit{\count0}\fi
+  \multiply\count0 by 16
+  \advance\thenumber by -\count0 \count0=\thenumber
+  \hexdigit{\count0}}}
+%% 填写表头
+\def\threebit#1#2#3{\vbox to 0.8\rowheight{\bitfont
+    \vskip\topwhite
+    \hbox to \colwidth{\hskip\leftwhite#1\hfil
+    }
+    %\vskip-3.5mm
+    \vfil
+    \hbox to \colwidth{\hfil#2\hfil
+    }
+    %\vskip-3.5mm
+    \vfil
+    \hbox to \colwidth{\hfil#3\hskip\rightwhite
+    }
+    \vskip\botwhite}}
+\def\comment#1{\vbox to 0.8\colwidth{\vfil%\hrule height 0mm depth .25mm
+    \vfil
+    \hbox to \Colwidth{\hfil#1\hfil%\commentfont
+    }
+    \vfil}}
+\def\bithead{\vbox to 0.8\colwidth{\hsize=1.5\colwidth
+    \vskip \topwhite
+    \hbox to \hsize{\commentfont\hskip5.5mm BITS\hfil
+    }
+    %\vskip-1.0mm
+    \vfil
+    \hbox to \hsize{\bitfont\ b4 b3 b2 b1
+    }
+    \vskip\botwhite}}
+%% ASCII字符排版
+\def\fourbit#1\fb{\vbox to \rowheight{
+    \vfil
+    \hbox to 1.0\colwidth{\bitfont\hfil #1\hfil}
+    \vfil%
+  }%
+  \global\advance\rowcount by 1%行计数器加1
+  \global\colcount=0}%列计数器复位(0)
+\def\asc#1\ii{\calcnumber%计算ASCII码10、16、8进制的值
+  \vbox to \rowheight{\offinterlineskip
+    \vskip\topwhite
+    \hbox to \colwidth{\codefont
+      \hskip\leftwhite
+      \deccode\hfil
+    }
+    \vfil
+    \hbox to \colwidth{%\vrule width 0cm height 10pt depth 2pt
+      \namefont
+      \hfil#1\hfil
+    }
+    \vfil
+    \hbox to \colwidth{\codefont
+      \hskip\leftwhite
+      \hexcode\hfil\octcode
+      \hskip\rightwhite
+    }
+    \vskip\botwhite
+  }%
+  \global\advance\colcount by 1% 列计数器加1
+}
+%% ========================================================
+% 在表格列中使用带参数的命令
+\newcommand*{\myfirstCol}[1]{\fourbit{#1}\fb}% Do anything you like with `#1`
+\newcolumntype{F}{>{\collectcell\myfirstCol}c<{\endcollectcell}}
+
+\newcommand*{\mymacro}[1]{\asc{#1}\ii}% Do anything you like with `#1`
+\newcolumntype{C}{>{\collectcell\mymacro}c<{\endcollectcell}}
+
+%=======================================================
+\begin{document} %在document环境中撰写文档
+\pagestyle{empty}
+\centering
+\setlength\tabcolsep{1.5pt}
+%\renewcommand{\arraystretch}{0.5}
+\begin{tabular}{|F|C|C|C|C|C|C|C|C|}
+  \hline
+  \multicolumn{1}{|r|}{\threebit{b7}{b6}{b5}}&
+  \multicolumn{1}{c|}{\threebit000}&\multicolumn{1}{c|}{\threebit001}&
+  \multicolumn{1}{c|}{\threebit010}&\multicolumn{1}{c|}{\threebit011}&
+  \multicolumn{1}{c|}{\threebit100}&\multicolumn{1}{c|}{\threebit101}&
+  \multicolumn{1}{c|}{\threebit110}&\multicolumn{1}{c|}{\threebit111}\\\cline{2-9}
+  \multicolumn{1}{|c|}{\bithead}&
+  \multicolumn{2}{c|}{\comment{控制字符}}&
+  \multicolumn{2}{c|}{\comment{符号和数据}}&
+  \multicolumn{2}{c|}{\comment{大写字母}}&
+  \multicolumn{2}{c|}{\comment{小写字母}}\\\hline
+  0 0 0 0&NUL&DLE&SP     &0  &@  &P       &\texttt{`} &p  \\\hline
+  0 0 0 1&SOH&DC1&!      &1  &A  &Q       &a &q \\\hline
+  0 0 1 0&STX&DC2&"      &2  &B  &R       &b &r \\\hline
+  0 0 1 1&ETX&DC3&\#     &3  &C  &S       &c &s  \\\hline
+  0 1 0 0&EOT&DC4&\$     &4  &D  &T       &d &t  \\\hline
+  0 1 0 1&ENQ&NAK&\%     &5  &E  &U       &e &u  \\\hline
+  0 1 1 0&ACK&SYN&\&     &6  &F  &V       &f &v  \\\hline
+  0 1 1 1&BEL&ETB&'      &7  &G  &W       &g &w  \\\hline
+  1 0 0 0&BS &CAN&(      &8  &H  &X       &h &x  \\\hline
+  1 0 0 1&HT &EM &)      &9  &I  &Y       &i &y  \\\hline
+  1 0 1 0&LF &SUB&*      &:  &J  &Z       &j &z  \\\hline
+  1 0 1 1&VT &ESC&+      &;  &K  &[       &k &$\{$\\\hline
+  1 1 0 0&FF &FS &,      &$<$&L  &\bks      &l &| \\\hline
+  1 1 0 1&CR &GS &$-$    &=  &M  &]       &m &$\}$\\\hline
+  1 1 1 0&SO &RS &.      &$>$&N  &\char94 &n &\char126\\\hline
+  1 1 1 1&SI &US &/      &?  &O  &\texttt{\_}&o &DEL\\\hline
+  \multicolumn{3}{r}{图例：}&
+  \multicolumn{4}{c}{\hskip\fatlinewidth
+      \vtop{\vskip-10pt\hbox{
+          \vrule
+          \vbox to 1.1\rowheight{
+            %\offinterlineskip
+            \hrule\vskip \topwhite
+            \hbox to 1.2\colwidth{
+              \codefont\hskip\leftwhite dec\hfil
+            }
+            \vfil
+            \hbox to 1.2\colwidth{
+              \namefont\hfil CHAR\hfil
+            }
+            \vfil
+            \hbox to 1.2\colwidth{
+              \codefont\hskip\leftwhite hex\hfil oct \hskip\rightwhite
+            }
+            \vskip-\botwhite
+            \hrule}%
+            \vrule
+          }
+        }
+        \hfil
+        }&
+        \multicolumn{2}{c}{
+          \tiny \hskip\fatlinewidth
+          \vtop{\vskip-10pt\baselineskip=8.5pt
+          \hbox{汉化:耿楠}
+          \rlap{信息工程学院}
+          \rlap{西北农林科技大学}
+          \rlap{中国·陕西·杨凌}        
+          }
+        }%\\
+\end{tabular}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
