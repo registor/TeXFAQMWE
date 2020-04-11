@@ -1,0 +1,147 @@
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+
+% 中文支持
+\usepackage{ctex}
+
+% TikZ
+\usepackage{tikz}
+\usetikzlibrary{calc}% 计算库
+\usetikzlibrary{arrows.meta}% 箭头库
+\usetikzlibrary{shapes}
+%%%%%%% 绘制链表数据结构需要的TikZ样式 %%%%%%%%
+\tikzstyle{ptr}  = [draw, -{Stealth[scale=1.0]}, blue]
+\tikzstyle{head} = [rectangle, draw, text height=3mm, text width=3mm,
+                    text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{data} = [rectangle split, rectangle split parts=2, draw,
+                    text centered, minimum height=3em]
+\newcommand{\data}{
+  data \nodepart{second}
+  \phantom{\texttt{NULL}}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document} %在document环境中撰写文档
+% 缩放比例
+\def\scaleratio{1.0}
+\begin{figure}[htp]
+  \centering
+  \begin{tikzpicture}[node distance=2cm, auto, scale=\scaleratio,
+    every node/.style={scale=\scaleratio}]
+    \node[head, label=below:phead] (head) {};
+    \node[data, right of=head] (A) {\data};
+    \node[above of=A,node distance=0.5cm,label=above:a1] (a1){};
+    \node[data, right of=A] (B) {\data};
+    \node[above of=B,node distance=0.5cm,label=above:a2] (a2){};
+    \node[data, right of=B] (C) {\data};
+    \node[above of=C,node distance=0.5cm,label=above:a3] (a3){};
+    \node[data, right of=C] (D) {\data};
+    \node[above of=D,node distance=0.5cm,label=above:a4] (a4){};
+    \node[data, right of=D] (E) {\data};
+    \node[above of=E,node distance=0.5cm,label=above:a5] (a5){};
+    \node[data, right of=E] (last) {data \nodepart{second} \texttt{NULL}};
+    \node[above of=last,node distance=0.5cm,label=above:a6] (a6){};
+
+    \draw[fill] (head.center) circle (0.05);
+
+    \path[ptr] (head.center) --++(right:7.5mm) |- (A.text west);
+    \draw[fill] ($(A.south)!0.5!(A.text split)$) circle (0.05);
+    \draw[ptr] ($(A.south)!0.5!(A.text split)$) --++(right:10mm) |- (B.text west);
+    \draw[fill] ($(B.south)!0.5!(B.text split)$) circle (0.05);
+    \draw[ptr] ($(B.south)!0.5!(B.text split)$) --++(right:10mm) |- (C.text west);
+    \draw[fill] ($(C.south)!0.5!(C.text split)$) circle (0.05);
+    \draw[ptr] ($(C.south)!0.5!(C.text split)$) --++(right:10mm) |- (D.text west);
+    \draw[fill] ($(D.south)!0.5!(D.text split)$) circle (0.05);
+    \draw[ptr] ($(D.south)!0.5!(D.text split)$) --++(right:10mm) |- (E.text west);
+    \draw[fill] ($(E.south)!0.5!(E.text split)$) circle (0.05);
+    \draw[ptr] ($(E.south)!0.5!(E.text split)$) --++(right:10mm) |- (last.text west);
+  \end{tikzpicture}
+  \caption{链表结构}
+  \label{fig:list01}
+\end{figure}
+
+\begin{figure}[htp]
+  \centering
+  \begin{tikzpicture}[node distance=2cm, auto, scale=\scaleratio,
+    every node/.style={scale=\scaleratio}]
+    \node[head, label=below:phead] (head) {};
+    \node[data, right of=head] (A) {\data};
+    \node[above of=A,node distance=0.5cm,label=above:a1] (a1){};
+    \node[data, right of=A] (B) {\data};
+    \node[above of=B,node distance=0.5cm,label=above:a2] (a2){};
+    \node[data, right of=B] (C) {\data};
+    \node[above of=C,node distance=0.5cm,label=above:a3] (a3){};
+    \node[data, below of=C, xshift=0.8cm, yshift=0.5cm] (CI) {\data};
+    \node[above of=CI,node distance=0.5cm,label=above:a7] (a7){};        
+    \node[data, right of=C, xshift=0.1cm] (D) {\data};%, xshift=1.5cm
+    \node[above of=D,node distance=0.5cm,label=above:a4] (a4){};
+    \node[data, right of=D] (E) {\data};
+    \node[above of=E,node distance=0.5cm,label=above:a5] (a5){};
+    \node[data, right of=E] (last) {data \nodepart{second} \texttt{NULL}};
+    \node[above of=last,node distance=0.5cm,label=above:a6] (a6){};
+
+    \draw[fill] (head.center) circle (0.05);
+
+    \path[ptr] (head.center) --++(right:7.5mm) |- (A.text west);
+    \draw[fill] ($(A.south)!0.5!(A.text split)$) circle (0.05);
+    \draw[ptr] ($(A.south)!0.5!(A.text split)$) --++(right:10mm) |- (B.text west);
+    \draw[fill] ($(B.south)!0.5!(B.text split)$) circle (0.05);
+    \draw[ptr] ($(B.south)!0.5!(B.text split)$) --++(right:10mm) |- (C.text west);
+    \draw[fill] ($(C.south)!0.5!(C.text split)$) circle (0.05);
+        %\draw[ptr] ($(C.south)!0.5!(C.text split)$) --++(right:10mm) |- (CI.text west);
+    \draw[ptr] ($(C.south)!0.5!(C.text split)$) |- (CI.text west);
+    \draw[fill] ($(CI.south)!0.5!(CI.text split)$) circle (0.05);
+    \draw[ptr] ($(CI.south)!0.5!(CI.text split)$) --++(right:6mm) |- (D.text west);
+    \draw[fill] ($(D.south)!0.5!(D.text split)$) circle (0.05);
+    \draw[ptr] ($(D.south)!0.5!(D.text split)$) --++(right:10mm) |- (E.text west);
+    \draw[fill] ($(E.south)!0.5!(E.text split)$) circle (0.05);
+    \draw[ptr] ($(E.south)!0.5!(E.text split)$) --++(right:10mm) |- (last.text west);
+  \end{tikzpicture}
+  \caption{添加链表节点}
+  \label{fig:list02}
+\end{figure}
+
+\begin{figure}[htp]
+  \centering
+  \begin{tikzpicture}[node distance=2cm, auto, scale=\scaleratio,
+    every node/.style={scale=\scaleratio}]
+
+    \node[head, label=below:phead] (head) {};
+    \node[data, right of=head] (A) {\data};
+    \node[above of=A,node distance=0.5cm,label=above:a1] (a1){};
+    \node[data, right of=A] (B) {\data};
+    \node[above of=B,node distance=0.5cm,label=above:a2] (a2){};
+    \node[data, right of=B] (C) {\data};
+    \node[above of=C,node distance=0.5cm,label=above:a3] (a3){};
+    \node[data, below of=C, xshift=0.8cm, yshift=0.5cm] (CI) {\data};
+    \node[above of=CI,node distance=0.5cm,label=above:a7] (a7){};        
+    \node[data, right of=C, xshift=0.1cm] (D) {\data};
+    \node[above of=D,node distance=0.5cm,label=above:a4] (a4){};
+    \node[data, right of=D] (E) {data \nodepart{second} \texttt{NULL}};
+    \node[above of=E,node distance=0.5cm,label=above:a5] (a5){};
+    \node[data, right of=E] (last) {data \nodepart{second} \texttt{NULL}};
+    \node[above of=last,node distance=0.5cm,label=above:a6] (a6){};
+
+    \draw[fill] (head.center) circle (0.05);
+
+    \path[ptr] (head.center) --++(right:7.5mm) |- (A.text west);
+    \draw[fill] ($(A.south)!0.5!(A.text split)$) circle (0.05);
+    \draw[ptr] ($(A.south)!0.5!(A.text split)$) --++(right:10mm) |- (B.text west);
+    \draw[fill] ($(B.south)!0.5!(B.text split)$) circle (0.05);
+    \draw[ptr] ($(B.south)!0.5!(B.text split)$) --++(right:10mm) |- (C.text west);
+    \draw[fill] ($(C.south)!0.5!(C.text split)$) circle (0.05);
+    \draw[ptr] ($(C.south)!0.5!(C.text split)$) |- (CI.text west);
+    \draw[fill] ($(CI.south)!0.5!(CI.text split)$) circle (0.05);
+    \draw[ptr] ($(CI.south)!0.5!(CI.text split)$) --++(right:6mm) |- (D.text west);
+    \draw[fill] ($(D.south)!0.5!(D.text split)$) circle (0.05);
+    \draw[ptr] ($(D.south)!0.5!(D.text split)$) --++(right:10mm)
+    |- ($(last.text west) + (-0.4, 0.9)$) |- (last.text west);
+  \end{tikzpicture}
+  \caption{删除链表节点}
+  \label{fig:list03}
+\end{figure}      
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
