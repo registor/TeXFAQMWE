@@ -1,0 +1,193 @@
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+
+% 中文支持
+\usepackage{ctex}
+
+% 通过数据表/文件排版表格的宏包
+\usepackage{pgfplotstable}
+% pgfplotstable推荐加载的宏包
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+% 生成文件
+\usepackage{filecontents}
+% 生成逗号分隔的数据文件
+% #或%表示注释
+% 如果数据中有逗号，用{}进行分组，如{grad(log(dof),log(error2))}
+\begin{filecontents}{example.csv}
+# Convergence results
+# fictional source generated 2008
+level,dof,error1,error2,info,{grad(log(dof),log(error2))},quot(error1)
+1,9,2.50000000e-01,7.57858283e-01,48,0,0
+2,25,6.25000000e-02,5.00000000e-01,25,-1.35691545e+00,4
+3,81,1.56250000e-02,2.87174589e-01,41,-1.17924958e+00,4
+4,289,3.90625000e-03,1.43587294e-01,8,-1.08987331e+00,4
+5,1089,9.76562500e-04,4.41941738e-02,22,-1.04500712e+00,4
+6,4225,2.44140625e-04,1.69802322e-02,46,-1.02252239e+00,4
+7,16641,6.10351562e-05,8.20091159e-03,40,-1.01126607e+00,4
+8,66049,1.52587891e-05,3.90625000e-03,48,-1.00563427e+00,3.99999999e+00
+9,263169,3.81469727e-06,1.95312500e-03,33,-1.00281745e+00,4.00000001e+00
+10,1050625,9.53674316e-07,9.76562500e-04,2,-1.00140880e+00,4.00000001e+00
+\end{filecontents}
+
+% 全局格式设置，逗号分隔各参数
+\pgfplotstableset{
+  col sep=comma,%数据用逗号分隔
+  fixed zerofill,%固定小数位数，不足用0填充
+  precision=3%精度
+}
+
+\begin{document}
+
+\begin{table}[htp]
+  \centering
+  \caption{读入csv数据文件排版表格}
+  \pgfplotstabletypeset{example.csv}  
+\end{table}
+
+\begin{table}[htp]
+  \centering
+  \caption{通过列名称/编号选择指定列}
+  \pgfplotstabletypeset[columns={dof,level,[index]4}]{example.csv}  
+\end{table}
+
+\begin{table}[htp]
+  \centering
+  \caption{设置表格式}  
+  \pgfplotstabletypeset[% 如果需要全局设置，可将这些格式在导言区用\pgfplotstableset设置
+    % 通过columns/<colname>/.style={<options>}设置指定 <colname> 列的格式
+    columns/dof/.style={int detect,column type=r,column name=\textsc{Dof}},
+    columns/error1/.style={
+      sci, sci zerofill, sci sep align, precision=1, sci superscript,
+      column name=$e_1$,
+    },
+    columns/error2/.style={
+      sci,sci zerofill,sci sep align,precision=2,sci 10e,
+      column name=$e_2$,
+    },
+    columns/{grad(log(dof),log(error2))}/.style={
+      string replace={0}{}, % 删除 '0'
+      column name={$\nabla e_2$},
+      dec sep align,
+    },
+    columns/{quot(error1)}/.style={
+      string replace={0}{}, % 删除 '0'
+      column name={$\frac{e_1^{(n)}}{e_1^{(n-1)}}$}
+    },
+    empty cells with={--}, % 替换空白单元格为'--'
+    every head row/.style={% 标题行格式
+      before row=\toprule,% 行前命令
+      after row=\midrule% 行后命令
+    },
+    every last row/.style={% 最后一行格式
+      after row=\bottomrule% 行后命令
+    },
+    1000 sep={\,},% 千分位分隔符
+    columns/info/.style={
+      fixed,fixed zerofill,precision=1,showpos,
+      column type=r,
+    }
+    ]{example.csv}% 数据文件
+\end{table}
+
+% 将读入的数据存入宏命令
+\pgfplotstableread{example.csv}\loadedtable
+\begin{table}[htp]
+  \centering
+  \caption{多次使用预读csv数据文件}
+  % 选择指定的列
+  \pgfplotstabletypeset[columns={dof,error1}]\loadedtable
+  \hspace*{2cm}
+  \pgfplotstabletypeset[columns={dof,error2}]\loadedtable
+\end{table}
+  
+\begin{table}[htp]
+  \centering
+  \caption{使用内嵌数据排版}
+  % 选择指定的行
+  \pgfplotstabletypeset[
+    col sep=space,% 空格分隔各列
+    skip first n=4,% 跳过前4行
+    % 三线表
+    every head row/.style={% 标题行格式
+      before row=\toprule,% 行前命令
+      after row=\midrule% 行后命令
+    },
+    every last row/.style={% 最后一行格式
+      after row=\bottomrule% 行后命令
+    },
+    ]{%<- 必须使用这个'%'，否则此处的newline会被认为是一个空行
+      XYZ Format,
+      Version 1.234
+      Date 2010-09-01
+      @author Mustermann
+      A B C
+      1 2 3
+      4 5 6
+    }
+\end{table}
+
+\begin{table}[htp]
+  \centering
+  \caption{设置彩色列}
+  \pgfplotstabletypeset[
+    columns={dof,error1,{grad(log(dof),log(error2))},info},% 列选择
+    % 列格式设置
+    columns/error1/.style={
+      column name=$L_2$,
+      sci,sci zerofill,sci subscript,
+      precision=3
+    },
+    columns/dof/.style={
+      int detect,
+      column name=\textsc{Dof}
+    },
+    columns/{grad(log(dof),log(error2))}/.style={
+      column name=slopes $L_2$,
+      fixed,fixed zerofill,
+      precision=1
+    },
+    % 每偶数列设置格式(从0开始计数)
+    every even column/.style={
+      column type/.add={>{\columncolor[gray]{.8}}}{}
+    },
+    % 三线表
+    every head row/.style={% 标题行格式
+      before row=\toprule,% 行前命令
+      after row=\midrule% 行后命令
+    },
+    every last row/.style={% 最后一行格式
+      after row=\bottomrule% 行后命令
+    },
+  ]\loadedtable%预读入的数据  
+\end{table}
+
+\begin{table}[htp]
+  \centering
+  \caption{设置彩色行}
+  \pgfplotstabletypeset[
+    columns={dof,error1,{grad(log(dof),log(error2))},info},% 列选择
+    % 设置寄数行颜色
+    every even row/.style={
+      before row={\rowcolor[gray]{0.9}}
+    },
+    % 三线表
+    every head row/.style={
+      before row=\toprule,
+      after row=\midrule
+    },
+    every last row/.style={
+      after row=\bottomrule},
+  ]\loadedtable%预读入的数据  
+\end{table}  
+
+\verb|pgfplotstable|宏包采用``key-value-options''方式设置各个参数，并
+提供了丰富的格式控制，其细节，请使用\verb|texdoc pgfplotstable|参阅说
+明书。  
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
