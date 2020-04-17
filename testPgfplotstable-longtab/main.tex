@@ -1,0 +1,160 @@
+\documentclass{ctexart}
+
+% 通过数据表/文件排版表格的宏包
+\usepackage{pgfplotstable}
+% pgfplotstable推荐加载的宏包
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{multirow}
+% 生成文件
+\usepackage{filecontents}
+% 生成逗号分隔的数据文件
+% #或%表示注释
+% 如果数据中有逗号，用{}进行分组，如{grad(log(dof),log(error2))}
+\begin{filecontents}{example.csv}
+cola,colb,colc,cold,cole,colf,colg
+CG.A.2,23.05,0.002,0.116,0.035,0.589,32491
+CG.A.4,15.06,0.003,0.067,0.021,0.351,18211
+CG.A.8,13.38,0.004,0.072,0.023,0.210,9890
+CG.B.2,867.45,0.002,0.864,0.232,3.256,228562
+CG.B.4,501.61,0.003,0.438,0.136,2.075,123862
+CG.B.8,384.65,0.004,0.457,0.108,1.235,63777
+MG.A.2,112.27,0.002,0.846,0.237,3.930,236473
+MG.A.4,59.84,0.003,0.442,0.128,2.070,123875
+MG.A.8,31.38,0.003,0.476,0.114,1.041,60627
+MG.B.2,526.28,0.002,0.821,0.238,4.176,236635
+MG.B.4,280.11,0.003,0.432,0.130,1.706,123793
+MG.B.8,148.29,0.003,0.442,0.116,0.893,60600
+LU.A.2,2116.54,0.002,0.110,0.030,0.532,28754
+LU.A.4,1102.50,0.002,0.069,0.017,0.255,14915
+LU.A.8,574.47,0.003,0.067,0.016,0.192,8655
+LU.B.2,9712.87,0.002,0.357,0.104,1.734,101975
+LU.B.4,4757.80,0.003,0.190,0.056,0.808,53522
+LU.B.8,2444.05,0.004,0.222,0.057,0.548,30134
+CG.B.2,867.45,0.002,0.864,0.232,3.256,228562
+CG.B.4,501.61,0.003,0.438,0.136,2.075,123862
+CG.B.8,384.65,0.004,0.457,0.108,1.235,63777
+MG.A.2,112.27,0.002,0.846,0.237,3.930,236473
+MG.A.4,59.84,0.003,0.442,0.128,2.070,123875
+MG.A.8,31.38,0.003,0.476,0.114,1.041,60627
+MG.B.2,526.28,0.002,0.821,0.238,4.176,236635
+MG.B.4,280.11,0.003,0.432,0.130,1.706,123793
+MG.B.8,148.29,0.003,0.442,0.116,0.893,60600
+LU.A.2,2116.54,0.002,0.110,0.030,0.532,28754
+LU.A.4,1102.50,0.002,0.069,0.017,0.255,14915
+LU.A.8,574.47,0.003,0.067,0.016,0.192,8655
+LU.B.2,9712.87,0.002,0.357,0.104,1.734,101975
+LU.B.4,4757.80,0.003,0.190,0.056,0.808,53522
+LU.B.8,2444.05,0.004,0.222,0.057,0.548,30134
+EP.A.2,123.81,0.002,0.010,0.003,0.074,1834
+EP.A.4,61.92,0.003,0.011,0.004,0.073,1743
+EP.A.8,31.06,0.004,0.017,0.005,0.073,1661
+EP.B.2,495.49,0.001,0.009,0.003,0.196,2011
+EP.B.4,247.69,0.002,0.012,0.004,0.122,1663
+EP.B.8,126.74,0.003,0.017,0.005,0.083,1656
+\end{filecontents}
+
+% 全局格式设置，对所有表格有效
+\pgfplotstableset{
+  col sep=comma,%数据用逗号分隔
+  fixed zerofill,%固定小数位数，不足用0填充
+  precision=3%精度
+}
+
+% 定义跨页表表头
+\newcommand{\headrow}{
+   \multirow{2}{*}{测试程序} & \multicolumn{1}{c}{正常运行} &
+   \multicolumn{1}{c}{同步} & \multicolumn{1}{c}{检查点} &
+   \multicolumn{1}{c}{卷回恢复} & \multicolumn{1}{c}{进程迁移} &
+   \multicolumn{1}{c}{检查点} \\
+   & \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{时间(s)} &
+   \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{时间(s)} &
+   \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{文件(KB)} \\
+ }
+ % 定义跨页表续表表题
+ \newcommand{\ctncap}{
+   \multicolumn{7}{c}{续表~\thetable\hskip1em 实验数据}  
+ }
+
+\begin{document}
+
+% \begin{table}[htp]
+%   \centering
+%   \caption{设置表格式}  
+  \pgfplotstabletypeset[
+    % 使用longtable环境
+    begin table=\begin{longtable},% 
+    end table=\end{longtable},%
+    % 设置列格式(通过索引号选择列)
+    display columns/0/.style={%
+      column name={\multirow{2}{*}{测试程序}},% 列名称
+      column type={c},% 列格式
+      string type% 数据类型
+    },%
+    display columns/1/.style={%
+      column name=正常运行,% 列名称
+      column type={r},% 列格式
+      fixed zerofill,%固定小数位数，不足用0填充
+      precision=2%精度
+    },%
+    display columns/2/.style={%
+      column name=同步,% 列名称
+      column type={r},% 列格式
+      fixed zerofill,%固定小数位数，不足用0填充
+      precision=3%精度
+      %int detect%
+    },%
+    display columns/3/.style={%
+      column name=检测点,% 列名称
+      column type={r},% 列格式
+      %int detect% 数据类型
+    },%
+    display columns/4/.style={%
+      column name=卷回恢复,% 列名称
+      column type={r},% 列格式
+      %int detect% 数据类型
+    },%
+    display columns/5/.style={%
+      column name=进程迁移,% 列名称
+      column type={r},% 列格式
+      int detect% 数据类型
+    },%
+    display columns/6/.style={%
+      column name=检查点,% 列名称
+      column type={r},% 列格式
+      int detect% 数据类型
+    },%      
+    every head row/.append style={
+      before row={\caption[实验数据]{实验数据，这个题注十分的长，注意这在索引中的处理方式，还有 caption 后面的双反斜杠\label{tabpgfltab}}\\\toprule},
+      after row={%          
+        & 时间(s) & 时间(s) & 时间(s) & 时间(s) & 时间(s) & 文件(KB)\\ % 数据单位，用 & 分割
+        \midrule
+        \endfirsthead
+        \ctncap\\
+        \toprule
+        \headrow
+        \midrule
+        \endhead
+        \hline
+        \multicolumn{7}{r}{续下页} \\
+        \endfoot
+        \endlastfoot
+      },
+    },
+    every last row/.style={after row=\bottomrule}, %
+  % %]{db4.csv} % filename/path to file
+    ]{example.csv}% 数据文件
+%\end{table}
+
+\verb|pgfplotstable|宏包采用``key-value-options''方式设置各个参数，并
+提供了丰富的格式控制，其细节，请使用\verb|texdoc pgfplotstable|参阅说
+明书。  
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
