@@ -59,8 +59,6 @@ EP.B.8,126.74,0.003,0.017,0.005,0.083,1656
 % 全局格式设置，对所有表格有效
 \pgfplotstableset{
   col sep=comma,%数据用逗号分隔
-  fixed zerofill,%固定小数位数，不足用0填充
-  precision=3%精度
 }
 
 % 定义跨页表表头
@@ -80,77 +78,76 @@ EP.B.8,126.74,0.003,0.017,0.005,0.083,1656
 
 \begin{document}
 
-% \begin{table}[htp]
-%   \centering
-%   \caption{设置表格式}  
-  \pgfplotstabletypeset[
-    % 使用longtable环境
-    begin table=\begin{longtable},% 
-    end table=\end{longtable},%
-    % 设置列格式(通过索引号选择列)
-    display columns/0/.style={%
-      column name={\multirow{2}{*}{测试程序}},% 列名称
-      column type={c},% 列格式
-      string type% 数据类型
-    },%
-    display columns/1/.style={%
-      column name=正常运行,% 列名称
-      column type={r},% 列格式
-      fixed zerofill,%固定小数位数，不足用0填充
-      precision=2%精度
-    },%
-    display columns/2/.style={%
-      column name=同步,% 列名称
-      column type={r},% 列格式
-      fixed zerofill,%固定小数位数，不足用0填充
-      precision=3%精度
-      %int detect%
-    },%
-    display columns/3/.style={%
-      column name=检测点,% 列名称
-      column type={r},% 列格式
-      %int detect% 数据类型
-    },%
-    display columns/4/.style={%
-      column name=卷回恢复,% 列名称
-      column type={r},% 列格式
-      %int detect% 数据类型
-    },%
-    display columns/5/.style={%
-      column name=进程迁移,% 列名称
-      column type={r},% 列格式
-      int detect% 数据类型
-    },%
-    display columns/6/.style={%
-      column name=检查点,% 列名称
-      column type={r},% 列格式
-      int detect% 数据类型
-    },%      
-    every head row/.append style={
-      before row={\caption[实验数据]{实验数据，这个题注十分的长，注意这在索引中的处理方式，还有 caption 后面的双反斜杠\label{tabpgfltab}}\\\toprule},
-      after row={%          
-        & 时间(s) & 时间(s) & 时间(s) & 时间(s) & 时间(s) & 文件(KB)\\ % 数据单位，用 & 分割
-        \midrule
-        \endfirsthead
-        \ctncap\\
-        \toprule
-        \headrow
-        \midrule
-        \endhead
-        \hline
-        \multicolumn{7}{r}{续下页} \\
-        \endfoot
-        \endlastfoot
-      },
+\pgfplotstabletypeset[
+  % 使用longtable环境
+  begin table=\begin{longtable},% 
+  end table=\end{longtable},%
+  % 设置列格式(通过索引号选择列)
+  display columns/0/.style={%
+    column name={\multirow{2}{*}{测试程序}},% 列名称
+    column type={c},% 列格式
+    string type% 数据类型
+  },%
+  display columns/1/.style={%
+    column name={\multicolumn{1}{c}{正常运行}},% 列名称
+    column type={r},% 列格式
+    fixed zerofill,%固定小数位数，不足用0填充
+    precision=2%精度
+  },%
+  display columns/2/.style={%
+    column name={\multicolumn{1}{c}{同步}},% 列名称
+    column type={r},% 列格式
+    sci,% 科学计数法
+    sci zerofill,% 数位不足补0
+    precision=2,% 数据精度
+  },%
+  display columns/3/.style={%
+    column name={\multicolumn{1}{c}{检测点}},% 列名称
+    column type={r},% 列格式
+    fixed,
+    precision = 3,
+    fixed zerofill,
+  },%
+  display columns/4/.style={%
+    column name={\multicolumn{1}{c}{卷回恢复}},% 列名称
+    column type={r},% 列格式
+    fixed,
+    precision = 3,
+    fixed zerofill,
+  },%
+  display columns/5/.style={%
+    column name={\multicolumn{1}{c}{进程迁移}},% 列名称
+    column type={r},% 列格式
+    fixed,
+    precision = 3,
+    fixed zerofill,
+  },%
+  display columns/6/.style={%
+    column name={\multicolumn{1}{c}{检查点}},% 列名称
+    column type={r},% 列格式
+    int detect% 数据类型
+  },%      
+  every head row/.append style={
+    before row={\caption[实验数据]{实验数据，这个题注十分的长，注意这在索引中的处理方式，还有 caption 后面的双反斜杠\label{tabpgfltab}}\\\toprule},
+    after row={%          
+      & \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{时间(s)} &
+      \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{时间(s)} &
+      \multicolumn{1}{c}{时间(s)} & \multicolumn{1}{c}{文件(KB)}\\ % 数据单位，用 & 分割
+      \midrule
+      \endfirsthead
+      \ctncap\\
+      \toprule
+      \headrow
+      \midrule
+      \endhead
+      \hline
+      \multicolumn{7}{r}{续下页} \\
+      \endfoot
+      \endlastfoot
     },
-    every last row/.style={after row=\bottomrule}, %
-  % %]{db4.csv} % filename/path to file
-    ]{example.csv}% 数据文件
-%\end{table}
-
-\verb|pgfplotstable|宏包采用``key-value-options''方式设置各个参数，并
-提供了丰富的格式控制，其细节，请使用\verb|texdoc pgfplotstable|参阅说
-明书。  
+  },
+  every last row/.style={after row=\bottomrule}, %
+]{example.csv}% 数据文件 
 
 \end{document}
 
