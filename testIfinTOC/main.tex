@@ -1,0 +1,54 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexbook}
+
+\usepackage{titletoc}
+
+%\usepackage{calc}
+
+% \newlength{\tocseplen}
+% \setlength{\tocseplen}{\widthof{0}}
+% \newlength{\subsecl}
+% \newlength{\substrl}
+\newlength{\sdigitlen}
+\settowidth{\sdigitlen}{0}
+
+\titlecontents{chapter}[0pt]{\vspace{0.25\baselineskip} \songti \zihao{5}}
+    {\thecontentslabel{}\quad}{}
+    {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
+\titlecontents{section}[2em]{\songti \zihao{5}}
+    {\thecontentslabel{}\quad}{}
+    {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
+\titlecontents{subsection}[4em]{\songti \zihao{5}}
+    {\thecontentslabel{}\quad}{}%
+    {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
+
+\renewcommand*{\thesubsection}{\thesection.\arabic{subsection}\ifnum\value{subsection}=10
+  \hspace{-\sdigitlen}\else \ifnum\value{subsection}>10 \hspace{-\sdigitlen}\fi\fi}
+
+% \renewcommand*{\thesubsubsection}{.\arabic{subsubsection}}
+% \renewcommand*{\theparagraph}{.\arabic{paragraph}}
+% \setcounter{secnumdepth}{5}
+% \setcounter{tocdepth}{5}
+
+\begin{document} %在document环境中撰写文档
+
+\tableofcontents
+\chapter{test}
+\section{testsec}
+\subsection{testsub1}
+\subsection{testsub2}
+\subsection{testsub3}
+\subsection{testsub4}
+\subsection{testsub5}
+\subsection{testsub6}
+\subsection{testsub7}
+\subsection{testsub8}
+\subsection{testsub9}
+\subsection{testsub10}
+\subsection{testsub11}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
