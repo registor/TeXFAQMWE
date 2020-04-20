@@ -3,15 +3,28 @@
 
 \usepackage{titletoc}
 
-%\usepackage{calc}
+% \titlecontents{标题名}[左间距]{标题格式}{标题标志}{无序号标题}{指引线与页码}[下间距]
 
-% \newlength{\tocseplen}
-% \setlength{\tocseplen}{\widthof{0}}
-% \newlength{\subsecl}
-% \newlength{\substrl}
-\newlength{\sdigitlen}
-\settowidth{\sdigitlen}{0}
+% 标题名 设置所需修改的某一层次标题格式的标题名，如chapter、section等层次标题名，或是table和figure图表标题名
+% 左间距 可选参数，不能省略
+% 标题格式 设置标题的整体格式，如字体、字体尺寸、与上一个标题的垂直距离等。该参数可空置。
+% 标题标志 设置标题标志的格式,如序号格式、序号宽度、序号与标题内容之间的间距等。该参数不能空置, 否则标题将无标题标志。
+% 无序号标题 设置无序号标题的格式, 如字体、字体尺寸等。 该参数可以空置
+% 指引线与页码 设置标题与页码之间的指引线样式以及页码的格式, 该参数如果空置,标题将无指引线和页码。
+% 下间距 可选参数, 用于设置标题排版后还需要执行的命令, 例如与下个标题的垂直间距等。该参数常被省略。
 
+% 示例如下，第一个参数的section表示标题名，第三个参数{\bf \large}表示字体，粗体，大号，最后一个参数中的\hspace*{3cm}是为了产生一个右间距，使左右对称，因为前边左间距设置的也是3cm.
+
+
+% \titlecontents{section}
+%               [3cm]
+%               {\bf \large}%
+%               {\contentslabel{2.5em}}%
+%               {}%
+%               {\titlerule*[0.5pc]{$\cdot$}\contentspage\hspace*{3cm}}% 
+
+
+% 设置目录格式
 \titlecontents{chapter}[0pt]{\vspace{0.25\baselineskip} \songti \zihao{5}}
     {\thecontentslabel{}\quad}{}
     {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
@@ -19,11 +32,16 @@
     {\thecontentslabel{}\quad}{}
     {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
 \titlecontents{subsection}[4em]{\songti \zihao{5}}
-    {\thecontentslabel{}\quad}{}%
+    {\contentslabel{2.5em}}{}%
     {\hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}
 
-\renewcommand*{\thesubsection}{\thesection.\arabic{subsection}\ifnum\value{subsection}=10
-  \hspace{-\sdigitlen}\else \ifnum\value{subsection}>10 \hspace{-\sdigitlen}\fi\fi}
+   
+
+% \newlength{\sdigitlen}
+% \settowidth{\sdigitlen}{0}    
+    
+% \renewcommand*{\thesubsection}{\thesection.\arabic{subsection}\ifnum\value{subsection}=10
+%   \hspace{-\sdigitlen}\else \ifnum\value{subsection}>10 \hspace{-\sdigitlen}\fi\fi}
 
 % \renewcommand*{\thesubsubsection}{.\arabic{subsubsection}}
 % \renewcommand*{\theparagraph}{.\arabic{paragraph}}
