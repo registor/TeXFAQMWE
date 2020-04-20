@@ -1,0 +1,63 @@
+% 使用ctexart文档类（用XeLaTeX编译，直接支持中文）
+\documentclass{ctexart}
+
+% 设置页面尺寸
+\usepackage{geometry}
+\geometry{%
+  paperwidth=18.5cm,
+  paperheight=26cm,
+  text={14.5cm, 21.5cm},
+  centering,
+  top=2.7cm,
+  left=2.2cm,
+  headsep=3mm,
+  twoside,
+}
+% 中文乱数假文
+\usepackage{zhlipsum}
+% 显示页面布局图
+\usepackage{layout}
+
+% 摘录自https://liam.page/2017/05/14/make-text-area-colored-by-TikZ/
+% tikzpagenodes 宏包定义了相关的区域。
+% current page: 整个纸张区域
+% current page text area: 整个版芯区域
+% current page header area: 整个页眉区域
+% current page footer area: 整个页脚区域
+% current page marginpar area: 整个边注区域
+\usepackage{tikzpagenodes}
+% 改自https://tex.stackexchange.com/questions/353891/how-can-i-draw-a-vertical-line-on-every-page-of-a-document/354058#354058
+\usepackage{everypage}
+\AddEverypageHook{\tikz[remember picture,overlay]{%
+%  \ifodd\value{page}\draw ($(current page text area.north west)+(-0.5\marginparsep,0pt)$)
+%    -- ($(current page text area.south west)+(-0.5\marginparsep,0pt)$);
+%  \else\draw ($(current page text area.north east)+(0.5\marginparsep,0pt)$)
+%    -- ($(current page text area.south east)+(0.5\marginparsep,0pt)$);
+%  \fi
+    % 填充整个
+    \draw[cyan, fill=cyan!35, fill opacity=0.3](current page.north
+    west) rectangle (current page.south east);
+    % 填充版芯    
+    \draw[gray, fill=green!35, fill opacity=0.3](current page text
+    area.north west) rectangle (current page text area.south east);
+    % 填充页眉    
+    \draw[blue, fill=blue!35, fill opacity=0.3](current page header
+    area.north west) rectangle (current page header area.south east);
+    % 填充页脚    
+    \draw[red, fill=red!35, fill opacity=0.3](current page footer
+    area.north west) rectangle (current page footer area.south east);
+    % 填充边注    
+    \draw[yellow, fill=yellow!35, fill opacity=0.3](current page marginpar
+    area.north west) rectangle (current page marginpar area.south east);  
+  }
+}
+
+\begin{document} %在document环境中撰写文档
+% \layout
+\zhlipsum[3-8] 
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
