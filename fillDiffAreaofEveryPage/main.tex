@@ -29,6 +29,7 @@
 % 改自https://tex.stackexchange.com/questions/353891/how-can-i-draw-a-vertical-line-on-every-page-of-a-document/354058#354058
 \usepackage{everypage}
 \AddEverypageHook{\tikz[remember picture,overlay]{%
+% 可以针对奇偶页进行不同处理
 %  \ifodd\value{page}\draw ($(current page text area.north west)+(-0.5\marginparsep,0pt)$)
 %    -- ($(current page text area.south west)+(-0.5\marginparsep,0pt)$);
 %  \else\draw ($(current page text area.north east)+(0.5\marginparsep,0pt)$)
