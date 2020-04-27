@@ -1,0 +1,59 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{backgrounds,calc}
+
+\tikzset{glass tube height/.store in=\glasslength,
+	glass tube height=5,
+	glass tube width/.store in=\glasswidth,
+	glass tube width=1,
+	glass tube/.style={glass indicators,
+		insert path={
+			(-\glasswidth,0)--(-\glasswidth,-\glasslength)arc (180:360:\glasswidth)
+			(\glasswidth,-\glasslength)--(\glasswidth,0)
+			(0,0) ellipse (\glasswidth{} and .5\glasswidth)
+		}
+	},
+	glass indicators/.code={
+		\pgfmathtruncatemacro\xglasslength{\glasslength -1}
+		\foreach \y[count=\x] in {-\glasslength,-\xglasslength,...,-1}
+		{
+			\draw (-0.2,\y)--(0.2,\y) node[right](\x){\x};
+			\ifnum\y<-1
+			\foreach \z in {0.2,0.4,0.6,0.8}
+			{\draw ($(-0.1,\z) + (0,\y)$)--($(0.1,\z)+(0,\y)$);}
+			\fi
+		};
+	},
+	liquid color/.code={\tikzset{liquid n/.style={top color=#1!10,bottom color=#1},liquid u/.style={#1!13}}},
+	liquid/.style={
+		insert path={
+			\pgfextra{
+				\fill[liquid n](-\glasswidth,#1)--(-\glasswidth,-\glasslength)arc (180:360:\glasswidth)
+				(\glasswidth,-\glasslength)--(\glasswidth,#1)--(-\glasswidth,#1);
+				\fill[liquid u](0,#1) ellipse (\glasswidth{} and .5\glasswidth);
+			}
+		},
+	}
+}
+
+% code by Mark Wibrow:
+% http://tex.stackexchange.com/a/124177/13304
+\pgfmathdeclareoperator{ml}{milliliters}{2}{postfix}{600}
+\pgfmathdeclarefunction{milliliters}{1}{%
+	\begingroup%
+	\pgfmathparse{#1-1-\glasslength}%
+	\expandafter%
+	\endgroup\expandafter\edef\expandafter\pgfmathresult\expandafter{\pgfmathresult}%
+}
+
+\begin{document}
+	
+	\begin{tikzpicture}
+	\draw[glass tube];
+	
+	\begin{scope}[on background layer]
+	\fill[liquid color=red,liquid=4ml];
+	\end{scope}
+	\end{tikzpicture}
+	
+\end{document}
