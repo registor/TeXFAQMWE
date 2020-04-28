@@ -1,0 +1,296 @@
+% 一组画化学试验器材的命令
+% 摘录自：https://github.com/davidar/latex-glassware
+% 在原代码的基础上，添加了刻度线
+% 添加了颜色
+\documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+
+\usepackage{ctex}
+
+\usepackage{ifthen}
+\newcommand{\ifnonzero}[2]{
+ \ifthenelse{\equal{#1}{0}}{}{#2}
+}
+\usepackage{calc}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\tikzstyle{glassware} = [fill=white]
+
+\newcommand{\tripodheight}{5.3}
+
+\newcommand{\testtubeheight}{3}
+
+\newcommand{\bunsen}[2][]{
+  \begin{scope}[shift={(#2)},glassware,#1]
+    \filldraw (-1.55,0) -- (-1.55,0.2) -- (-0.45,0.7) -- (-0.45,1.4)
+    -- (0.45,1.4) -- (0.45,0.7) -- (1.55,0.2) -- (1.55,0) -- cycle; % 基座
+    \filldraw (-0.4,1.4) rectangle (0.4,3.8); % 颈部
+    \filldraw (-0.45,3.8) rectangle (0.45,4.8); % 头部
+  \end{scope}
+}
+
+\newcommand{\tripod}[2][]{
+  \begin{scope}[shift={(#2)},glassware,#1]
+    \filldraw (-2,0) -- (-1.3,5.1) -- (-1.8,5.1) -- (-1.8,5.3) --
+    (1.8,5.3) -- (1.8,5.1) -- (1.3,5.1) -- (2,0) -- (1.8,0) --
+    (1.1,5.1) -- (-1.1,5.1) -- (-1.8,0) -- cycle;
+  \end{scope}
+}
+
+\newcommand{\crucible}[2][]{
+  \begin{scope}[shift={(#2)},glassware,#1]
+    \draw (-0.7,1.4) .. controls (-0.7,1) and (-0.8,0) .. (-0.4,0) --
+    (0.4,0) .. controls (0.8,0) and (0.7,1) ..  (0.7,1.4);
+  \end{scope}
+}
+
+\newcommand{\cruciblelid}[2][]{
+ \begin{scope}[shift={(#2)},glassware,#1]
+  \draw[shift={(0,1.4)}] (-0.8,-0.15) .. controls (-0.8,0.15) .. (-0.65,0.15)
+     -- (0.65,0.15)   .. controls (0.8,0.15)  .. (0.8,-0.15);
+ \end{scope}
+}
+
+\newcommand{\metalcoil}[2][]{
+  \begin{scope}[shift={(#2)},glassware,#1]
+    \filldraw (-0.3,0.1) rectangle (0.3,0.3);
+    \filldraw (-0.3,0.1) -- (-0.3,0.3) arc (-90:-60:0.9) --
+      ++(-60:0.2) arc (-60:-90:1.1) -- cycle;
+  \end{scope}
+}
+
+\newcommand{\dropper}[2][]{
+  \begin{scope}[shift={(#2)},glassware,#1]
+    \filldraw[rounded corners] (-0.1,0) -- (-0.2,2.4) -- (-0.3,2.7) --
+    (-0.35,4.5) -- (0.35,4.5) -- (0.3,2.7) -- (0.2,2.4) -- (0.1,0) --
+    cycle;
+  \end{scope}
+}
+
+\newcommand{\beaker}[3][]{
+ \begin{scope}[shift={(#2)},glassware,#1]   
+  \ifnonzero{#3}{
+   \filldraw
+        [yscale=2.8] (-1.3,#3)
+        [rounded corners] -- (-1.3,0) -- (1.3,0)
+        [sharp corners] -- (1.3,#3) -- cycle;
+  }
+  \draw[rounded corners]
+        (-1.5,3) -- (-1.3,3) -- (-1.3,0) -- (1.3,0) -- (1.3,3) -- (1.5,3);
+  % 绘制刻度线(仅示意，非精确刻度) 
+  \foreach \y[count=\x] in {0.5, 1.0, ..., 2.5}
+  {
+    \draw (-0.2,\y)--(0.2,\y) node[right, xshift=-3pt](\x){\tiny{}\x};
+    \pgfmathtruncatemacro{\yy}{\y+0.5}% 变为整数
+    \ifnum\yy<3\relax
+      \foreach \z in {0.1,0.2,0.3,0.4}
+      {
+        \draw ($(-0.1,\z) + (0,\y)$)--($(0.1,\z)+(0,\y)$);
+      }
+    \fi
+  };     
+ \end{scope}
+}
+
+\newcommand{\flask}[3][]{
+ \begin{scope}[shift={(#2)},glassware,#1]
+  \ifnonzero{#3}{
+   \begin{scope}
+    \clip[rounded corners]
+         (-0.45,3) -- (-0.25,3) -- (-0.25,2) -- (-1.0,0) -- (1.0,0) -- (0.25,2) -- (0.25,3) -- (0.45,3);
+    \filldraw
+         [yscale=2.8] (-1.0,#3)
+         [rounded corners] -- (-1.0,0) -- (1.0,0)
+         [sharp corners] -- (1.0,#3) -- cycle;
+   \end{scope}
+  }
+  \draw[rounded corners]
+        (-0.45,3) -- (-0.25,3) -- (-0.25,2) -- (-1.0,0) -- (1.0,0) -- (0.25,2) -- (0.25,3) -- (0.45,3);
+  % 绘制刻度线(仅示意，非精确刻度)
+  \foreach \y[count=\x] in {0.3, 0.8, ..., 2.3}
+  {
+    \draw (-0.1,\y)--(0.1,\y) node[right, xshift=-3pt](\x){\tiny{}\x};
+    \pgfmathtruncatemacro{\yy}{\y+0.7}% 变为整数
+    \ifnum\yy<3\relax
+      \foreach \z in {0.1,0.2,0.3,0.4}
+      {
+        \draw ($(-0.05,\z) + (0,\y)$)--($(0.05,\z)+(0,\y)$);
+      }
+    \fi
+  }; 
+ \end{scope}
+}
+
+% 在原图上添加刻度线，为管口和液面添加椭圆标记
+% TODO：如何在转换后保持液面水平？
+\newcommand{\testtube}[3][]{
+\begin{scope}[shift={(#2)},glassware,#1]
+  \path[draw, clip] (-0.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
+    --++(0,-2.6)arc(-180:0:0.3)to[rounded corners=2pt]++(0.0,2.6)
+    --++(0.1, 0.1)++(-0.4, 0.0) circle [x radius=0.4, y radius=0.065];%      
+  \ifnonzero{#3}{
+    \fill[yscale=2.8] (-0.3,#3) -- (-0.3,0.1071428571) -- (0.3,0.1071428571) -- (0.3,#3) -- cycle; % 0.1071428571 = 0.3/2.8
+    \fill (-0.3,0.3)  -- (-0.3,0.3) arc (-180:0:0.3) -- (0.3,0.3)  -- (0.3,0.3) -- cycle;    
+    \path[draw=white, very thin, #1, yscale=2.8] (0,#3) circle[x radius = 0.3, y radius = 0.035];
+  }
+  % 绘制刻度线(仅示意，非精确刻度) 
+  \foreach \y[count=\x] in {0.5, 1.0, ..., 2.5}
+  {
+    \draw (-0.1,\y)--(0.1,\y) node[right, xshift=-3pt](\x){\tiny{}\x};
+    \pgfmathtruncatemacro{\yy}{\y+0.5}% 变为整数
+    \ifnum\yy<3\relax
+      \foreach \z in {0.1,0.2,0.3,0.4}
+      {
+        \draw ($(-0.05,\z) + (0,\y)$)--($(0.05,\z)+(0,\y)$);
+      }
+    \fi
+  };  
+ \end{scope}
+}
+
+\newcommand{\stopper}[2][]{
+ \begin{scope}[shift={(#2)},glassware,#1]
+  \filldraw (-0.35,0.3) -- (-0.25,-0.5) -- (0.25,-0.5) -- (0.35,0.3) -- cycle;
+ \end{scope}
+}
+
+\newcommand{\pile}[2][]{
+ \begin{scope}[shift={(#2)},glassware,#1]
+  \filldraw (-0.3,0.1) -- (0.3,0.1) -- (0.1, 0.3) arc (45:135:0.141421) -- cycle; % 0.141421 = 0.2/sqrt(2)
+ \end{scope}
+}
+
+\newcommand{\burette}[3][]{
+ \begin{scope}[shift={(#2)},glassware,#1]
+  \ifnonzero{#3}{
+   \begin{scope}
+    \clip[rounded corners]
+         (-0.5,9) -- (-0.3,9) -- (-0.3,3) -- (-0.15,2.8) -- (-0.15,1) -- (0,0) -- (0.15,1) -- (0.15,2.8) -- (0.3,3) -- (0.3,9) -- (0.5,9);
+    \filldraw[shift={(0,2.7)},yscale=6.1] (-0.5,#3) rectangle (0.5,0);
+    \fill (-0.5,0) rectangle (0.5,2.7);
+   \end{scope}
+  }
+  \draw[rounded corners]
+        (-0.5,9) -- (-0.3,9) -- (-0.3,3) -- (-0.15,2.8) -- (-0.15,1)
+        -- (0,0) -- (0.15,1) -- (0.15,2.8) -- (0.3,3) -- (0.3,9) --
+        (0.5,9);
+  % 绘制刻度线(仅示意，非精确刻度)
+  \foreach \y[count=\x] in {3, 4, ..., 8}
+  {
+    \draw (-0.1,\y)--(0.1,\y) node[right, xshift=-3pt](\x){\tiny{}\x};
+    %\pgfmathtruncatemacro{\yy}{\y+0.5}% 变为整数
+    \ifnum\y<8\relax
+      \foreach \z in {0.2,0.4,0.6,0.8}
+      {
+        \draw ($(-0.05,\z) + (0,\y)$)--($(0.05,\z)+(0,\y)$);
+      }
+    \fi
+  };        
+  \filldraw[fill=white,rounded corners] (-0.3,2.7) rectangle (0.6,2.4);
+  \filldraw[fill=white,rounded corners] (0.4,3.0) rectangle (0.6,2.1);
+ \end{scope}
+}
+
+\begin{document}
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \bunsen{0,0}
+      \tripod{0,0}
+      \crucible{0, \tripodheight}
+      \cruciblelid{0,\tripodheight}
+      \metalcoil[fill=blue!15]{0,\tripodheight}
+    \end{tikzpicture}
+    \caption{本生灯, 三角架, 带盖坩锅, 金属试剂}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \dropper[rotate={-45}]{0,0}
+    \end{tikzpicture}
+    \caption{滴管}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \beaker{0,0}{0}
+    \end{tikzpicture}
+    \caption{空烧杯}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \beaker{0,0}{1.00}
+      \testtube[rotate={15},fill=red!25]{-0.2,0.8}{1.00}
+    \end{tikzpicture}
+    \caption{试管与烧杯}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{scope}[shift={(0,0)}]
+        \beaker[fill=lime!25]{0,0}{1.00}
+        \pile[fill=cyan!25]{0,0}
+      \end{scope}
+    \end{tikzpicture}
+    \caption{粉堆与烧杯}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{scope}[shift={(0,0)}]
+        \beaker{0,0}{1.00}
+        \beaker[fill=pink!25]{0,0}{0.50}
+      \end{scope}
+    \end{tikzpicture}
+    \caption{混合物与烧杯}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \testtube[fill=violet!50]{0,0}{0.25}
+      \metalcoil[fill=teal!25, scale=0.8]{0,0.1}
+    \end{tikzpicture}
+    \caption{有金属试剂的试管(25\%)}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \stopper{0,\testtubeheight}
+      \testtube[fill=olive!65]{0,0}{0.50}      
+    \end{tikzpicture}
+    \caption{带塞子的试管{50\%}}
+  \end{center}
+\end{figure}
+ 
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \tikzstyle{glassware} = [fill=magenta!15]
+      \flask{0,0}{0.2}
+      \burette{0,3}{1.0}
+    \end{tikzpicture}
+    \caption{滴定管与烧瓶}
+    \label{d1}
+  \end{center}
+\end{figure}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
