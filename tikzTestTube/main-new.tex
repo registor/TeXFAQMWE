@@ -168,12 +168,12 @@
 \newcommand{\erlenmeyer}[3][]{
 \begin{scope}[shift={(#2)},glassware,#1]
   \path[draw, clip, name path=P1] (-0.3, 3.0)to[rounded corners=2pt]++(0.0,-0.75)
-    to[rounded corners=10pt]++(-1.2,-2.25)
+    to[rounded corners=10pt]++(-1.2,-2.00)
     to[rounded corners=10pt, bend right=15pt]++(3.0, 0.0)
-    to[rounded corners=2pt]++(-1.2, 2.25)--++(0.0, 0.75)
+    to[rounded corners=2pt]++(-1.2, 2.00)--++(0.0, 0.75)
     ++(-0.3, 0.0)circle [x radius=0.3, y radius=0.03];%      
   \ifnonzero{#3}{
-    \fill[yscale=2.8] (-1.5, -15pt) rectangle (1.5, #3);
+    \fill[yscale=2.8] (-1.5, 0pt) rectangle (1.5, #3);
     \path[yscale=2.8, name path=P2](-1.5, #3)--++(3,0);
     \path [name intersections={of=P1 and P2, by={E,F}}];
     % 计算中点
@@ -262,42 +262,20 @@
   \begin{center}
     \begin{tikzpicture}
       \beaker{0,0}{0}
-    \end{tikzpicture}
-    \caption{空烧杯}
-  \end{center}
-\end{figure}
- 
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \beaker{0,0}{1.00}
-      \testtube[rotate={15},fill=red!25]{-0.2,0.8}{1.00}
-    \end{tikzpicture}
-    \caption{试管与烧杯}
-  \end{center}
-\end{figure}
- 
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{scope}[shift={(0,0)}]
+      \begin{scope}[shift={(3,0)}]
+        \beaker{0,0}{1.00}
+        \testtube[rotate={15},fill=red!25]{-0.2,0.8}{1.00}
+      \end{scope}
+      \begin{scope}[shift={(6,0)}]
         \beaker[fill=lime!25]{0,0}{1.00}
         \pile[fill=cyan!25]{0,0}
       \end{scope}
-    \end{tikzpicture}
-    \caption{粉堆与烧杯}
-  \end{center}
-\end{figure}
- 
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{scope}[shift={(0,0)}]
-        \beaker{0,0}{1.00}
+      \begin{scope}[shift={(9,0)}]        
         \beaker[fill=pink!25]{0,0}{0.50}
+        \metalcoil[fill=teal!25, scale=0.8]{0,0.1}
       \end{scope}
     \end{tikzpicture}
-    \caption{混合物与烧杯}
+    \caption{烧杯}
   \end{center}
 \end{figure}
  
@@ -306,39 +284,20 @@
     \begin{tikzpicture}
       \testtube[fill=violet!50]{0,0}{0.25}
       \metalcoil[fill=teal!25, scale=0.8]{0,0.1}
+      \begin{scope}[shift={(3,0)}]        
+        \stopper{0,\testtubeheight}
+        \testtube[fill=olive!65]{0,0}{0.50}
+      \end{scope}
+      \begin{scope}[shift={(6,0)}]        
+        \stopper{0,\testtubeheight}
+        \erlenmeyer[fill=olive!65]{0,0}{0.50}
+      \end{scope}
+      \begin{scope}[shift={(9,0)}]        
+        \stopper{0,\testtubeheight}
+        \ballon[fill=olive!65]{0,0}{0.50}
+      \end{scope}
     \end{tikzpicture}
-    \caption{有金属试剂的试管(25\%)}
-  \end{center}
-\end{figure}
- 
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \stopper{0,\testtubeheight}
-      \testtube[fill=olive!65]{0,0}{0.50}      
-    \end{tikzpicture}
-    \caption{带塞子的试管{50\%}}
-  \end{center}
-\end{figure}
-
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \stopper{0,\testtubeheight}
-      \erlenmeyer[fill=olive!65]{0,0}{0.50}      
-    \end{tikzpicture}
-    \caption{带塞子的锥形瓶{50\%}}
-  \end{center}
-\end{figure}
-
-% 空的锥形瓶
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \stopper{0,\testtubeheight}
-      \ballon[fill=olive!65]{0,0}{0.50}      
-    \end{tikzpicture}
-    \caption{带塞子的球形瓶{50\%}}
+    \caption{试管与瓶}
   \end{center}
 \end{figure}
  
@@ -348,34 +307,23 @@
       \tikzstyle{glassware} = [fill=magenta!15]
       \flask{0,0}{0.2}
       \burette{0,3}{1.0}
+      \begin{scope}[shift={(3,3)}]
+        \tikzstyle{glassware} = [fill=white]
+        \dropper[rotate={-45}]{0,0}
+      \end{scope}
+      \begin{scope}[shift={(9,0)}]
+        \tikzstyle{glassware} = [fill=white]
+        \bunsen{0,0}
+        \tripod{0,0}
+        \crucible{0, \tripodheight}
+        \cruciblelid{0,\tripodheight}
+        \metalcoil[fill=blue!15]{0,\tripodheight}
+      \end{scope}
     \end{tikzpicture}
-    \caption{滴定管与锥形瓶}
+    \caption{其它}
     \label{d1}
   \end{center}
-\end{figure}
-
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \dropper[rotate={-45}]{0,0}
-    \end{tikzpicture}
-    \caption{滴管}
-  \end{center}
-\end{figure}
-
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \bunsen{0,0}
-      \tripod{0,0}
-      \crucible{0, \tripodheight}
-      \cruciblelid{0,\tripodheight}
-      \metalcoil[fill=blue!15]{0,\tripodheight}
-    \end{tikzpicture}
-    \caption{本生灯, 三角架, 带盖坩锅, 金属试剂}
-  \end{center}
-\end{figure}
- 
+\end{figure} 
 \end{document}
 
 %%% Local Variables:
