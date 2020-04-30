@@ -194,7 +194,7 @@
 % 在原图上添加刻度线，为管口和液面添加椭圆标记
 % TODO：如何在给scope转入rotate旋转参数后保持液面水平？
 \newcommand{\testtube}[3][]{
-  \begin{scope}[shift={(#2)},glassware,#1]
+  \begin{scope}[shift={(#2)},glassware,#1]    
     \ifnonzero{#3}{
       \clip(-0.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
         --++(0,-2.6)arc(-180:0:0.3)to[rounded corners=2pt]++(0.0,2.6)
