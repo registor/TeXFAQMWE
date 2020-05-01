@@ -1,0 +1,78 @@
+https://wenda.latexstudio.net/q-2111.html
+
+可以使用选项 /tikz/reset cm 把变换矩阵还原为单位矩阵。
+
+\newcommand{\flask}[3][]{
+  \begin{scope}[reset cm,#2,fill=magenta!15,#1]
+%..........................................................省略
+      % TODO：如何获得给scope转入的rotate旋转参数
+      %       从而进行反旋转以保持液面水平？
+      \begin{scope}[reset cm]
+      \fill[name path=P2] (current bounding box.south west) rectangle (current bounding box.south east |- 0, \i);
+      % 绘制液面椭圆标志
+      % 求交点
+      \path [name intersections={of=P1 and P2, by={E,F}}];
+      % 计算中点
+      \node (M) at ($(E)!0.5!(F)$){};
+      % 计算半径并绘制液面椭圆标志
+      \fill[draw=white, very thin] (E) let \p1 = ($(M)-(E)$),
+                                           \n2 = {veclen(\x1,\y1)}
+        in ++(\n2, 0) circle[x radius = \n2, y radius = 2.5pt];
+      \end{scope}
+%.................................................................省略
+  \end{scope}
+}
+
+
+
+然后效果是：
+
+
+
+\begin{tikzpicture}
+  \flask{rotate=69}{0.50}
+\end{tikzpicture}
+
+
+
+2020-04-30 23-11-26屏幕截图.png
+
+图形中这个倾斜角度有一点问题（杯口那里），要避免这个问题，可能需要一些复杂的计算。
+
+
+
+我对TikZ变换的了解是：
+
+1.如果想获得当前的变换矩阵，可以使用命令 \pgfgettransform，变换矩阵的主要元素是 \pgf@pt@aa, \pgf@pt@ab, \pgf@pt@ba, \pgf@pt@ba 这4个宏(数值)，和 \pgf@pt@x, \pgf@pt@y 这2个尺寸寄存器。
+
+2.直接改变变换矩阵的是命令 \pgftransformcm。
+
+3.顶层的 TikZ 命令、变换选项不会直接把变换矩阵应用于点的坐标，对点坐标应用变换矩阵的是底层的 PGF 命令，例如\pgfpathmoveto, 它会调用命令 \pgfpointtransformed 做变换，变换后的坐标构成软路径。
+
+4.TikZ的变换选项基本上都调用内部命令 \tikz@addtransform 来重定义宏 \tikz@transform, 宏 \tikz@transform 保存一系列的底层变换命令。当宏 \tikz@transform 被执行时，其中的各个变换命令依次起作用，也就是依次修改变换矩阵。
+
+5.如果只用TikZ的命令来画“烧杯”，那么TikZ的变换选项差不多就够用了，不过有时候使用底层的命令会更方便。
+
+我的理解可能不对，仅供参考。
+
+另一个解决方案
+
+另外定义一个pgfkey，在这个key的code里设置rotate并将值存储到一个宏里
+
+\documentclass{article}
+\usepackage{tikz}
+\pgfkeys{
+  /rotate/.code={
+    \pgfkeysalso{/tikz/rotate=#1}
+    \def\rot{#1}
+  }
+}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{scope}[/rotate=45]
+  \draw (0, 0) -- node[right] {\rot} (1, 0);
+\end{scope}
+\end{tikzpicture}
+\end{document}
+

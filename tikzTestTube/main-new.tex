@@ -1,8 +1,9 @@
 % 一组画化学试验器材的命令
 % 结合https://github.com/davidar/latex-glassware
 % 和：https://github.com/raoulhatterer/tikz-labo
-% 在原代码的基础上，添加了刻度线
-% TODO：如何在给scope转入rotate旋转参数后保持液面水平？
+% 在原代码的基础上，添加了刻度线，绘制了立体形式
+% 感谢https://wenda.latexstudio.net/q-2111.html中"咸菜的味道"给于的指
+% 点解决了液面水平问题
 \documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
 % \documentclass[margin=3pt,
 %   convert,
@@ -24,12 +25,16 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usetikzlibrary{intersections}
+%\usetikzlibrary{shapes.geometric,shapes.symbols}
+
+%\pgfkeys{/tikz/remplissage/.initial = -1 cm}%液体高度 -1 = 真空
 
 
 \tikzstyle{glassware} = [fill=white]
 \newcommand{\tripodheight}{5.3}
 \newcommand{\testtubeheight}{3}
 
+\makeatletter
 % 本生灯
 \newcommand{\bunsen}[2][]{
   \begin{scope}[shift={(#2)},glassware,#1]
@@ -86,16 +91,32 @@
 }
 
 % 烧杯
-% 在原图上添加刻度线，为管口和液面添加椭圆标记
-% TODO：如何在给scope转入rotate旋转参数后保持液面水平？
 \newcommand{\beaker}[3][]{
   \begin{scope}[shift={(#2)},glassware,#1]
     \ifnonzero{#3}{
-      \clip[draw, clip] (-1.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
+      % 裁剪区域
+      \clip[draw, clip, name path=P1] (-1.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
         to[rounded corners=7pt]++(0,-2.9)to[rounded corners=7pt, bend right=15pt]
         ++(2.6, 0)--++(0, 3.0)++(-1.35, 0.0) circle [x radius=1.35, y radius=0.08]--cycle;%  
-      \fill[yscale=2.8] (-1.3, -15pt) rectangle (1.3, #3);    
-      \fill[draw=white, yscale=2.8] (0,#3) circle[x radius = 1.3, y radius = 0.03];
+      % 按比例计算液面高度
+      \pgfmathsetmacro{\c}{2.8 * #3}
+      % 旋转  
+      \pgfpointtransformed{\pgfpoint{0}{\c}}
+      % 得到y轴坐标
+      \pgfmathsetmacro{\c}{\pgf@y}
+      \begin{scope}[reset cm]%重变换矩阵为单位阵
+        % 绘制液面矩形
+        \fill[name path=P2](current bounding box.south west) rectangle (current bounding box.south east |- 0, \c);
+        % 绘制液面椭圆标志
+        % 求液面与外壁交点
+        \path [name intersections={of=P1 and P2, by={E, F}}];
+        % 计算中点
+        \node (M) at ($(E)!0.5!(F)$){};
+        % 计算半径并绘制液面椭圆标志
+        \fill[draw=white, very thin] (E) let \p1 = ($(M)-(E)$),
+                                             \n2 = {veclen(\x1,\y1)}
+          in ++(\n2, 0) circle[x radius = \n2, y radius = 2.5pt];
+      \end{scope}
     }
     % 绘制刻度线(仅示意，非精确刻度) 
     \foreach \y[count=\x] in {0.5, 1.0, ..., 2.5}
@@ -109,6 +130,7 @@
         }
       \fi
     }
+    % 绘制烧杯外壁
     \draw[thick] (-1.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
       to[rounded corners=7pt]++(0,-2.9)to[rounded corners=7pt, bend right=15pt]
       ++(2.6, 0)--++(0, 3.0)++(-1.35, 0.0) circle [x radius=1.35, y radius=0.08]--cycle;%
@@ -135,7 +157,7 @@
     \pgfmathsetmacro{\m}{-1 * \b / (2 * \a)}
     % 液面系数为不0
     \ifnonzero{#3}{
-      % 烧瓶外框路径，并构成裁剪区域
+      % 用烧瓶外壁路径构成裁剪区域
       \clip[rounded corners, name path = P1] (-0.4, 3)--++(0.15,-0.1)
         --++(0,-0.9)--++(-0.75, -2.0)to[bend right=10pt]++(2.0, 0.0)--++(-0.75, 2.0)
         --++(0.0, 0.9)--++(0.15, 0.10)
@@ -146,18 +168,22 @@
       \pgfmathsetmacro{\n}{sqrt(abs(\delta)) / (2 * abs(\a))}
       \pgfmathsetmacro{\i}{\m - \n}
       % 绘制液面矩形并被烧瓶裁剪
-      \filldraw (-1.0, -3.5pt) rectangle (1.0, \i);
-      % 绘制液面椭圆标志
-      % 定义水平线
-      \path[name path=P2](-1.0, \i)--++(2,0);
-      % 求交点
-      \path [name intersections={of=P1 and P2, by={E,F}}];
-      % 计算中点
-      \node (M) at ($(E)!0.5!(F)$){};
-      % 计算半径并绘制液面椭圆标志
-      \fill[draw=white, very thin] (E) let \p1 = ($(M)-(E)$),
-                                           \n2 = {veclen(\x1,\y1)}
-        in ++(\n2, 0) circle[x radius = \n2, y radius = 2.5pt];
+      % 旋转  
+      \pgfpointtransformed{\pgfpoint{0}{\c}}
+      % 得到y轴坐标
+      \pgfmathsetmacro{\c}{\pgf@y}
+      \begin{scope}[reset cm]%重变换矩阵为单位阵
+        \fill[name path=P2](current bounding box.south west) rectangle (current bounding box.south east |- 0, \i);
+        % 绘制液面椭圆标志
+        % 求液面与外壁交点
+        \path [name intersections={of=P1 and P2, by={E, F}}];
+        % 计算中点
+        \node (M) at ($(E)!0.5!(F)$){};
+        % 计算半径并绘制液面椭圆标志
+        \fill[draw=white, very thin] (E) let \p1 = ($(M)-(E)$),
+                                             \n2 = {veclen(\x1,\y1)}
+          in ++(\n2, 0) circle[x radius = \n2, y radius = 2.5pt];
+      \end{scope}
     }
     % 绘制刻度线(用积分法计算出刻度位置)
     \pgfmathtruncatemacro{\lticklable}{1}
@@ -182,7 +208,7 @@
         \draw (-0.05,\i)--(0.05,\i);
       \fi
     }
-    % 绘制烧瓶外框
+    % 绘制烧瓶外壁
     \draw[thick, rounded corners] (-0.4, 3)--++(0.15,-0.1)
       --++(0,-0.9)--++(-0.75, -2.0)to[bend right=10pt]++(2.0, 0.0)--++(-0.75, 2.0)
       --++(0.0, 0.9)--++(0.15, 0.10)
@@ -191,18 +217,33 @@
 }
 
 % 试管
-% 在原图上添加刻度线，为管口和液面添加椭圆标记
-% TODO：如何在给scope转入rotate旋转参数后保持液面水平？
 \newcommand{\testtube}[3][]{
   \begin{scope}[shift={(#2)},glassware,#1]
+    % 液面系数不为0，通过设置裁剪区域绘制液面
     \ifnonzero{#3}{
-      \clip(-0.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
+      % 用试管外壁构成裁剪区域
+      \clip[name path=P1](-0.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
         --++(0,-2.6)arc(-180:0:0.3)to[rounded corners=2pt]++(0.0,2.6)
-        --++(0.1, 0.1)++(-0.4, 0.0) circle [x radius=0.4, y radius=0.065]--cycle;% 
-      % \fill[yscale=2.8] (-0.3,#3) -- (-0.3,0.1071428571) -- (0.3,0.1071428571) -- (0.3,#3) -- cycle; % 0.1071428571 = 0.3/2.8
-      % \fill (-0.3,0.3)  -- (-0.3,0.3) arc (-180:0:0.3) -- (0.3,0.3)  -- (0.3,0.3) -- cycle;    
-      \fill[yscale=2.8] (-0.3,0.0) rectangle (0.3, #3);    
-      \fill[draw=white, very thin, yscale=2.8] (0,#3) circle[x radius = 0.3, y radius = 0.035];
+        --++(0.1, 0.1)++(-0.4, 0.0) circle [x radius=0.4, y radius=0.065]--cycle;%  
+      % 按比例计算液面高度
+      \pgfmathsetmacro{\c}{2.8 * #3}
+      % 旋转  
+      \pgfpointtransformed{\pgfpoint{0}{\c}}
+      % 得到y轴坐标
+      \pgfmathsetmacro{\c}{\pgf@y}
+      \begin{scope}[reset cm]%重变换矩阵为单位阵
+        % 绘制液面矩形
+        \fill[name path=P2](current bounding box.south west) rectangle (current bounding box.south east |- 0, \c);
+        % 绘制液面椭圆标志
+        % 求液面与试管壁交点
+        \path [name intersections={of=P1 and P2, by={E, F}}];
+        % 计算中点
+        \node (M) at ($(E)!0.5!(F)$){};
+        % 计算半径并绘制液面椭圆标志
+        \fill[draw=white, very thin] (E) let \p1 = ($(M)-(E)$),
+                                             \n2 = {veclen(\x1,\y1)}
+          in ++(\n2, 0) circle[x radius = \n2, y radius = 1.5pt];
+      \end{scope}
     }
     % 绘制刻度线(仅示意，非精确刻度) 
     \foreach \y[count=\x] in {0.5, 1.0, ..., 2.5}
@@ -216,6 +257,7 @@
         }
       \fi
     };
+    % 绘制试管外壁
     \draw[thick](-0.4, 3) to[rounded corners=2pt]++(0.1,-0.1)
       --++(0,-2.6)arc(-180:0:0.3)to[rounded corners=2pt]++(0.0,2.6)
       --++(0.1, 0.1)++(-0.4, 0.0) circle [x radius=0.4, y radius=0.065]--cycle;%
@@ -223,8 +265,7 @@
 }
 
 % 锥形瓶
-% 新加图形
-% TODO：如何在给scope转入rotate旋转参数后保持液面水平？
+% TODO: 需要计算面积等分
 \newcommand{\erlenmeyer}[3][]{
   \begin{scope}[shift={(#2)},glassware,#1]
     \ifnonzero{#3}{
@@ -251,8 +292,7 @@
 }
 
 % 球形瓶
-% 新加图形
-% TODO：如何在给scope转入rotate旋转参数后保持液面水平？
+% TODO: 需要计算面积等分
 \newcommand{\ballon}[3][]{
   \begin{scope}[shift={(#2)},glassware,#1]
     \ifnonzero{#3}{
@@ -322,6 +362,7 @@
     \filldraw[fill=white,rounded corners=3pt] (0.4,3.0) rectangle (0.6,2.1);
   \end{scope}
 }
+\makeatother
 
 \begin{document}
 
@@ -335,7 +376,7 @@
         \beaker[fill=lime!45]{0,0}{1.00}
         \pile[fill=cyan!5]{0,0}
       \end{scope}
-      \begin{scope}[shift={(9,0)}]        
+      \begin{scope}[shift={(9,0)},rotate=69]        
         \beaker[fill=pink!45]{0,0}{0.50}
         \metalcoil[fill=teal!25, scale=0.8]{0,0.1}
       \end{scope}
@@ -348,13 +389,13 @@
   \begin{center}
     \begin{tikzpicture}
       \begin{scope}
-        \testtube{0.0,0.0}{0.00}
+        \testtube{0.0,0.0}{0}
       \end{scope}
       \begin{scope}[shift={(2.5,0)}]
-        \testtube[rotate=15, draw=red, fill=violet!50]{0,0}{0.25}
-        \metalcoil[rotate=15, fill=teal!25, scale=0.8]{0,0.1}
-      \end{scope}      
-      \begin{scope}[shift={(4,0)}]
+        \testtube[rotate=69, draw=red, fill=violet!50]{0,0}{0.25}
+        \metalcoil[rotate=69, fill=teal!25, scale=0.8]{0,0.1}
+      \end{scope}
+      \begin{scope}[shift={(4,0)},rotate=-15]
         \tikzstyle{glassware} = [fill=gray]
         \stopper{0,\testtubeheight}
         \testtube[fill=olive!65]{0,0}{0.50}
