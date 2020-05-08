@@ -1,0 +1,104 @@
+% \documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+\documentclass[margin=3pt,
+   varwidth, 
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+  ]{standalone}
+
+%  \usepackage{pgfmath}
+\usepackage{tikz}
+\usetikzlibrary{decorations,decorations.markings,decorations.text}%
+
+% 提取自tkz-euclide宏包的tkz-obj-eu-draw-lines.txt文件  
+%<--------------------------------------------------------------------------–>
+% 为直线标注尺寸，基本语法：
+% 指定尺寸、偏移距离，逗号不能省略
+% \draw[dim={5cm,7pt,}]   (A) --  (B);
+% 指定尺寸、、偏移距离和文字平行于直线
+% \draw[dim={7cm,10pt,transform shape}]  (B) --  (C);
+% 参数可以省略，但逗号不能省略
+% \draw[dim={X,,}]  (A) --  (C);
+% 省略#1参数，则自动计算直线长度，单位是mm
+% \draw[dim={,10pt,}]  (A) --  (C);
+%<--------------------------------------------------------------------------–>
+\pgfkeys{/pgf/decoration/.cd,
+  distance/.initial = 10pt
+}
+
+\pgfdeclaredecoration{add dim}{final}{
+  \state{final}{%
+    \pgfmathsetmacro{\dist}{\pgfkeysvalueof{/pgf/decoration/distance}}
+    \pgfpathmoveto{\pgfpoint{0pt}{0pt}}
+    \pgfpathlineto{\pgfpoint{0pt}{1.2*\dist}}
+    \pgfpathmoveto{\pgfpoint{\pgfdecoratedpathlength}{0pt}}
+    \pgfpathlineto{\pgfpoint{(\pgfdecoratedpathlength}{1.2*\dist}}
+    \pgfsetarrowsstart{latex}
+    \pgfsetarrowsend{latex}
+    \pgfpathmoveto{\pgfpoint{0pt}{\dist}}
+    \pgfpathlineto{\pgfpoint{\pgfdecoratedpathlength}{\dist}}
+    \pgfusepath{stroke}
+    \pgfpathmoveto{\pgfpoint{0pt}{0pt}}
+    \pgfpathlineto{\pgfpoint{\pgfdecoratedpathlength}{0pt}}
+  }
+}
+
+\tikzset{
+  dim/.style args={#1,#2,#3}{%
+    decoration = {
+      add dim,
+      distance=\ifx&#2&0pt\else#2\fi
+    },
+    decorate,
+    postaction = {%
+      decorate,
+      decoration={%
+        raise=\pgfkeysvalueof{/pgf/decoration/distance},%\ifx&#2&0pt\else#2\fi,%原代码未做判断，不提供#2时，会出错
+        markings,
+        mark=at position .5 with {%
+          \ifx&#1&
+            \node[inner sep=0pt,
+                  font=\footnotesize,
+                  fill=white,
+                  #3] at (0,0) {% 尺寸计算，https://tex.stackexchange.com/questions/123913/adding-dimensions-to-tikz-pictures
+                    \pgfmathparse{\pgfdecoratedpathlength/2.845274}%
+                    \pgfmathprintnumber[fixed,precision=1]\pgfmathresult mm%
+                  };          
+          \else
+            \node[inner sep=0pt,
+                  font=\footnotesize,
+                  fill=white,
+                  #3] at (0,0) {#1};
+          \fi      
+        }
+      }
+    }
+  },
+  dim/.default={,0pt,}
+}
+
+\begin{document} %在document环境中撰写文档
+\begin{tikzpicture}
+  % 定义坐标点
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (4,0);
+  \coordinate (C) at (4,3);
+  % 绘制坐标点
+  \draw[fill=gray] (A) circle(1pt); 
+  \draw[fill=gray] (B) circle(1pt);
+  \draw[fill=gray] (C) circle(1pt);
+  % 绘制直线并标记尺寸
+  \draw[dim={4cm,-10pt,transform shape}] (A)--(B);
+  \draw[dim={3cm,-10pt,transform shape}] (B)--(C);
+  \draw[dim={,10pt,transform shape}] (A)--(C);
+\end{tikzpicture}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
