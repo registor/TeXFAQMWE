@@ -1,0 +1,43 @@
+%https://tex.stackexchange.com/questions/60812/beamer-tikz-generating-two-slides
+\documentclass{beamer}
+\usepackage{tikz}
+
+\begin{document}
+\begin{frame}
+\frametitle{Power Utility Portfolio Choice}
+
+\begin{itemize}
+    \item Portfolio Return
+        \tikz[remember picture, overlay, baseline=-.5ex]\node (n1) {};
+\end{itemize}
+
+\begin{equation*}
+\begin{aligned}
+& \underset{\boldsymbol w_t}{\text{maximise}}
+& & \tikz[baseline,remember picture]{
+        \node[fill=blue!20,anchor=base] (t1)
+            {$\boldsymbol w_t \cdot \bar{\boldsymbol r}_t $};
+    } + \frac{1 - \gamma}{2} 
+    \tikz[baseline,remember picture]{
+            \node[fill=red!20,anchor=base] (t2)
+            {$ \boldsymbol w_t \cdot (\Sigma_t\boldsymbol w_t) $};
+    } \\
+& \text{subject to}
+& & \boldsymbol w_t \cdot \boldsymbol \iota = 1\\
+&&& \boldsymbol w_t \ge 0
+\end{aligned}
+\end{equation*}
+
+\begin{itemize}
+    \item Portfolio Variance
+        \tikz[remember picture,overlay, baseline=-.5ex]\node (n2) {};
+\end{itemize}
+
+\begin{tikzpicture}[remember picture,overlay]
+        \path[-stealth] (n1) edge [bend left] (t1);
+        \path[-stealth] (n2) edge [out=0, in=-90] (t2);
+\end{tikzpicture}
+
+\end{frame}
+
+\end{document}

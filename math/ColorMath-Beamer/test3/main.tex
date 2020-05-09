@@ -1,0 +1,54 @@
+%https://sites.google.com/site/kaarebmikkelsen/in-the-news/fancyequationsinlatexbeamerwithtikz
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage{beamerthemeJLTree}
+
+\graphicspath{{figurer/}}
+
+
+%%Tikz'ing:
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{chains}
+\usetikzlibrary{positioning}
+\everymath{\displaystyle}
+\tikzstyle{mathbox} = [inner sep=0pt, anchor=base]
+\tikzstyle{every picture}+=[remember picture]
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\xdefinecolor{darkgreen}{RGB}{175, 193, 36}
+
+%%%%%%%%%
+
+\begin{document}
+	
+	
+	\begin{frame}[fragile]
+		\frametitle{Tsodyks-Uziel-Markram model}
+		
+		\begin{figure}
+			\begin{tikzpicture}[every node/.style=mathbox]
+			\matrix (m) [row sep =.5 em,column sep=0em,
+			start chain=lhs1, start chain=lhs2, start chain=rhs2, start chain=rhs1, node distance=0pt]{
+				\node[on chain=lhs1] (taum){$\tau_m$}; \node[on chain=lhs1] {$\frac{dV_{i}}{dt}$}; &\node[above=-1pt]{=};& 
+				\node[on chain=rhs1,above left= -2 pt and -5pt](Vrest){$V_{rest}$}; \node[on chain=rhs1] {$-V_i+$}; \node[on chain=rhs1] (rm) {$R_m$}; \node[on chain=rhs1] {$I_{syn}$};  \\
+				
+				
+				\node[on chain=lhs2] {$\hspace{3 ex}$};\node[on chain=lhs2](Isyn){$ I_{syn}$}; & \node{=};& \node[on chain=rhs2]{$\frac{1}{R_m}\sum_j$};  \node[on chain=rhs2] (w){$w_{ji}$}; \node[on chain=rhs2] (Y) {$Y_{ji}$}; \node[on chain=rhs2] (Vrev) {$(V_{rev}$}; \node[on chain=rhs2] {$-V_i)$};  \\
+			};%matrix end
+			
+			\onslide<2->{\node[blue,text width = 5em,above = of taum,inner sep = 3pt] (taumText) {Membrane leak time} edge [blue,thick,->] (taum);}
+			\onslide<3->{\node[red,text width = 5em,above = of rm,inner sep = 3pt] (rmText) {Membrane resistance} edge [red,thick,->] (rm);}
+			
+			\onslide<4->{\node[black,text width = 4em,left=of Isyn] (IsynText) {Synaptic Current} edge [black,thick,->] (Isyn);}
+			\onslide<5->{\node[green!50,text width = 5em,below left=of w]  (wText) {Couplingstrength i to j} edge [green!50,thick,->] (w);}
+			\onslide<6->{\node[darkgreen,text width = 6em,below right = of Y]  (YText) {Active Transmitters} edge[darkgreen,thick,->] (Y);}
+			\onslide<7->{\node[red!60!white!80,text width = 5em,above right=of Vrev] (VrevText) {Reversal potential} edge [red!60!white!80,thick,->] (Vrev);}
+			
+			\end{tikzpicture}\end{figure}
+		
+		
+	\end{frame}
+	
+\end{document}
