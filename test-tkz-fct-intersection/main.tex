@@ -1,0 +1,114 @@
+%https://tex.stackexchange.com/questions/53858/intersection-of-two-tkz-fct-funktions
+% \documentclass[12pt, border = 8pt, varwidth, convert]{standalone}
+\documentclass[margin=3pt,
+   varwidth, 
+  convert,
+  convert={
+    outext=.png,
+    command=\unexpanded{
+      pdftocairo -r 300 -png \infile % 将生成的pdf文件转换为png图像
+    }
+  }
+]{standalone}
+
+\usepackage{tkz-fct}
+
+% \usetikzlibrary{%
+%   arrows,
+%   calc,intersections
+% }
+
+% \tikzset{
+%    name plot/.style={every path/.style={name path global=#1}}
+% }
+
+% \makeatletter
+% \def\tkz@fct[#1]#2{%
+% \pgfkeys{/tkzfct/.cd,
+% domain      = \tkz@dmin:\tkz@dmax,
+% samples     = 200,
+% fp          = true,
+% id          = tkzfct}
+% \pgfqkeys{/tkzfct}{#1}%
+% \iftkz@init@NO%
+%   \FPdiv{\tkz@x@delta}{\tkz@init@xorigine}{\tkz@init@xstep}%
+%   \FPdiv{\tkz@y@delta}{\tkz@init@yorigine}{\tkz@init@ystep}%
+% \else
+%   \FPset{\tkz@x@delta}{0}%
+%   \FPset{\tkz@y@delta}{0}%
+% \fi% 
+% % stockage
+% \advance\tkz@tkzf@fct by  1 %
+% \FPdiv\tkz@ba{\tkz@min}{\tkz@init@xstep}%
+% \FPdiv\tkz@bb{\tkz@max}{\tkz@init@xstep}%
+% \def\x{(x*\tkz@init@xstep)}%
+% \expandafter\edef\csname tkzFctgnu\@alph\tkz@tkzf@fct \endcsname{#2}%
+% \expandafter\edef\csname tkzFctgnuLast\endcsname{#2}     
+%  \clip (\tkz@xa,\tkz@ya) rectangle (\tkz@xb,\tkz@yb);
+%  \draw[name path =\tkz@fct@id,xshift  = -\tkz@x@delta cm,yshift  = -\tkz@y@delta cm,/tkzfct/.cd,#1 ]%
+%  plot[id=\tkz@fct@id,domain= \tkz@ba:\tkz@bb,samples    = \tkz@fct@samples]%
+%  function{(#2)/\tkz@init@ystep};%
+% %\end{scope} 
+%    \let\tkz@tmp@xstep\tkz@init@xstep
+%    \def\tkz@init@xstep{1}
+% \iftkz@fp%       
+%    \ReplaceSubStrings{\tkz@tempa}{#2}{log}{ln}
+%    \ReplaceSubStrings{\tkz@tempb}{\tkz@tempa}{**}{^}
+%    \ReplaceSubStrings{\tkz@tempa}{\tkz@tempb}{\x}{x}
+%    \ReplaceSubStrings{\tkz@tempb}{\tkz@tempa}{asin}{arcsin}
+%    \ReplaceSubStrings{\tkz@tempa}{\tkz@tempb}{acos}{arccos}
+%    \ReplaceSubStrings{\tkz@tempb}{\tkz@tempa}{atan}{arctan} 
+%   \expandafter\edef\csname tkzFct\@alph\tkz@tkzf@fct\endcsname{\tkz@tempb}%
+%   \expandafter\edef\csname tkzFctLast\endcsname{\tkz@tempb}%
+%  \fi
+%   \let\tkz@init@xstep\tkz@tmp@xstep 
+%  \catcode`\:=\tkzTWOPTCode\relax   
+% }%
+% \makeatother
+
+\begin{document} %在document环境中撰写文档
+
+% \begin{tikzpicture}
+% \tkzInit[ymax=15,xmax=4,ystep=5]
+% \tkzAxeXY
+% %
+% \tkzFct[name plot=A,color=red,domain=0:4]{2*x**2+5}
+% %
+% \tkzFct[name plot=B,color=blue,domain=0:4]{-x**3+15}
+% %
+% \draw [name intersections={of=A and B, by=AxB}] (AxB) circle (2pt);
+
+% \draw [name intersections={of=A and B, by=AxB}] let \p1=(AxB) in
+% (AxB) circle (1pt) node [right] {\x1,\y1};
+
+% \end{tikzpicture}
+
+\begin{tikzpicture}
+  \tkzInit[ymax=15,xmax=4,ystep=5]
+  \tkzAxeXY
+  \tkzFct[name path global=f,color=red,domain=0:4]{2*x**2+5}
+  \tkzFct[name path global=g,color=blue,domain=0:4]{-x**3+15}
+  \makeatletter
+  \draw [name intersections={of=f and g, by=fxg}]
+    let \p1=(fxg) in (fxg) circle (1pt)
+    \pgfextra{\pgfmathsetmacro\xc{\x1/28.45*\tkz@init@xstep}\pgfmathsetmacro\yc{\y1/28.45*\tkz@init@ystep}}
+    node[right, align=left]{a=\xc\\ b=\yc};
+  \makeatother  
+\end{tikzpicture}
+
+%   \begin{tikzpicture}
+% \tkzInit[ymax=15,xmax=4,ystep=5]
+% \tkzAxeXY
+% \tkzFct[id=f,color=red,domain=0:4]{2*x**2+5}
+% \tkzFct[id=g,color=blue,domain=0:4]{-x**3+15}
+%  \makeatletter   
+%     \draw [name intersections={of=f and g, by=fxg}] let \p1=(fxg) in
+%    (fxg) circle (1pt) \pgfextra{\pgfmathsetmacro\xc{\x1/28.45}\pgfmathsetmacro\yc{\y1/28.45*\tkz@init@ystep}} node [right,align=left] {a=\xc\\ b=\yc};
+% \end{tikzpicture} 
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
