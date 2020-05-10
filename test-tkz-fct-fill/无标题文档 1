@@ -1,0 +1,13 @@
+请问有人知道怎么画这个图吗
+https://wenda.latexstudio.net/q-2130.html
+
+有大佬知道怎么用tikz画吗
+https://wenda.latexstudio.net/q-2133.html
+
+在问答是[有大佬知道怎么用tikz画吗](https://wenda.latexstudio.net/q-2133.html "有大佬知道怎么用tikz画吗")和[请问有人知道怎么画这个图吗](https://wenda.latexstudio.net/q-2130.html "请问有人知道怎么画这个图吗")。
+
+觉得用tkz-fct宏包实现也挺方便的，简单试了试，请大家批评指正。
+
+tkz-fct需要使用gnuplots，细节可使用`texdoc tkz-fct`查看其使用说明。
+
+用tkz-fct宏包绘制函数图形
